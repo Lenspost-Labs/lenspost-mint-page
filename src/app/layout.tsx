@@ -18,15 +18,15 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   twitter: {
+    images: [`${APP_URL}/OG_logo_1200x630.png`],
     creator: LENSPOST_TWITTER_USERNAME,
-    images: [`${APP_URL}/logo.png`],
     site: LENSPOST_TWITTER_USERNAME,
     description: APP_DESCRIPTION,
     card: 'summary_large_image',
     title: APP_NAME
   },
   openGraph: {
-    images: [`${APP_URL}/logo.png`],
+    images: [`${APP_URL}/OG_logo_1200x630.png`],
     description: APP_DESCRIPTION,
     title: APP_NAME,
     url: APP_URL

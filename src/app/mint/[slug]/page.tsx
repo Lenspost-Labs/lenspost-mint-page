@@ -24,7 +24,6 @@ export const generateMetadata = async ({
 
   const { imageUrl } = await getCollectionData(slug);
   const imageCdnUrl = imageUrl?.replace(S3_IMAGE_URL, CDN_IMAGE_URL);
-
   const frameMetadata = getFrameMetadata({
     buttons: [
       {

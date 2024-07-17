@@ -89,6 +89,7 @@ const Home = async ({ params }: Props) => {
   const {
     publicSaleActive,
     contractAddress,
+    currencyAddress,
     contractType,
     totalMinted,
     royaltyBPS,
@@ -109,6 +110,7 @@ const Home = async ({ params }: Props) => {
     <NFTCard
       publicSaleActive={publicSaleActive}
       contractAddress={contractAddress}
+      currencyAddress={currencyAddress}
       contractType={contractType}
       totalMinted={totalMinted}
       royaltyBPS={royaltyBPS}

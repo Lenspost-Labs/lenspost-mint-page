@@ -20,6 +20,7 @@ export const getCollectionData = async (
         publicSaleActive: data?.metadata?.publicSaleActive,
         publicSaleStart: data?.metadata?.publicSaleStart,
         publicSaleEnd: data?.metadata?.publicSaleEnd,
+        currencyAddress: data?.metadata?.currency,
         totalMinted: data?.metadata?.totalMinted,
         price: data?.metadata?.publicSalePrice,
         royaltyBPS: data?.metadata?.royaltyBPS,

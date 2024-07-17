@@ -5,20 +5,20 @@ import {
   CREATORS_REWARD_FEE,
   CDN_IMAGE_URL,
   S3_IMAGE_URL,
+  NULL_ADDRESS,
   CHAIN_HELPER,
   CHAIN_NAME,
   TOKENS,
   REGEX
 } from '@/data';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
-import { useReadContractData, useMint721 } from '@/hooks';
 import { ShareButton, CopyButton, Button } from '@/ui';
+import { CollectionData, ParamsType } from '@/types';
 import { useSwitchChain, useAccount } from 'wagmi';
+import { useApprove, useMint721 } from '@/hooks';
 import { useEffect, useState, FC } from 'react';
 import { LENSPOST_721 } from '@/contracts';
-import { CollectionData } from '@/types';
 import { formatAddress } from '@/utils';
-import { base } from 'viem/chains';
 import { parseEther } from 'viem';
 import { toast } from 'sonner';
 import Image from 'next/image';
@@ -28,6 +28,7 @@ import { ConnectButton } from '.';
 const NFTCard: FC<CollectionData> = ({
   publicSaleActive,
   contractAddress,
+  currencyAddress,
   contractType,
   totalMinted,
   royaltyBPS,
@@ -44,27 +45,23 @@ const NFTCard: FC<CollectionData> = ({
   } = useAccount();
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
   const [isInputError, setIsInputError] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
 
+  const tokenSymbol =
+    currencyAddress === NULL_ADDRESS
+      ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
+          ?.nativeCurrency?.symbol
+      : TOKENS?.[currencyAddress]?.symbol;
   const isSupportedChain: Boolean = isConnected && chainId === currentChainId;
   const imageCdnUrl = imageUrl?.replace(S3_IMAGE_URL, CDN_IMAGE_URL) as string;
+  const isContractApprove = currencyAddress && currencyAddress != NULL_ADDRESS;
   const mintFee = parseEther(CREATORS_REWARD_FEE);
   const formattedPrice = Number(price) / 10 ** 18;
   const royalty = Number(royaltyBPS) / 100;
   const mintReferral = LENSPOST_ETH_ADDRESS;
   const mintTotalFee = mintFee * quantity;
   const comment = '';
-
-  const readParams = {
-    chainId: CHAIN_HELPER[chainId as keyof typeof CHAIN_HELPER]?.id,
-    functionName: 'claimCondition',
-    address: contractAddress,
-    abi: LENSPOST_721?.abi
-  };
-
-  const { pricePerToken, tokenAddress } = useReadContractData(
-    readParams as any
-  );
 
   const handleQuantity = (e: any) => {
     const value = e.target.value;
@@ -83,14 +80,62 @@ const NFTCard: FC<CollectionData> = ({
     }
   };
 
-  const mintParams = {
-    args: [EVMAddress as `0x${string}`, quantity, comment, mintReferral],
-    functionName: 'mintWithRewards',
-    address: contractAddress,
-    value: mintTotalFee,
-    abi: erc721DropABI,
-    chainId: chainId
+  const mintParams = () => {
+    if (currencyAddress) {
+      let params: ParamsType = {
+        args: [
+          EVMAddress,
+          quantity,
+          currencyAddress,
+          price,
+          [[], quantity, price, currencyAddress],
+          '0x'
+        ],
+        address: contractAddress,
+        abi: LENSPOST_721?.abi,
+        functionName: 'claim',
+        chainId: chainId
+      };
+
+      if (currencyAddress === NULL_ADDRESS) {
+        params = {
+          ...params,
+          value: price
+        };
+      }
+
+      return params;
+    } else {
+      let params: ParamsType = {
+        args: [EVMAddress as `0x${string}`, quantity, comment, mintReferral],
+        functionName: 'mintWithRewards',
+        address: contractAddress,
+        value: mintTotalFee,
+        abi: erc721DropABI,
+        chainId: chainId
+      };
+
+      return params;
+    }
   };
+
+  const approveParams = {
+    abi: TOKENS?.[currencyAddress]?.abi,
+    args: [contractAddress, price],
+    address: currencyAddress,
+    functionName: 'approve'
+  };
+
+  const {
+    tx: {
+      isApproveTxConfirming,
+      isApproveTxSuccess,
+      isApproveTxError,
+      approveTxError,
+      approveTxData
+    },
+    write: { isApproveWriteError, approveWriteError, isApproving, approve }
+  } = useApprove(approveParams);
 
   const {
     simulation: {
@@ -102,7 +147,7 @@ const NFTCard: FC<CollectionData> = ({
     },
     tx: { isTxConfirming, isTxSuccess, isTxError, txError, txData },
     write: { isWriteError, writeError, isWriting, mint721 }
-  } = useMint721(mintParams);
+  } = useMint721(mintParams());
 
   useEffect(() => {
     if (isSwitchChainSuccess) {
@@ -117,18 +162,17 @@ const NFTCard: FC<CollectionData> = ({
   }, [isTxSuccess]);
 
   useEffect(() => {
-    if (isSimulateError || isWriteError || isTxError) {
-      const error: any = simulateError || writeError || txError;
+    if (isApproveTxSuccess) {
+      setIsApproved(true);
+    }
+  }, [isApproveTxSuccess, isApproved]);
+
+  useEffect(() => {
+    if (isWriteError || isTxError) {
+      const error: any = writeError || txError;
       toast.error(error?.message?.split('\n')[0]);
     }
-  }, [
-    isSimulateError,
-    simulateError,
-    isWriteError,
-    writeError,
-    isTxError,
-    txError
-  ]);
+  }, [isWriteError, writeError, isTxError, txError]);
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col justify-between gap-8 rounded-3xl bg-white p-6 shadow-2xl sm:flex-row sm:p-10">
@@ -189,9 +233,7 @@ const NFTCard: FC<CollectionData> = ({
               Price
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
-              {formattedPrice > 0
-                ? `${formattedPrice} ${TOKENS?.[tokenAddress]?.symbol}`
-                : 'Free'}
+              {formattedPrice > 0 ? `${formattedPrice} ${tokenSymbol}` : 'Free'}
             </p>
           </div>
           <div>
@@ -231,8 +273,6 @@ const NFTCard: FC<CollectionData> = ({
           </div>
         </div>
 
-        {/* TODO: Dropdown */}
-
         <div className="mt-2 w-full rounded-lg bg-[#EBE8FD] px-4 py-2 text-center sm:w-fit">
           {!isConnected ? (
             <ConnectButton />
@@ -241,18 +281,26 @@ const NFTCard: FC<CollectionData> = ({
               onClick={() => switchChain({ chainId: chainId as number })}
               title="Switch Network"
             />
+          ) : isContractApprove && !isApproved ? (
+            <Button title="Approve token allowance" onClick={approve} />
+          ) : isApproved ? (
+            <Button
+              // disabled={!isConnected || isSimulateError || !simulateData}
+              onClick={mint721}
+              title="Mint NFT"
+            />
           ) : (
             <Button
-              disabled={!isConnected || isSimulateError || !simulateData}
+              disabled={!isConnected || isTxSuccess}
               onClick={mint721}
               title="Mint NFT"
             />
           )}
         </div>
 
-        {(isSimulating || isWriting || isTxConfirming) && (
+        {(isWriting || isTxConfirming) && (
           <div className="mt-2 text-sm font-semibold ">
-            {isSimulating && 'Simulating...'}
+            {/* {isSimulating && 'Simulating...'} */}
             {isTxConfirming && 'Confirming...'}
             {isWriting && 'Writing...'}
           </div>
@@ -262,7 +310,8 @@ const NFTCard: FC<CollectionData> = ({
           <div className="mt-2 text-sm text-green-500">
             <a
               href={
-                base?.blockExplorers?.default?.url +
+                CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
+                  ?.blockExplorers?.default +
                 '/tx/' +
                 txData?.transactionHash
               }

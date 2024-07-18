@@ -1,5 +1,6 @@
 export interface CollectionData {
   contractAddress?: `0x${string}`;
+  currencyAddress?: string | any;
   chainId?: undefined | number;
   publicSaleActive?: boolean;
   publicSaleStart?: string;
@@ -13,6 +14,15 @@ export interface CollectionData {
   isError?: boolean;
   price?: string;
   title?: string;
+}
+
+export interface ParamsType {
+  address?: `0x${string}` | undefined;
+  value?: number | string | any;
+  chainId?: undefined | number;
+  functionName?: string;
+  abi?: any | [];
+  args?: any[];
 }
 
 export interface ContractData {

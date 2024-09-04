@@ -20,6 +20,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^5.45.1
     version: 5.45.1(react@18.3.1)
+  '@zoralabs/protocol-sdk':
+    specifier: ^0.9.6
+    version: 0.9.6(typescript@5.4.5)(viem@2.9.32)
   '@zoralabs/zora-721-contracts':
     specifier: ^1.15.3
     version: 1.15.4
@@ -6208,6 +6211,13 @@ packages:
       undici: 5.28.4
     dev: false
 
+  /@zoralabs/protocol-deployments@0.3.2:
+    resolution:
+      {
+        integrity: sha512-ZL8SN4qKIgo4+VugWzkP8RC7RO80dAPss93IMsW0Nv94l6w6CPURGDPCepCkYsEAdYU0aaIGb5CaAS/Frs5w6g==
+      }
+    dev: false
+
   /@zoralabs/protocol-rewards@1.2.3:
     resolution:
       {
@@ -6216,6 +6226,22 @@ packages:
     dependencies:
       ds-test: github.com/dapphub/ds-test/cd98eff28324bfac652e63a239a60632a761790b
       forge-std: github.com/foundry-rs/forge-std/705263c95892a906d7af65f0f73ce8a4a0c80b80
+    dev: false
+
+  /@zoralabs/protocol-sdk@0.9.6(typescript@5.4.5)(viem@2.9.32):
+    resolution:
+      {
+        integrity: sha512-uHEY5DIvGFT1vVnmpamCFRZRoKn1L4bVdjxt3V2IGCEE8KmSYz3SVgL1Po/mxsvWQ1WmyW16jk3tJ9L1XxDv1A==
+      }
+    peerDependencies:
+      viem: ^2.13.2
+    dependencies:
+      '@zoralabs/protocol-deployments': 0.3.2
+      abitype: 1.0.6(typescript@5.4.5)
+      viem: 2.9.32(typescript@5.4.5)
+    transitivePeerDependencies:
+      - typescript
+      - zod
     dev: false
 
   /@zoralabs/zora-721-contracts@1.15.4:
@@ -6254,6 +6280,23 @@ packages:
     resolution:
       {
         integrity: sha512-NMeMah//6bJ56H5XRj8QCV4AwuW6hB6zqz2LnhhLdcWVQOsXki6/Pn3APeqxCma62nXIcmZWdu1DlHWS74umVQ==
+      }
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.22.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      zod:
+        optional: true
+    dependencies:
+      typescript: 5.4.5
+    dev: false
+
+  /abitype@1.0.6(typescript@5.4.5):
+    resolution:
+      {
+        integrity: sha512-MMSqYh4+C/aVqI2RQaWqbvI4Kxo5cQV40WQ4QFtDnNzCkqChm8MuENhElmynZlO0qUy/ObkEUaXtKqYnx1Kp3A==
       }
     peerDependencies:
       typescript: '>=5.0.4'
@@ -12721,6 +12764,7 @@ packages:
       {
         integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
       }
+    dev: true
 
   /react-is@17.0.2:
     resolution:
@@ -12894,7 +12938,7 @@ packages:
     dependencies:
       object-assign: 4.1.1
       react: 18.3.1
-      react-is: 16.13.1
+      react-is: 18.3.1
     dev: false
 
   /react-style-singleton@2.2.1(@types/react@18.3.3)(react@18.3.1):

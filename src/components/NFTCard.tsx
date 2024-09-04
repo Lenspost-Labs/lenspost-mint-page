@@ -63,7 +63,21 @@ const NFTCard: FC<CollectionData> = ({
   const mintTotalFee = mintFee * quantity;
   const comment = '';
 
-  const handleQuantity = (e: any) => {
+  const contractTypeFiltered = (() => {
+    if (contractType?.startsWith('ERC')) {
+      return contractType;
+    } else if (['ZORA721', 'LP721'].includes(contractType as string)) {
+      return 'ERC721';
+    } else if (contractType === 'ZORA1155') {
+      return 'ERC1155';
+    } else if (contractType) {
+      return 'ERC' + contractType;
+    } else {
+      return 'ERC721';
+    }
+  })();
+
+  const handleQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     if (!REGEX?.number.test(value)) {
@@ -73,10 +87,11 @@ const NFTCard: FC<CollectionData> = ({
       setIsInputError(false);
     }
 
-    if (value < 1 || !value) {
+    const numValue = parseInt(value, 10);
+    if (isNaN(numValue) || numValue < 1) {
       setQuantity(1n);
     } else {
-      setQuantity(BigInt(value));
+      setQuantity(BigInt(numValue));
     }
   };
 
@@ -127,26 +142,14 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const {
-    tx: {
-      isApproveTxConfirming,
-      isApproveTxSuccess,
-      isApproveTxError,
-      approveTxError,
-      approveTxData
-    },
-    write: { isApproveWriteError, approveWriteError, isApproving, approve }
+    write: { isApproving, approve },
+    tx: { isApproveTxSuccess }
   } = useApprove(approveParams);
 
   const {
-    simulation: {
-      refetchSimulation,
-      isSimulateError,
-      simulateError,
-      isSimulating,
-      simulateData
-    },
     tx: { isTxConfirming, isTxSuccess, isTxError, txError, txData },
-    write: { isWriteError, writeError, isWriting, mint721 }
+    write: { isWriteError, writeError, isWriting, mint721 },
+    simulation: { refetchSimulation }
   } = useMint721(mintParams());
 
   useEffect(() => {
@@ -170,7 +173,7 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (isWriteError || isTxError) {
       const error: any = writeError || txError;
-      toast.error(error?.message?.split('\n')[0]);
+      toast.error(error?.message?.split('\n')[0] || 'An error occurred');
     }
   }, [isWriteError, writeError, isTxError, txError]);
 
@@ -178,9 +181,7 @@ const NFTCard: FC<CollectionData> = ({
     <div className="mx-auto flex max-w-4xl flex-col justify-between gap-8 rounded-3xl bg-white p-6 shadow-2xl sm:flex-row sm:p-10">
       <Image
         className="w-full rounded-3xl shadow-xl sm:w-1/2"
-        blurDataURL={imageCdnUrl}
         alt={title as string}
-        placeholder="blur"
         src={imageCdnUrl}
         priority={true}
         height={1080}
@@ -223,9 +224,7 @@ const NFTCard: FC<CollectionData> = ({
               Type
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
-              {contractType?.startsWith('ERC')
-                ? contractType
-                : 'ERC' + contractType}
+              {contractTypeFiltered}
             </p>
           </div>
           <div>
@@ -265,10 +264,14 @@ const NFTCard: FC<CollectionData> = ({
           <div className="flex w-full items-center gap-2">
             <label className="text-sm font-medium text-black">Quantity:</label>
             <input
-              className={`w-16 rounded-md bg-slate-100 p-1 text-center outline-none ring-2 ${isInputError ? 'ring-red-500' : 'ring-blue-800'} focus:ring-${isInputError ? 'red' : 'blue'}-500`}
+              className={`w-16 rounded-md bg-slate-100 p-1 text-center outline-none ring-2 ${
+                isInputError ? 'ring-red-500' : 'ring-blue-800'
+              } focus:ring-${isInputError ? 'red' : 'blue'}-500`}
+              value={quantity.toString()}
               onChange={handleQuantity}
               placeholder="1"
-              type="text"
+              type="number"
+              min="1"
             />
           </div>
         </div>
@@ -282,7 +285,11 @@ const NFTCard: FC<CollectionData> = ({
               title="Switch Network"
             />
           ) : isContractApprove && !isApproved ? (
-            <Button title="Approve token allowance" onClick={approve} />
+            <Button
+              title="Approve token allowance"
+              onClick={() => approve?.()}
+              disabled={isApproving}
+            />
           ) : isApproved ? (
             <Button
               // disabled={!isConnected || isSimulateError || !simulateData}

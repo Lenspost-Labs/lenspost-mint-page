@@ -17,10 +17,12 @@ export const getCollectionData = async (
     if (response.ok) {
       const data = await response.json();
       return {
+        currencyAddress: data?.metadata?.currency?.startsWith('0x')
+          ? data?.metadata?.currency
+          : null,
         publicSaleActive: data?.metadata?.publicSaleActive,
         publicSaleStart: data?.metadata?.publicSaleStart,
         publicSaleEnd: data?.metadata?.publicSaleEnd,
-        currencyAddress: data?.metadata?.currency,
         totalMinted: data?.metadata?.totalMinted,
         price: data?.metadata?.publicSalePrice,
         royaltyBPS: data?.metadata?.royaltyBPS,

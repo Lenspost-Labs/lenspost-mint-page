@@ -4,34 +4,34 @@ import {
   LENSPOST_ETH_ADDRESS,
   CREATORS_REWARD_FEE,
   CDN_IMAGE_URL,
-  S3_IMAGE_URL,
+  R2_IMAGE_URL,
   NULL_ADDRESS,
   CHAIN_HELPER,
   CHAIN_NAME,
   TOKENS,
   REGEX
 } from '@/data';
+import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
+import { formatEther, parseEther, Abi } from 'viem';
 import { useSwitchChain, useAccount } from 'wagmi';
-import { useApprove, useMint721 } from '@/hooks';
 import { useEffect, useState, FC } from 'react';
 import { LENSPOST_721 } from '@/contracts';
 import { formatAddress } from '@/utils';
-import { parseEther } from 'viem';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
 import { ConnectButton } from '.';
 
 const NFTCard: FC<CollectionData> = ({
-  publicSaleActive,
   contractAddress,
   currencyAddress,
   contractType,
   totalMinted,
   royaltyBPS,
+  isMinting,
   maxSupply,
   imageUrl,
   chainId,
@@ -47,17 +47,31 @@ const NFTCard: FC<CollectionData> = ({
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
+  const { maxClaimableSupply, supplyClaimed, pricePerToken, tokenAddress } =
+    useReadContractData({
+      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      functionName: 'claimCondition',
+      abi: LENSPOST_721?.abi as Abi,
+      address: contractAddress,
+      args: []
+    });
+
+  const currencyAddress2 = currencyAddress || tokenAddress;
+  const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
+  const totalMinted2 = totalMinted || supplyClaimed?.toString();
+  const price2 = price || pricePerToken;
 
   const tokenSymbol =
-    currencyAddress === NULL_ADDRESS
+    currencyAddress2 === NULL_ADDRESS
       ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
           ?.nativeCurrency?.symbol
-      : TOKENS?.[currencyAddress]?.symbol;
+      : TOKENS?.[currencyAddress2]?.symbol;
   const isSupportedChain: Boolean = isConnected && chainId === currentChainId;
-  const imageCdnUrl = imageUrl?.replace(S3_IMAGE_URL, CDN_IMAGE_URL) as string;
-  const isContractApprove = currencyAddress && currencyAddress != NULL_ADDRESS;
+  const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) as string;
+  const isContractApprove =
+    currencyAddress2 && currencyAddress2 != NULL_ADDRESS;
   const mintFee = parseEther(CREATORS_REWARD_FEE);
-  const formattedPrice = Number(price) / 10 ** 18;
+  const formattedPrice = price2 ? formatEther(price2.toString()) : 0n;
   const royalty = Number(royaltyBPS) / 100;
   const mintReferral = LENSPOST_ETH_ADDRESS;
   const mintTotalFee = mintFee * quantity;
@@ -96,14 +110,14 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const mintParams = () => {
-    if (currencyAddress) {
+    if (contractType === 'LP721') {
       let params: ParamsType = {
         args: [
           EVMAddress,
           quantity,
-          currencyAddress,
-          price,
-          [[], quantity, price, currencyAddress],
+          currencyAddress2,
+          price2,
+          [[], quantity, price2, currencyAddress2],
           '0x'
         ],
         address: contractAddress,
@@ -112,10 +126,10 @@ const NFTCard: FC<CollectionData> = ({
         chainId: chainId
       };
 
-      if (currencyAddress === NULL_ADDRESS) {
+      if (currencyAddress2 === NULL_ADDRESS) {
         params = {
           ...params,
-          value: price
+          value: price2
         };
       }
 
@@ -135,9 +149,9 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const approveParams = {
-    abi: TOKENS?.[currencyAddress]?.abi,
-    args: [contractAddress, price],
-    address: currencyAddress,
+    abi: TOKENS?.[currencyAddress2]?.abi,
+    args: [contractAddress, price2],
+    address: currencyAddress2,
     functionName: 'approve'
   };
 
@@ -232,23 +246,27 @@ const NFTCard: FC<CollectionData> = ({
               Price
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
-              {formattedPrice > 0 ? `${formattedPrice} ${tokenSymbol}` : 'Free'}
+              {Number(formattedPrice) > 0
+                ? `${formattedPrice} ${tokenSymbol}`
+                : 'Free'}
             </p>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Minting
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {publicSaleActive ? 'Now' : 'No'}
-            </p>
-          </div>
+          {isMinting && (
+            <div>
+              <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
+                Minting
+              </p>
+              <p className="text-sm text-[#11111b] sm:text-sm">
+                {isMinting ? 'Now' : 'No'}
+              </p>
+            </div>
+          )}
           <div>
             <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
               Minted
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
-              {totalMinted}/{maxSupply}
+              {totalMinted2}/{maxSupply2}
             </p>
           </div>
           <div>
@@ -318,7 +336,7 @@ const NFTCard: FC<CollectionData> = ({
             <a
               href={
                 CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
-                  ?.blockExplorers?.default +
+                  ?.blockExplorers?.default?.url +
                 '/tx/' +
                 txData?.transactionHash
               }

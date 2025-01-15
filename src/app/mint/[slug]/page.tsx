@@ -3,7 +3,7 @@ import {
   LENSPOST_APP_URL,
   APP_DESCRIPTION,
   CDN_IMAGE_URL,
-  S3_IMAGE_URL,
+  R2_IMAGE_URL,
   APP_NAME,
   APP_URL,
   AUTHOR
@@ -23,7 +23,7 @@ export const generateMetadata = async ({
   const slug = params.slug;
 
   const { imageUrl } = await getCollectionData(slug);
-  const imageCdnUrl = imageUrl?.replace(S3_IMAGE_URL, CDN_IMAGE_URL);
+  const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL);
   const frameMetadata = getFrameMetadata({
     buttons: [
       {
@@ -87,12 +87,12 @@ export const generateMetadata = async ({
 
 const Home = async ({ params }: Props) => {
   const {
-    publicSaleActive,
     contractAddress,
     currencyAddress,
     contractType,
     totalMinted,
     royaltyBPS,
+    isMinting,
     maxSupply,
     imageUrl,
     chainId,
@@ -108,12 +108,12 @@ const Home = async ({ params }: Props) => {
 
   return (
     <NFTCard
-      publicSaleActive={publicSaleActive}
       contractAddress={contractAddress}
       currencyAddress={currencyAddress}
       contractType={contractType}
       totalMinted={totalMinted}
       royaltyBPS={royaltyBPS}
+      isMinting={isMinting}
       maxSupply={maxSupply}
       imageUrl={imageUrl}
       chainId={chainId}

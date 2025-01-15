@@ -13,9 +13,10 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import '@rainbow-me/rainbowkit/styles.css';
 import { WALLETCONNECT_KEY } from '@/data';
 import { WagmiProvider } from 'wagmi';
+import { ham, og } from '@/chains';
 
 const config = getDefaultConfig({
-  chains: [base, mainnet, polygon, optimism, arbitrum, degen],
+  chains: [base, mainnet, polygon, optimism, arbitrum, degen, ham, og],
   projectId: WALLETCONNECT_KEY,
   appName: 'Lenspost Studio',
   ssr: true

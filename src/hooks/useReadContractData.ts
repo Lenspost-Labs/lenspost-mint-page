@@ -14,6 +14,8 @@ const useReadConractData = (params: UseReadContractParameters) => {
     };
   }
 
+  console.log({ data });
+
   return {
     quantityLimitPerWallet: data?.[3],
     maxClaimableSupply: data?.[1],

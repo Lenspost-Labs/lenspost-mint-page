@@ -20,18 +20,18 @@ export const getCollectionData = async (
         currencyAddress: data?.metadata?.currency?.startsWith('0x')
           ? data?.metadata?.currency
           : null,
-        publicSaleActive: data?.metadata?.publicSaleActive,
         publicSaleStart: data?.metadata?.publicSaleStart,
+        imageUrl: data?.image || data?.metadata?.image,
         publicSaleEnd: data?.metadata?.publicSaleEnd,
         totalMinted: data?.metadata?.totalMinted,
         price: data?.metadata?.publicSalePrice,
         royaltyBPS: data?.metadata?.royaltyBPS,
+        isMinting: data?.metadata?.isMinting,
         maxSupply: data?.metadata?.maxSupply,
         contractType: data?.contractType,
         contractAddress: data?.contract,
         title: data?.metadata?.name,
-        chainId: data?.chainId,
-        imageUrl: data?.image
+        chainId: data?.chainId
       };
     } else {
       return {

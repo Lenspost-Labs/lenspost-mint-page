@@ -4,6 +4,7 @@ export const CHAIN_NAME = Object.freeze({
   42161: 'Arbitrum',
   7777777: 'Zora',
   10: 'Optimism',
+  137: 'Polygon',
   1: 'Ethereum',
   8453: 'Base',
   5112: 'Ham',

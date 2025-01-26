@@ -7,7 +7,6 @@ import {
   R2_IMAGE_URL,
   NULL_ADDRESS,
   CHAIN_HELPER,
-  CHAIN_NAME,
   TOKENS,
   REGEX
 } from '@/data';
@@ -47,19 +46,26 @@ const NFTCard: FC<CollectionData> = ({
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
-  const { maxClaimableSupply, supplyClaimed, pricePerToken, tokenAddress } =
-    useReadContractData({
-      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
-      functionName: 'claimCondition',
-      abi: LENSPOST_721?.abi as Abi,
-      address: contractAddress,
-      args: []
-    });
+  const {
+    maxClaimableSupply,
+    startTimestamp,
+    supplyClaimed,
+    pricePerToken,
+    tokenAddress
+  } = useReadContractData({
+    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+    functionName: 'claimCondition',
+    abi: LENSPOST_721?.abi as Abi,
+    address: contractAddress,
+    args: []
+  });
 
   const currencyAddress2 = currencyAddress || tokenAddress;
   const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
   const totalMinted2 = totalMinted || supplyClaimed?.toString();
   const price2 = price || pricePerToken;
+  const isMinting2 =
+    isMinting || BigInt(Math.floor(Date.now() / 1000)) >= startTimestamp;
 
   const tokenSymbol =
     currencyAddress2 === NULL_ADDRESS
@@ -230,7 +236,7 @@ const NFTCard: FC<CollectionData> = ({
               Network
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
-              {CHAIN_NAME[chainId as keyof typeof CHAIN_NAME]}
+              {CHAIN_HELPER[chainId as keyof typeof CHAIN_HELPER]?.name}
             </p>
           </div>
           <div>
@@ -251,16 +257,14 @@ const NFTCard: FC<CollectionData> = ({
                 : 'Free'}
             </p>
           </div>
-          {isMinting && (
-            <div>
-              <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-                Minting
-              </p>
-              <p className="text-sm text-[#11111b] sm:text-sm">
-                {isMinting ? 'Now' : 'No'}
-              </p>
-            </div>
-          )}
+          <div>
+            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
+              Minting
+            </p>
+            <p className="text-sm text-[#11111b] sm:text-sm">
+              {isMinting2 ? 'Now' : 'No'}
+            </p>
+          </div>
           <div>
             <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
               Minted

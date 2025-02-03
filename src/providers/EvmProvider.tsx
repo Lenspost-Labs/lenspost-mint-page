@@ -6,6 +6,7 @@ import {
   mainnet,
   polygon,
   degen,
+  morph,
   base
 } from 'wagmi/chains';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
@@ -23,6 +24,7 @@ const config = getDefaultConfig({
     mainnet,
     polygon,
     degen,
+    morph,
     base,
     ham,
     og

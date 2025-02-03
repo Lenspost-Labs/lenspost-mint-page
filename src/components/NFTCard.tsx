@@ -46,13 +46,7 @@ const NFTCard: FC<CollectionData> = ({
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
-  const {
-    maxClaimableSupply,
-    startTimestamp,
-    supplyClaimed,
-    pricePerToken,
-    tokenAddress
-  } = useReadContractData({
+  const readClaimConditionData = useReadContractData({
     chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
     functionName: 'claimCondition',
     abi: LENSPOST_721?.abi as Abi,
@@ -60,12 +54,41 @@ const NFTCard: FC<CollectionData> = ({
     args: []
   });
 
+  const readRoyaltyData = useReadContractData({
+    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+    functionName: 'getDefaultRoyaltyInfo',
+    abi: LENSPOST_721?.abi as Abi,
+    address: contractAddress,
+    args: []
+  });
+
+  const claimConditionData = {
+    quantityLimitPerWallet: readClaimConditionData?.[3],
+    maxClaimableSupply: readClaimConditionData?.[1],
+    startTimestamp: readClaimConditionData?.[0],
+    supplyClaimed: readClaimConditionData?.[2],
+    pricePerToken: readClaimConditionData?.[5],
+    tokenAddress: readClaimConditionData?.[6],
+    merkleRoot: readClaimConditionData?.[4],
+    metadata: readClaimConditionData?.[7]
+  };
+
+  const {
+    maxClaimableSupply,
+    startTimestamp,
+    supplyClaimed,
+    pricePerToken,
+    tokenAddress
+  } = claimConditionData;
+
   const currencyAddress2 = currencyAddress || tokenAddress;
   const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
   const totalMinted2 = totalMinted || supplyClaimed?.toString();
   const price2 = price || pricePerToken;
   const isMinting2 =
     isMinting || BigInt(Math.floor(Date.now() / 1000)) >= startTimestamp;
+  const royaltyTokenAddress = readRoyaltyData?.[0];
+  const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
 
   const tokenSymbol =
     currencyAddress2 === NULL_ADDRESS
@@ -78,7 +101,7 @@ const NFTCard: FC<CollectionData> = ({
     currencyAddress2 && currencyAddress2 != NULL_ADDRESS;
   const mintFee = parseEther(CREATORS_REWARD_FEE);
   const formattedPrice = price2 ? formatEther(price2.toString()) : 0n;
-  const royalty = Number(royaltyBPS) / 100;
+  const royalty = Number(royaltyBps) / 100;
   const mintReferral = LENSPOST_ETH_ADDRESS;
   const mintTotalFee = mintFee * quantity;
   const comment = '';

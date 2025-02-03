@@ -6,17 +6,29 @@ import {
   mainnet,
   polygon,
   degen,
+  morph,
   base
 } from 'wagmi/chains';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { campNetworkTestnetV2, ham, og } from '@/chains';
 import '@rainbow-me/rainbowkit/styles.css';
 import { WALLETCONNECT_KEY } from '@/data';
 import { WagmiProvider } from 'wagmi';
-import { ham, og } from '@/chains';
 
 const config = getDefaultConfig({
-  chains: [base, mainnet, polygon, optimism, arbitrum, degen, ham, og],
+  chains: [
+    campNetworkTestnetV2,
+    optimism,
+    arbitrum,
+    mainnet,
+    polygon,
+    degen,
+    morph,
+    base,
+    ham,
+    og
+  ],
   projectId: WALLETCONNECT_KEY,
   appName: 'Lenspost Studio',
   ssr: true

@@ -14,16 +14,7 @@ const useReadConractData = (params: UseReadContractParameters) => {
     };
   }
 
-  return {
-    quantityLimitPerWallet: data?.[3],
-    maxClaimableSupply: data?.[1],
-    startTimestamp: data?.[0],
-    supplyClaimed: data?.[2],
-    pricePerToken: data?.[5],
-    tokenAddress: data?.[6],
-    merkleRoot: data?.[4],
-    metadata: data?.[7]
-  };
+  return data;
 };
 
 export default useReadConractData;

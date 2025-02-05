@@ -62,6 +62,14 @@ const NFTCard: FC<CollectionData> = ({
     args: []
   });
 
+  const readContractName = useReadContractData({
+    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+    abi: LENSPOST_721?.abi as Abi,
+    address: contractAddress,
+    functionName: 'name',
+    args: []
+  });
+
   const claimConditionData = {
     quantityLimitPerWallet: readClaimConditionData?.[3],
     maxClaimableSupply: readClaimConditionData?.[1],
@@ -89,6 +97,7 @@ const NFTCard: FC<CollectionData> = ({
     isMinting || BigInt(Math.floor(Date.now() / 1000)) >= startTimestamp;
   const royaltyTokenAddress = readRoyaltyData?.[0];
   const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
+  const title2 = title || readContractName;
 
   const tokenSymbol =
     currencyAddress2 === NULL_ADDRESS
@@ -224,7 +233,7 @@ const NFTCard: FC<CollectionData> = ({
     <div className="mx-auto flex max-w-4xl flex-col justify-between gap-8 rounded-3xl bg-white p-6 shadow-2xl sm:flex-row sm:p-10">
       <Image
         className="w-full rounded-3xl shadow-xl sm:w-1/2"
-        alt={title as string}
+        alt={title2 as string}
         src={imageCdnUrl}
         priority={true}
         height={1080}
@@ -235,7 +244,7 @@ const NFTCard: FC<CollectionData> = ({
           <ConnectButton />
         </div>
         <div className="mt-6 flex items-center justify-between">
-          <h3 className="text-xl font-semibold sm:text-4xl">{title}</h3>
+          <h3 className="text-xl font-semibold sm:text-4xl">{title2}</h3>
           <ShareButton successMessage="Link copied!" />
         </div>
         <hr className="my-4 border border-dashed border-[#9E9EAD] border-opacity-30" />

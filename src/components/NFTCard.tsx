@@ -82,6 +82,7 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const {
+    quantityLimitPerWallet,
     maxClaimableSupply,
     startTimestamp,
     supplyClaimed,
@@ -95,6 +96,7 @@ const NFTCard: FC<CollectionData> = ({
   const price2 = price || pricePerToken;
   const isMinting2 =
     isMinting || BigInt(Math.floor(Date.now() / 1000)) >= startTimestamp;
+  const mintQuantityLimitPerWallet = quantityLimitPerWallet?.toString();
   const royaltyTokenAddress = readRoyaltyData?.[0];
   const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
   const title2 = title || readContractName;
@@ -167,7 +169,7 @@ const NFTCard: FC<CollectionData> = ({
       if (currencyAddress2 === NULL_ADDRESS) {
         params = {
           ...params,
-          value: price2
+          value: price2 * quantity
         };
       }
 
@@ -295,6 +297,14 @@ const NFTCard: FC<CollectionData> = ({
             </p>
             <p className="text-sm text-[#11111b] sm:text-sm">
               {isMinting2 ? 'Now' : 'No'}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
+              Mint Per Wallet
+            </p>
+            <p className="text-sm text-[#11111b] sm:text-sm">
+              {mintQuantityLimitPerWallet}
             </p>
           </div>
           <div>

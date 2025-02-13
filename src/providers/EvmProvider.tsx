@@ -7,11 +7,18 @@ import {
   polygon,
   degen,
   morph,
-  base
+  base,
+  zora
 } from 'wagmi/chains';
+import {
+  campNetworkTestnetV2,
+  storyAeneidTestnet,
+  storyMainnet,
+  ham,
+  og
+} from '@/chains';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { campNetworkTestnetV2, ham, og } from '@/chains';
 import '@rainbow-me/rainbowkit/styles.css';
 import { WALLETCONNECT_KEY } from '@/data';
 import { WagmiProvider } from 'wagmi';
@@ -19,6 +26,8 @@ import { WagmiProvider } from 'wagmi';
 const config = getDefaultConfig({
   chains: [
     campNetworkTestnetV2,
+    storyAeneidTestnet,
+    storyMainnet,
     optimism,
     arbitrum,
     mainnet,
@@ -26,6 +35,7 @@ const config = getDefaultConfig({
     degen,
     morph,
     base,
+    zora,
     ham,
     og
   ],

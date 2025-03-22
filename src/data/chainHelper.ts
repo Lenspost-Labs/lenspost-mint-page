@@ -1,4 +1,12 @@
 import {
+  campNetworkTestnetV2,
+  storyAeneidTestnet,
+  basecampTestnet,
+  storyMainnet,
+  ham,
+  og
+} from '@/chains';
+import {
   baseSepolia,
   arbitrum,
   polygon,
@@ -7,15 +15,9 @@ import {
   base,
   zora
 } from 'wagmi/chains';
-import {
-  campNetworkTestnetV2,
-  storyAeneidTestnet,
-  storyMainnet,
-  ham,
-  og
-} from '@/chains';
 
 export const CHAIN_HELPER = Object.freeze({
+  123420001114: basecampTestnet,
   325000: campNetworkTestnetV2,
   1315: storyAeneidTestnet,
   1514: storyMainnet,

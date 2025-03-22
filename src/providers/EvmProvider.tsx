@@ -1,6 +1,14 @@
 'use client';
 
 import {
+  campNetworkTestnetV2,
+  storyAeneidTestnet,
+  basecampTestnet,
+  storyMainnet,
+  ham,
+  og
+} from '@/chains';
+import {
   optimism,
   arbitrum,
   mainnet,
@@ -10,13 +18,6 @@ import {
   base,
   zora
 } from 'wagmi/chains';
-import {
-  campNetworkTestnetV2,
-  storyAeneidTestnet,
-  storyMainnet,
-  ham,
-  og
-} from '@/chains';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -27,6 +28,7 @@ const config = getDefaultConfig({
   chains: [
     campNetworkTestnetV2,
     storyAeneidTestnet,
+    basecampTestnet,
     storyMainnet,
     optimism,
     arbitrum,

@@ -4,3 +4,4 @@ export * from './basecampTestnet';
 export * from './storyMainnet';
 export * from './ham';
 export * from './og';
+export * from './monadTestnet';

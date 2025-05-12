@@ -5,6 +5,7 @@ import {
   storyAeneidTestnet,
   basecampTestnet,
   storyMainnet,
+  monadTestnet,
   ham,
   og
 } from '@/chains';
@@ -39,7 +40,8 @@ const config = getDefaultConfig({
     base,
     zora,
     ham,
-    og
+    og,
+    monadTestnet
   ],
   projectId: WALLETCONNECT_KEY,
   appName: 'Lenspost Studio',

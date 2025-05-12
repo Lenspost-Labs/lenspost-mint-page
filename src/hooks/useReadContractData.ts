@@ -14,7 +14,7 @@ const useReadConractData = (params: UseReadContractParameters) => {
     };
   }
 
-  return data;
+  return { isError: false, data };
 };
 
 export default useReadConractData;

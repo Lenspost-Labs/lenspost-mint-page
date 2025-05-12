@@ -3,6 +3,7 @@ import {
   storyAeneidTestnet,
   basecampTestnet,
   storyMainnet,
+  monadTestnet,
   ham,
   og
 } from '@/chains';
@@ -20,6 +21,7 @@ export const CHAIN_HELPER = Object.freeze({
   123420001114: basecampTestnet,
   325000: campNetworkTestnetV2,
   1315: storyAeneidTestnet,
+  10143: monadTestnet,
   1514: storyMainnet,
   84532: baseSepolia,
   666666666: degen,

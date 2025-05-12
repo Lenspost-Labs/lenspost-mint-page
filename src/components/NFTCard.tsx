@@ -42,33 +42,37 @@ const NFTCard: FC<CollectionData> = ({
     address: EVMAddress,
     isConnected
   } = useAccount();
+
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
-  const readClaimConditionData = useReadContractData({
-    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
-    functionName: 'claimCondition',
-    abi: LENSPOST_721?.abi as Abi,
-    address: contractAddress,
-    args: []
-  });
+  const { isError: isReadClaimConditionError, data: readClaimConditionData } =
+    useReadContractData({
+      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      functionName: 'claimCondition',
+      abi: LENSPOST_721?.abi as Abi,
+      address: contractAddress,
+      args: []
+    });
 
-  const readRoyaltyData = useReadContractData({
-    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
-    functionName: 'getDefaultRoyaltyInfo',
-    abi: LENSPOST_721?.abi as Abi,
-    address: contractAddress,
-    args: []
-  });
+  const { isError: isReadRoyaltyError, data: readRoyaltyData } =
+    useReadContractData({
+      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      functionName: 'getDefaultRoyaltyInfo',
+      abi: LENSPOST_721?.abi as Abi,
+      address: contractAddress,
+      args: []
+    });
 
-  const readContractName = useReadContractData({
-    chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
-    abi: LENSPOST_721?.abi as Abi,
-    address: contractAddress,
-    functionName: 'name',
-    args: []
-  });
+  const { isError: isReadContractNameError, data: readContractName } =
+    useReadContractData({
+      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      abi: LENSPOST_721?.abi as Abi,
+      address: contractAddress,
+      functionName: 'name',
+      args: []
+    });
 
   const claimConditionData = {
     quantityLimitPerWallet: readClaimConditionData?.[3],
@@ -211,6 +215,16 @@ const NFTCard: FC<CollectionData> = ({
       refetchSimulation();
     }
   }, [isSwitchChainSuccess, refetchSimulation]);
+
+  useEffect(() => {
+    if (
+      isReadClaimConditionError ||
+      isReadRoyaltyError ||
+      isReadContractNameError
+    ) {
+      toast.error('Failed to load contract data. Please try again later.');
+    }
+  }, [isReadClaimConditionError, isReadRoyaltyError, isReadContractNameError]);
 
   useEffect(() => {
     if (isTxSuccess) {

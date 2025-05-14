@@ -364,8 +364,10 @@ const NFTCard: FC<CollectionData> = ({
             />
           ) : isContractApprove && !isApproved ? (
             <Button
+              onClick={() => {
+                approve?.();
+              }}
               title="Approve token allowance"
-              onClick={() => approve?.()}
               disabled={isApproving}
             />
           ) : isApproved ? (

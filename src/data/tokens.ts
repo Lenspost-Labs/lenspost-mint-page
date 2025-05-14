@@ -61,6 +61,13 @@ export const TOKENS: any = {
     abi: USDC_ABI,
     decimals: 18
   },
+  '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': {
+    name: 'USD Coin',
+    symbol: 'USDC',
+    chainId: 8453,
+    abi: USDC_ABI,
+    decimals: 18
+  },
   '0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed': {
     symbol: 'DEGEN',
     abi: DEGEN_ABI,

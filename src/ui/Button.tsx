@@ -47,7 +47,11 @@ const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className="rounded-lg bg-[#EBE8FD] px-4 py-2 text-center"
+      className={`rounded-lg px-4 py-2 font-medium transition-all ${
+        disabled ? 'cursor-not-allowed opacity-50' : 'hover:opacity-90'
+      } ${
+        className || 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+      }`}
       onClick={onClick && onClick}
       disabled={disabled}
     >

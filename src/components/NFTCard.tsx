@@ -246,173 +246,194 @@ const NFTCard: FC<CollectionData> = ({
   }, [isWriteError, writeError, isTxError, txError]);
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col justify-between gap-8 rounded-3xl bg-white p-6 shadow-2xl sm:flex-row sm:p-10">
-      <div className="my-auto flex h-full w-full">
-        <Image
-          className="aspect-square rounded-3xl shadow-xl"
-          alt={title2 as string}
-          src={imageCdnUrl}
-          priority={true}
-          height={1080}
-          width={1920}
-        />
+    <div className="w-full max-w-6xl overflow-hidden rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
+      <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-purple-500" />
+          <h2 className="text-lg font-bold tracking-tight text-purple-400">
+            POSTER MINT
+          </h2>
+          <Image
+            src="/apple-touch-icon.png"
+            className="h-auto w-auto"
+            alt="Poster Logo"
+            height={28}
+            width={28}
+          />
+        </div>
+        <ConnectButton />
       </div>
 
-      <div className="w-full">
-        <div className="ml-auto w-fit">
-          <ConnectButton />
+      <div className="flex flex-col justify-between gap-8 p-6 md:flex-row md:p-8">
+        <div className="w-full md:w-1/2">
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900/30 to-blue-900/30 p-1 shadow-xl">
+            <Image
+              className="aspect-square w-full rounded-xl object-cover"
+              alt={title2 as string}
+              src={imageCdnUrl}
+              priority={true}
+              height={1080}
+              width={1920}
+            />
+          </div>
         </div>
-        <div className="mt-6 flex items-center justify-between">
-          <h3 className="text-xl font-semibold sm:text-4xl">{title2}</h3>
-          <ShareButton successMessage="Link copied!" />
-        </div>
-        <hr className="my-4 border border-dashed border-[#9E9EAD] border-opacity-30" />
-        <div className="flex w-full flex-wrap gap-9">
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Contract
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              <span className="flex items-center gap-1">
-                {formatAddress(contractAddress)}
-                <CopyButton
-                  successMessage="Address copied!"
-                  text={contractAddress as string}
-                />
+
+        <div className="w-full md:w-1/2">
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-bold text-white md:text-3xl">
+                {title2}
+              </h3>
+              <ShareButton successMessage="Link copied!" />
+            </div>
+
+            <div className="mt-2 flex items-center gap-2">
+              <span
+                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${isMinting2 ? 'bg-green-900/60 text-green-400' : 'bg-red-900/60 text-red-400'}`}
+              >
+                {isMinting2 ? 'Live Mint' : 'Not Minting'}
               </span>
-            </p>
+              <span className="inline-flex rounded-full bg-blue-900/60 px-2 py-1 text-xs font-medium text-blue-400">
+                {contractTypeFiltered}
+              </span>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Network
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {CHAIN_HELPER[chainId as keyof typeof CHAIN_HELPER]?.name}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Type
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {contractTypeFiltered}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Price
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {Number(formattedPrice) > 0
-                ? `${formattedPrice} ${tokenSymbol}`
-                : 'Free'}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Minting
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {isMinting2 ? 'Now' : 'No'}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Mint Per Wallet
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {mintQuantityLimitPerWallet}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Minted
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">
-              {totalMinted2}/{maxSupply2}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#11111b] sm:text-sm">
-              Royalty
-            </p>
-            <p className="text-sm text-[#11111b] sm:text-sm">{royalty} %</p>
+
+          <div className="space-y-4 rounded-xl bg-gray-800/50 p-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">Price</p>
+                <p className="text-sm font-bold text-white">
+                  {Number(formattedPrice) > 0
+                    ? `${formattedPrice} ${tokenSymbol}`
+                    : 'Free'}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">Network</p>
+                <p className="text-sm font-bold text-white">
+                  {CHAIN_HELPER[chainId as keyof typeof CHAIN_HELPER]?.name}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">Minted</p>
+                <p className="text-sm font-bold text-white">
+                  <span className="text-purple-400">{totalMinted2}</span>/
+                  {maxSupply2}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">
+                  Max Per Wallet
+                </p>
+                <p className="text-sm font-bold text-white">
+                  {mintQuantityLimitPerWallet}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">Royalty</p>
+                <p className="text-sm font-bold text-white">{royalty} %</p>
+              </div>
+
+              <div className="rounded-lg bg-gray-800 p-3">
+                <p className="text-xs font-medium text-gray-400">Contract</p>
+                <div className="flex items-center gap-1 text-sm font-bold text-white">
+                  {formatAddress(contractAddress)}
+                  <CopyButton
+                    successMessage="Address copied!"
+                    text={contractAddress as string}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-300">
+                  Quantity:
+                </label>
+                <input
+                  className={`w-16 rounded-md bg-gray-700 p-2 text-center font-bold text-white outline-none ring-2 ${
+                    isInputError ? 'ring-red-500' : 'ring-purple-500'
+                  } focus:ring-${isInputError ? 'red' : 'purple'}-400`}
+                  value={quantity.toString()}
+                  onChange={handleQuantity}
+                  placeholder="1"
+                  type="number"
+                  min="1"
+                />
+              </div>
+
+              <div className="mt-4 w-full">
+                {!isConnected ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    title="Connect Wallet to Mint"
+                    onClick={() => {}}
+                  />
+                ) : !isSupportedChain ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    onClick={() => switchChain({ chainId: chainId as number })}
+                    title="Switch Network"
+                  />
+                ) : isContractApprove && !isApproved ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    onClick={() => {
+                      approve?.();
+                    }}
+                    title="Approve token allowance"
+                    disabled={isApproving}
+                  />
+                ) : isApproved ? (
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    onClick={mint721}
+                    title="Mint NFT"
+                  />
+                ) : (
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    disabled={!isConnected || isTxSuccess}
+                    onClick={mint721}
+                    title="Mint NFT"
+                  />
+                )}
+              </div>
+
+              {(isWriting || isTxConfirming) && (
+                <div className="mt-2 text-center text-sm font-semibold text-purple-400">
+                  {isTxConfirming && 'Confirming transaction...'}
+                  {isWriting && 'Processing...'}
+                </div>
+              )}
+
+              {isTxSuccess && (
+                <div className="mt-2 text-center text-sm text-green-400">
+                  <span>Transaction successful! </span>
+                  <a
+                    href={
+                      CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
+                        ?.blockExplorers?.default?.url +
+                      '/tx/' +
+                      txData?.transactionHash
+                    }
+                    className="font-medium underline"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    View transaction
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <hr className="my-4 border border-dashed border-[#9E9EAD] border-opacity-30" />
-
-        <div className="mt-2 flex w-full items-center justify-between">
-          <div className="flex w-full items-center gap-2">
-            <label className="text-sm font-medium text-black">Quantity:</label>
-            <input
-              className={`w-16 rounded-md bg-slate-100 p-1 text-center outline-none ring-2 ${
-                isInputError ? 'ring-red-500' : 'ring-blue-800'
-              } focus:ring-${isInputError ? 'red' : 'blue'}-500`}
-              value={quantity.toString()}
-              onChange={handleQuantity}
-              placeholder="1"
-              type="number"
-              min="1"
-            />
-          </div>
-        </div>
-
-        <div className="mt-2 w-full rounded-lg bg-[#EBE8FD] px-4 py-2 text-center sm:w-fit">
-          {!isConnected ? (
-            <ConnectButton />
-          ) : !isSupportedChain ? (
-            <Button
-              onClick={() => switchChain({ chainId: chainId as number })}
-              title="Switch Network"
-            />
-          ) : isContractApprove && !isApproved ? (
-            <Button
-              onClick={() => {
-                approve?.();
-              }}
-              title="Approve token allowance"
-              disabled={isApproving}
-            />
-          ) : isApproved ? (
-            <Button
-              // disabled={!isConnected || isSimulateError || !simulateData}
-              onClick={mint721}
-              title="Mint NFT"
-            />
-          ) : (
-            <Button
-              disabled={!isConnected || isTxSuccess}
-              onClick={mint721}
-              title="Mint NFT"
-            />
-          )}
-        </div>
-
-        {(isWriting || isTxConfirming) && (
-          <div className="mt-2 text-sm font-semibold ">
-            {/* {isSimulating && 'Simulating...'} */}
-            {isTxConfirming && 'Confirming...'}
-            {isWriting && 'Writing...'}
-          </div>
-        )}
-
-        {isTxSuccess && (
-          <div className="mt-2 text-sm text-green-500">
-            <a
-              href={
-                CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
-                  ?.blockExplorers?.default?.url +
-                '/tx/' +
-                txData?.transactionHash
-              }
-              rel="noreferrer"
-              target="_blank"
-            >
-              {' '}
-              View tx
-            </a>
-          </div>
-        )}
       </div>
     </div>
   );

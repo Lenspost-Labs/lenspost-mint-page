@@ -62,7 +62,7 @@ const RootLayout = ({
             closeButton
             richColors
           />
-          <div className="flex h-screen items-center justify-center bg-[#B7DAEE] p-4 sm:p-10">
+          <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
             {children}
           </div>
         </EvmProvider>

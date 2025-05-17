@@ -11,11 +11,11 @@ interface ShareButtonProps {
 const ShareButton: FC<ShareButtonProps> = ({ successMessage, url }) => {
   return (
     <div
+      className="cursor-pointer rounded-full border-2 border-gray-700 bg-gray-800 p-1.5 text-gray-300 transition-all hover:border-purple-600 hover:text-purple-400"
       onClick={() => {
         navigator.clipboard.writeText(window.location.href || url);
         toast.success(successMessage);
       }}
-      className="cursor-pointer rounded-full border-2 border-[#E7D9E9] p-1"
     >
       <Share height={16} width={16} />
     </div>

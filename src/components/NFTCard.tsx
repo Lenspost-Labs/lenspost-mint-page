@@ -246,7 +246,7 @@ const NFTCard: FC<CollectionData> = ({
   }, [isWriteError, writeError, isTxError, txError]);
 
   return (
-    <div className="w-full max-w-6xl overflow-hidden rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
+    <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-purple-500" />
@@ -383,7 +383,7 @@ const NFTCard: FC<CollectionData> = ({
                   />
                 ) : isContractApprove && !isApproved ? (
                   <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-2 text-white"
                     onClick={() => {
                       approve?.();
                     }}

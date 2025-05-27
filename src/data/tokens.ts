@@ -45,7 +45,7 @@ export const TOKENS: any = {
     symbol: 'USDT',
     chainId: 42161,
     abi: USDT_ABI,
-    decimals: 18
+    decimals: 6
   },
   '0xAfb89a09D82FBDE58f18Ac6437B3fC81724e4dF6': {
     name: 'The Doge NFT',
@@ -59,14 +59,14 @@ export const TOKENS: any = {
     symbol: 'USDC',
     chainId: 42161,
     abi: USDC_ABI,
-    decimals: 18
+    decimals: 6
   },
   '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': {
     name: 'USD Coin',
     symbol: 'USDC',
     chainId: 8453,
     abi: USDC_ABI,
-    decimals: 18
+    decimals: 6
   },
   '0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed': {
     symbol: 'DEGEN',

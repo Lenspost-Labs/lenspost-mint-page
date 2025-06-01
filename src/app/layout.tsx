@@ -55,6 +55,7 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={inter.className}>
+        {/* <SplitsClientProvider> */}
         <EvmProvider>
           <Toaster
             position="bottom-center"
@@ -66,6 +67,7 @@ const RootLayout = ({
             {children}
           </div>
         </EvmProvider>
+        {/* </SplitsClientProvider> */}
       </body>
     </html>
   );

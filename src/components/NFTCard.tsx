@@ -110,7 +110,8 @@ const NFTCard: FC<CollectionData> = ({
       ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
           ?.nativeCurrency?.symbol
       : TOKENS?.[currencyAddress2]?.symbol;
-  const isSupportedChain: Boolean = isConnected && chainId === currentChainId;
+  const isSupportedChain: Boolean = isConnected && chainId == currentChainId;
+
   const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) as string;
   const isContractApprove =
     currencyAddress2 && currencyAddress2 != NULL_ADDRESS;
@@ -378,7 +379,6 @@ const NFTCard: FC<CollectionData> = ({
                 ) : !isSupportedChain ? (
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    onClick={() => switchChain({ chainId: chainId as number })}
                     title="Switch Network"
                   />
                 ) : isContractApprove && !isApproved ? (

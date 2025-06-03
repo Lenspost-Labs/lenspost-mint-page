@@ -8,6 +8,7 @@ import {
   APP_URL,
   AUTHOR
 } from '@/data';
+import FarcasterFrameProvider from '@/providers/FarcasterProvider';
 import { EvmProvider } from '@/providers';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
@@ -25,12 +26,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: APP_NAME
   },
-  openGraph: {
-    images: [`${APP_URL}/OG_logo_1200x630.png`],
-    description: APP_DESCRIPTION,
-    title: APP_NAME,
-    url: APP_URL
-  },
+  // openGraph: {
+  //   images: [`${APP_URL}/OG_logo_1200x630.png`],
+  //   description: APP_DESCRIPTION,
+  //   title: APP_NAME,
+  //   url: APP_URL
+  // },
   keywords: [
     'Lenspost Mint',
     'Lenspost NFT',
@@ -55,19 +56,19 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <SplitsClientProvider> */}
-        <EvmProvider>
-          <Toaster
-            position="bottom-center"
-            duration={8000}
-            closeButton
-            richColors
-          />
-          <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
-            {children}
-          </div>
-        </EvmProvider>
-        {/* </SplitsClientProvider> */}
+        <FarcasterFrameProvider>
+          <EvmProvider>
+            <Toaster
+              position="bottom-center"
+              duration={8000}
+              closeButton
+              richColors
+            />
+            <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
+              {children}
+            </div>
+          </EvmProvider>
+        </FarcasterFrameProvider>
       </body>
     </html>
   );

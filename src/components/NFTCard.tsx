@@ -12,6 +12,7 @@ import {
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
 import { formatEther, parseEther, Abi } from 'viem';
@@ -42,7 +43,7 @@ const NFTCard: FC<CollectionData> = ({
     address: EVMAddress,
     isConnected
   } = useAccount();
-
+  const { openConnectModal } = useConnectModal();
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -374,7 +375,7 @@ const NFTCard: FC<CollectionData> = ({
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Connect Wallet to Mint"
-                    onClick={() => {}}
+                    onClick={openConnectModal}
                   />
                 ) : !isSupportedChain ? (
                   <Button

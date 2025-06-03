@@ -167,9 +167,9 @@ const NFTCard: FC<CollectionData> = ({
           '0x'
         ],
         address: contractAddress,
+        chainId: Number(chainId),
         abi: LENSPOST_721?.abi,
-        functionName: 'claim',
-        chainId: chainId
+        functionName: 'claim'
       };
 
       if (currencyAddress2 === NULL_ADDRESS) {

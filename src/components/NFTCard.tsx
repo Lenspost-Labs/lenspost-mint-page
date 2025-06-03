@@ -379,6 +379,14 @@ const NFTCard: FC<CollectionData> = ({
                   />
                 ) : !isSupportedChain ? (
                   <Button
+                    onClick={() => {
+                      switchChain?.({
+                        chainId:
+                          CHAIN_HELPER[
+                            Number(chainId) as keyof typeof CHAIN_HELPER
+                          ]?.id
+                      });
+                    }}
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Switch Network"
                   />

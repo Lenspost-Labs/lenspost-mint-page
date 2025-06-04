@@ -39,6 +39,24 @@ export const generateMetadata = async ({
   });
 
   return {
+    other: {
+      ...frameMetadata,
+      'fc:frame': JSON.stringify({
+        button: {
+          action: {
+            splashImageUrl:
+              'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+            url: `https://mint.poster.fun/mint/${slug}`,
+            splashBackgroundColor: '#ffffff',
+            type: 'launch_frame',
+            name: 'Mint'
+          },
+          title: 'Collect'
+        },
+        imageUrl: imageCdnUrl,
+        version: 'next'
+      })
+    },
     twitter: {
       images: [
         {
@@ -78,7 +96,6 @@ export const generateMetadata = async ({
     authors: [{ url: LENSPOST_APP_URL, name: AUTHOR }],
     metadataBase: new URL(APP_URL),
     description: APP_DESCRIPTION,
-    other: { ...frameMetadata },
     icons: ['/favicon.ico'],
     creator: AUTHOR,
     title: APP_NAME

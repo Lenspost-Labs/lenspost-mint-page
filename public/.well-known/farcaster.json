@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjIwMTExLCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4ZDQxNGQ5NEQ0YTI5OTA1NmQ2MEVhYTA1YTFEMjc5NjQyMjI1QjgzYiJ9",
+    "payload": "eyJkb21haW4iOiJtaW50LnBvc3Rlci5mdW4ifQ",
+    "signature": "MHgyY2NjYzg3NmM4OGE5OTdkNTJmZWNjY2MwZGI1ZTkzNjUzMjA3NWJlYjNkNmUwNTAzZDlkMDdiNjVkM2JiYTQ2MmRlYzgyMDhkMmVmODVlNzcyMzJjMGEyMzdhYzAzNTg1ZmE4NTFiNDg0ZTAxMTU3YzNjMDFjZDYxMmMwNTE1ODFi"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Mint-Page",
+    "iconUrl": "https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png",
+    "homeUrl": "https://mint.poster.fun",
+    "imageUrl": "https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png",
+    "buttonTitle": "Mint-page",
+    "splashImageUrl": "https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://dev-poster.vercel.app/api/webhook"
+  }
+}

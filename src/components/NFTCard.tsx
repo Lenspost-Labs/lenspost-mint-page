@@ -254,6 +254,32 @@ const NFTCard: FC<CollectionData> = ({
     }
   }, [isWriteError, writeError, isTxError, txError]);
 
+  // Add allowance check for ERC20 tokens
+  const { isError: isReadAllowanceError, data: currentAllowance } =
+    useReadContractData({
+      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      abi: TOKENS?.[currencyAddress2]?.abi,
+      args: [EVMAddress, contractAddress],
+      address: currencyAddress2,
+      functionName: 'allowance'
+    });
+
+  // Update isApproved based on actual allowance
+  useEffect(() => {
+    if (
+      currencyAddress2 &&
+      currencyAddress2 !== NULL_ADDRESS &&
+      currentAllowance &&
+      price2
+    ) {
+      const requiredAmount = price2 * quantity;
+      const hasRequiredAllowance =
+        BigInt(currentAllowance.toString()) >=
+        BigInt(requiredAmount.toString());
+      setIsApproved(hasRequiredAllowance);
+    }
+  }, [currentAllowance, currencyAddress2, price2, quantity]);
+
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">

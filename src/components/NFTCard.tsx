@@ -111,13 +111,20 @@ const NFTCard: FC<CollectionData> = ({
       ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
           ?.nativeCurrency?.symbol
       : TOKENS?.[currencyAddress2]?.symbol;
+
   const isSupportedChain: Boolean = isConnected && chainId == currentChainId;
 
   const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) as string;
   const isContractApprove =
     currencyAddress2 && currencyAddress2 != NULL_ADDRESS;
   const mintFee = parseEther(CREATORS_REWARD_FEE);
-  const formattedPrice = price2 ? formatEther(price2.toString()) : 0n;
+
+  const formattedPrice = price2
+    ? currencyAddress2 === NULL_ADDRESS
+      ? formatEther(price2.toString())
+      : Number(price2) / 10 ** 6
+    : '0';
+
   const royalty = Number(royaltyBps) / 100;
   const mintReferral = LENSPOST_ETH_ADDRESS;
   const mintTotalFee = mintFee * quantity;

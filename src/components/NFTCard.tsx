@@ -252,9 +252,6 @@ const NFTCard: FC<CollectionData> = ({
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-purple-500" />
-          <h2 className="text-lg font-bold tracking-tight text-purple-400">
-            POSTER MINT
-          </h2>
           <Image
             src="/apple-touch-icon.png"
             className="h-auto w-auto"
@@ -262,6 +259,9 @@ const NFTCard: FC<CollectionData> = ({
             height={28}
             width={28}
           />
+          <h2 className="text-lg font-bold tracking-tight text-purple-400">
+            POSTER MINT
+          </h2>
         </div>
         <ConnectButton />
       </div>

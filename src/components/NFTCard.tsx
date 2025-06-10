@@ -23,6 +23,7 @@ import { formatAddress } from '@/utils';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
+import ShareModal from './ShareModal';
 import { ConnectButton } from '.';
 
 const NFTCard: FC<CollectionData> = ({
@@ -48,6 +49,7 @@ const NFTCard: FC<CollectionData> = ({
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
       chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
@@ -96,6 +98,7 @@ const NFTCard: FC<CollectionData> = ({
   } = claimConditionData;
 
   const currencyAddress2 = currencyAddress || tokenAddress;
+  console.log(currencyAddress2, 'yooo');
   const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
   const totalMinted2 = totalMinted || supplyClaimed?.toString();
   const price2 = price || pricePerToken;
@@ -238,6 +241,7 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (isTxSuccess) {
       toast.success('NFT minted successfully!');
+      setShowSuccessModal(true);
     }
   }, [isTxSuccess]);
 
@@ -284,7 +288,7 @@ const NFTCard: FC<CollectionData> = ({
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-purple-500" />
+          {/* <div className="h-2 w-2 rounded-full bg-purple-500" /> */}
           <Image
             src="/apple-touch-icon.png"
             className="h-auto w-auto"
@@ -477,6 +481,14 @@ const NFTCard: FC<CollectionData> = ({
           </div>
         </div>
       </div>
+
+      <ShareModal
+        onClose={() => setShowSuccessModal(false)}
+        txHash={txData?.transactionHash || ''}
+        chainId={Number(chainId)}
+        isOpen={showSuccessModal}
+        title={title2 as string}
+      />
     </div>
   );
 };

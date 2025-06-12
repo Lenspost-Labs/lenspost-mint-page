@@ -12,14 +12,14 @@ import {
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
+import { formatStableTokens, formatAddress } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
-import { formatEther, parseEther, Abi } from 'viem';
 import { useSwitchChain, useAccount } from 'wagmi';
 import { useEffect, useState, FC } from 'react';
 import { LENSPOST_721 } from '@/contracts';
-import { formatAddress } from '@/utils';
+import { parseEther, Abi } from 'viem';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
@@ -123,9 +123,7 @@ const NFTCard: FC<CollectionData> = ({
   const mintFee = parseEther(CREATORS_REWARD_FEE);
 
   const formattedPrice = price2
-    ? currencyAddress2 === NULL_ADDRESS
-      ? formatEther(price2.toString())
-      : Number(price2) / 10 ** 6
+    ? formatStableTokens(currencyAddress2, price2.toString())
     : '0';
 
   const royalty = Number(royaltyBps) / 100;

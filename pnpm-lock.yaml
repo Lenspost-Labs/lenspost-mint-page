@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      '@0xsplits/splits-sdk-react':
+        specifier: ^3.1.0
+        version: 3.1.0(react@18.3.1)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))
       '@coinbase/onchainkit':
         specifier: ^0.13.0
         version: 0.13.4(@tanstack/react-query@5.45.1(react@18.3.1))(@xmtp/frames-validator@0.6.1(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))(graphql-request@6.1.0(graphql@16.8.2))(graphql@16.8.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))
@@ -136,6 +139,40 @@ importers:
         version: 5.4.5
 
 packages:
+  '@0no-co/graphql.web@1.1.2':
+    resolution:
+      {
+        integrity: sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==
+      }
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+
+  '@0xsplits/splits-sdk-react@3.1.0':
+    resolution:
+      {
+        integrity: sha512-RqVN3iwRhVA5AI5qet10BsIEs6m7fvQ+D5B+JZhZoaw3HLl80bSFgkwbzQeynJNs/OVuVH/y9uYqEfbSUrEpwg==
+      }
+    peerDependencies:
+      react: 17.x.x || 18.x.x
+      viem: ^2.0.0
+    peerDependenciesMeta:
+      viem:
+        optional: true
+
+  '@0xsplits/splits-sdk@5.1.0':
+    resolution:
+      {
+        integrity: sha512-hkygG/mehwmbmWkF8vjPZCGhS/Fz+rX3F5vj2iVkcuMK8UfL1n+xVxn+7lPBBmflugz2cV7d4KCFehGYs5uhDw==
+      }
+    peerDependencies:
+      viem: ^2.0.0
+    peerDependenciesMeta:
+      viem:
+        optional: true
+
   '@adraffy/ens-normalize@1.10.0':
     resolution:
       {
@@ -3480,6 +3517,12 @@ packages:
         integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
       }
 
+  '@urql/core@4.3.0':
+    resolution:
+      {
+        integrity: sha512-wT+FeL8DG4x5o6RfHEnONNFVDM3616ouzATMYUClB6CB+iIu2mwfBKd7xSUxYOZmwtxna5/hDRQdMl3nbQZlnw==
+      }
+
   '@vanilla-extract/css@1.14.0':
     resolution:
       {
@@ -4110,6 +4153,12 @@ packages:
     resolution:
       {
         integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+      }
+
+  base-64@1.0.0:
+    resolution:
+      {
+        integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
       }
 
   base64-js@1.5.1:
@@ -9864,6 +9913,12 @@ packages:
       }
     engines: { node: '>=8' }
 
+  wonka@6.3.5:
+    resolution:
+      {
+        integrity: sha512-SSil+ecw6B4/Dm7Pf2sAshKQ5hWFvfyGlfPbEd6A14dOH6VDjrmbY86u6nZvy9omGwwIPFR8V41+of1EezgoUw==
+      }
+
   word-wrap@1.2.5:
     resolution:
       {
@@ -10079,6 +10134,26 @@ packages:
         optional: true
 
 snapshots:
+  '@0no-co/graphql.web@1.1.2(graphql@16.8.2)':
+    optionalDependencies:
+      graphql: 16.8.2
+
+  '@0xsplits/splits-sdk-react@3.1.0(react@18.3.1)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))':
+    dependencies:
+      '@0xsplits/splits-sdk': 5.1.0(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))
+      react: 18.3.1
+    optionalDependencies:
+      viem: 2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48)
+
+  '@0xsplits/splits-sdk@5.1.0(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48))':
+    dependencies:
+      '@urql/core': 4.3.0(graphql@16.8.2)
+      base-64: 1.0.0
+      graphql: 16.8.2
+      lodash: 4.17.21
+    optionalDependencies:
+      viem: 2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(zod@3.25.48)
+
   '@adraffy/ens-normalize@1.10.0': {}
 
   '@adraffy/ens-normalize@1.11.0': {}
@@ -12740,6 +12815,13 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
+  '@urql/core@4.3.0(graphql@16.8.2)':
+    dependencies:
+      '@0no-co/graphql.web': 1.1.2(graphql@16.8.2)
+      wonka: 6.3.5
+    transitivePeerDependencies:
+      - graphql
+
   '@vanilla-extract/css@1.14.0':
     dependencies:
       '@emotion/hash': 0.9.1
@@ -13425,6 +13507,8 @@ snapshots:
       - '@babel/core'
 
   balanced-match@1.0.2: {}
+
+  base-64@1.0.0: {}
 
   base64-js@1.5.1: {}
 
@@ -17113,6 +17197,8 @@ snapshots:
   widest-line@3.1.0:
     dependencies:
       string-width: 4.2.3
+
+  wonka@6.3.5: {}
 
   word-wrap@1.2.5: {}
 

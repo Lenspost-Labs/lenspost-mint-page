@@ -2,6 +2,7 @@
 import farcasterFrame from '@farcaster/frame-wagmi-connector';
 import FrameSDK from '@farcaster/frame-sdk';
 import { connect } from 'wagmi/actions';
+import { useAccount } from 'wagmi';
 import { useEffect } from 'react';
 
 import { config } from '../providers/EVM/EVMWalletProvider';
@@ -10,6 +11,8 @@ export default function FarcasterFrameProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const { isConnected } = useAccount();
+
   useEffect(() => {
     const init = async () => {
       const context = await FrameSDK.context;
@@ -40,7 +43,7 @@ export default function FarcasterFrameProvider({
       }, 500);
     };
     init();
-  }, []);
+  }, [isConnected]);
 
   return children;
 }

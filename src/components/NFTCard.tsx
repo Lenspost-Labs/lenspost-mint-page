@@ -23,6 +23,7 @@ import { parseEther, Abi } from 'viem';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
+import { Recipients } from './Recipients';
 import ShareModal from './ShareModal';
 import { ConnectButton } from '.';
 
@@ -98,7 +99,6 @@ const NFTCard: FC<CollectionData> = ({
   } = claimConditionData;
 
   const currencyAddress2 = currencyAddress || tokenAddress;
-  console.log(currencyAddress2, 'yooo');
   const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
   const totalMinted2 = totalMinted || supplyClaimed?.toString();
   const price2 = price || pricePerToken;
@@ -286,7 +286,6 @@ const NFTCard: FC<CollectionData> = ({
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
-          {/* <div className="h-2 w-2 rounded-full bg-purple-500" /> */}
           <Image
             src="/apple-touch-icon.png"
             className="h-auto w-auto"
@@ -386,6 +385,13 @@ const NFTCard: FC<CollectionData> = ({
                   />
                 </div>
               </div>
+
+              {royaltyTokenAddress && (
+                <Recipients
+                  splitAddress={royaltyTokenAddress}
+                  chainId={chainId || 1}
+                />
+              )}
             </div>
 
             <div className="mt-6 space-y-4">

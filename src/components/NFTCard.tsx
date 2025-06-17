@@ -52,6 +52,7 @@ const NFTCard: FC<CollectionData> = ({
   const [quantity, setQuantity] = useState(1n);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isApprovalConfirming, setIsApprovalConfirming] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
       chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
@@ -289,6 +290,7 @@ const NFTCard: FC<CollectionData> = ({
     try {
       if (isContractApprove && !isApproved) {
         // approve
+        setIsProcessing(true);
         approve();
       } else {
         // If non native token or already approved
@@ -303,8 +305,9 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     const handleApproveConfirmation = async () => {
       try {
-        if (approveWriteData && publicClient) {
+        if (approveWriteData && publicClient && isProcessing) {
           setIsApprovalConfirming(true);
+          setIsProcessing(false);
           const receipt = await publicClient.waitForTransactionReceipt({
             hash: approveWriteData,
             confirmations: 2
@@ -324,7 +327,7 @@ const NFTCard: FC<CollectionData> = ({
     };
 
     handleApproveConfirmation();
-  }, [approveWriteData, publicClient, mint721]);
+  }, [approveWriteData, publicClient, mint721, isProcessing]);
 
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">

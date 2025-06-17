@@ -11,12 +11,12 @@ import {
   REGEX
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
+import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
-import { useSwitchChain, useAccount } from 'wagmi';
 import { useEffect, useState, FC } from 'react';
 import { LENSPOST_721 } from '@/contracts';
 import { parseEther, Abi } from 'viem';
@@ -51,6 +51,7 @@ const NFTCard: FC<CollectionData> = ({
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isApprovalConfirming, setIsApprovalConfirming] = useState(false);
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
       chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
@@ -210,7 +211,7 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const {
-    write: { isApproving, approve },
+    write: { approveWriteData, isApproving, approve },
     tx: { isApproveTxSuccess }
   } = useApprove(approveParams);
 
@@ -219,6 +220,8 @@ const NFTCard: FC<CollectionData> = ({
     write: { isWriteError, writeError, isWriting, mint721 },
     simulation: { refetchSimulation }
   } = useMint721(mintParams());
+
+  const publicClient = usePublicClient();
 
   useEffect(() => {
     if (isSwitchChainSuccess) {
@@ -281,6 +284,47 @@ const NFTCard: FC<CollectionData> = ({
       setIsApproved(hasRequiredAllowance);
     }
   }, [currentAllowance, currencyAddress2, price2, quantity]);
+
+  const handleMint = async () => {
+    try {
+      if (isContractApprove && !isApproved) {
+        // approve
+        approve();
+      } else {
+        // If non native token or already approved
+        mint721();
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to mint');
+    }
+  };
+
+  // watching approve txs
+  useEffect(() => {
+    const handleApproveConfirmation = async () => {
+      try {
+        if (approveWriteData && publicClient) {
+          setIsApprovalConfirming(true);
+          const receipt = await publicClient.waitForTransactionReceipt({
+            hash: approveWriteData,
+            confirmations: 2
+          });
+
+          if (receipt.status === 'success') {
+            setIsApprovalConfirming(false);
+            setIsApproved(true);
+            mint721();
+          }
+        }
+        setIsApprovalConfirming(false);
+      } catch (error: any) {
+        setIsApprovalConfirming(false);
+        toast.error(error?.message || 'Failed to confirm approval');
+      }
+    };
+
+    handleApproveConfirmation();
+  }, [approveWriteData, publicClient, mint721]);
 
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
@@ -431,35 +475,33 @@ const NFTCard: FC<CollectionData> = ({
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Switch Network"
                   />
-                ) : isContractApprove && !isApproved ? (
-                  <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-2 text-white"
-                    onClick={() => {
-                      approve?.();
-                    }}
-                    title="Approve token allowance"
-                    disabled={isApproving}
-                  />
-                ) : isApproved ? (
-                  <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    onClick={mint721}
-                    title="Mint NFT"
-                  />
                 ) : (
                   <Button
+                    title={
+                      isApproving
+                        ? 'Approving...'
+                        : isWriting || isTxConfirming || isApprovalConfirming
+                          ? 'Minting...'
+                          : 'Collect NFT'
+                    }
+                    disabled={
+                      !isConnected ||
+                      isTxSuccess ||
+                      isApproving ||
+                      isWriting ||
+                      isTxConfirming
+                    }
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    disabled={!isConnected || isTxSuccess}
-                    onClick={mint721}
-                    title="Mint NFT"
+                    onClick={handleMint}
                   />
                 )}
               </div>
 
-              {(isWriting || isTxConfirming) && (
+              {(isApproving || isWriting || isTxConfirming) && (
                 <div className="mt-2 text-center text-sm font-semibold text-purple-400">
+                  {isApproving && 'Approving token access...'}
+                  {isWriting && 'Preparing transaction...'}
                   {isTxConfirming && 'Confirming transaction...'}
-                  {isWriting && 'Processing...'}
                 </div>
               )}
 

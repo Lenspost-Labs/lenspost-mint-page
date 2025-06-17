@@ -233,16 +233,21 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (
       isReadClaimConditionError ||
-      isReadRoyaltyError ||
-      isReadContractNameError
+      isReadContractNameError ||
+      isReadRoyaltyError
     ) {
-      toast.error('Failed to load contract data. Please try again later.');
+      console.error('Contract data loading errors:', {
+        isReadClaimConditionError,
+        isReadContractNameError,
+        isReadRoyaltyError
+      });
+      toast.error('Unable to load collection details. Please try again later.');
     }
-  }, [isReadClaimConditionError, isReadRoyaltyError, isReadContractNameError]);
+  }, [isReadClaimConditionError, isReadContractNameError, isReadRoyaltyError]);
 
   useEffect(() => {
     if (isTxSuccess) {
-      toast.success('NFT minted successfully!');
+      toast.success('Successfully collected your NFT! 🎉');
       setShowSuccessModal(true);
     }
   }, [isTxSuccess]);
@@ -256,7 +261,20 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (isWriteError || isTxError) {
       const error: any = writeError || txError;
-      toast.error(error?.message?.split('\n')[0] || 'An error occurred');
+      console.error('Mint/transaction error:', error?.message);
+
+      let userMessage = 'Unable to complete the mint. Please try again.';
+
+      if (error?.message?.includes('insufficient funds')) {
+        userMessage =
+          "You don't have enough funds to complete this transaction.";
+      } else if (error?.message?.includes('user rejected')) {
+        userMessage = 'Transaction was cancelled.';
+      } else if (error?.message?.includes('gas')) {
+        userMessage = 'Network is busy. Please try again with higher gas fees.';
+      }
+
+      toast.error(userMessage);
     }
   }, [isWriteError, writeError, isTxError, txError]);
 
@@ -297,7 +315,8 @@ const NFTCard: FC<CollectionData> = ({
         mint721();
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to mint');
+      console.error('Mint handler error:', error);
+      toast.error('Unable to process your mint request. Please try again.');
     }
   };
 
@@ -321,8 +340,8 @@ const NFTCard: FC<CollectionData> = ({
         }
         setIsApprovalConfirming(false);
       } catch (error: any) {
-        setIsApprovalConfirming(false);
-        toast.error(error?.message || 'Failed to confirm approval');
+        console.error('Approval confirmation error:', error);
+        toast.error('Unable to confirm approval. Please try again.');
       }
     };
 

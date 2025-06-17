@@ -485,7 +485,7 @@ const NFTCard: FC<CollectionData> = ({
                         ? 'Approving...'
                         : isWriting || isTxConfirming || isApprovalConfirming
                           ? 'Minting...'
-                          : 'Collect NFT'
+                          : 'Collect'
                     }
                     disabled={
                       !isConnected ||

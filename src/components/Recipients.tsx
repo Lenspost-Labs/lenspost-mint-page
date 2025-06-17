@@ -3,9 +3,22 @@
 import { arbitrum, optimism, mainnet, base } from 'viem/chains';
 import { useSplitMetadata } from '@0xsplits/splits-sdk-react';
 import { createPublicClient, http } from 'viem';
+import { useEnsFromAddress } from '@/hooks';
 import { formatAddress } from '@/utils';
 import { CopyButton } from '@/ui';
 import { FC } from 'react';
+
+const RecipientName: FC<{ address: `0x${string}` }> = ({ address }) => {
+  const { isLoading, ensName } = useEnsFromAddress(address);
+
+  if (isLoading) {
+    return (
+      <span className="font-medium text-white">{formatAddress(address)}</span>
+    );
+  }
+
+  return <span className="font-medium text-white">{ensName}</span>;
+};
 
 export const createPublicClientForChain = (chainId: number) => {
   const chainConfig = {
@@ -52,7 +65,7 @@ export const Recipients: FC<{
       <div className="rounded-lg bg-gray-800 p-3">
         <p className="text-xs font-medium text-gray-400">Royalty Recipient</p>
         <div className="flex items-center gap-1 text-sm font-bold text-white">
-          {formatAddress(splitAddress)}
+          <RecipientName address={splitAddress} />
           <CopyButton successMessage="Address copied!" text={splitAddress} />
         </div>
       </div>
@@ -69,9 +82,7 @@ export const Recipients: FC<{
             key={recipient.recipient.address || index}
           >
             <div className="flex items-center gap-1">
-              <span className="font-medium text-white">
-                {formatAddress(recipient.recipient.address)}
-              </span>
+              <RecipientName address={recipient.recipient.address} />
               <CopyButton
                 text={recipient.recipient.address}
                 successMessage="Address copied!"

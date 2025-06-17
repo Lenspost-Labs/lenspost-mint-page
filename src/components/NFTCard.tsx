@@ -111,6 +111,8 @@ const NFTCard: FC<CollectionData> = ({
   const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
   const title2 = title || readContractName;
 
+  const isSoldOut = totalMinted2 === maxSupply2;
+
   const tokenSymbol =
     currencyAddress2 === NULL_ADDRESS
       ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]
@@ -309,6 +311,7 @@ const NFTCard: FC<CollectionData> = ({
       if (isContractApprove && !isApproved) {
         // approve
         setIsProcessing(true);
+        setIsApprovalConfirming(true);
         approve();
       } else {
         // If non native token or already approved
@@ -317,6 +320,8 @@ const NFTCard: FC<CollectionData> = ({
     } catch (error: any) {
       console.error('Mint handler error:', error);
       toast.error('Unable to process your mint request. Please try again.');
+      setIsProcessing(false);
+      setIsApprovalConfirming(false);
     }
   };
 
@@ -333,28 +338,28 @@ const NFTCard: FC<CollectionData> = ({
           });
 
           if (receipt.status === 'success') {
-            setIsApprovalConfirming(false);
             setIsApproved(true);
+            setIsApprovalConfirming(false);
             mint721();
           }
         }
-        setIsApprovalConfirming(false);
       } catch (error: any) {
         console.error('Approval confirmation error:', error);
         toast.error('Unable to confirm approval. Please try again.');
+        setIsProcessing(false);
       }
     };
 
     handleApproveConfirmation();
-  }, [approveWriteData, publicClient, mint721, isProcessing]);
+  }, [approveWriteData, publicClient, mint721]);
 
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
           <Image
-            src="/apple-touch-icon.png"
-            className="h-auto w-auto"
+            src="/poster-logo-8.svg"
+            className="h-7 w-7"
             alt="Poster Logo"
             height={28}
             width={28}
@@ -391,9 +396,13 @@ const NFTCard: FC<CollectionData> = ({
 
             <div className="mt-2 flex items-center gap-2">
               <span
-                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${isMinting2 ? 'bg-green-900/60 text-green-400' : 'bg-red-900/60 text-red-400'}`}
+                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${isMinting2 && !isSoldOut ? 'bg-green-900/60 text-green-400' : 'bg-red-900/60 text-red-400'}`}
               >
-                {isMinting2 ? 'Live Mint' : 'Not Minting'}
+                {isMinting2 && !isSoldOut
+                  ? 'Live Mint'
+                  : isSoldOut
+                    ? 'Minting Ended'
+                    : 'Not Minting'}
               </span>
               <span className="inline-flex rounded-full bg-blue-900/60 px-2 py-1 text-xs font-medium text-blue-400">
                 {contractTypeFiltered}
@@ -499,6 +508,16 @@ const NFTCard: FC<CollectionData> = ({
                   />
                 ) : (
                   <Button
+                    className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white ${
+                      !isConnected ||
+                      isApproving ||
+                      isWriting ||
+                      isTxConfirming ||
+                      isSoldOut ||
+                      isApprovalConfirming
+                        ? 'cursor-not-allowed opacity-50'
+                        : ''
+                    }`}
                     title={
                       isApproving
                         ? 'Approving...'
@@ -508,12 +527,11 @@ const NFTCard: FC<CollectionData> = ({
                     }
                     disabled={
                       !isConnected ||
-                      isTxSuccess ||
                       isApproving ||
                       isWriting ||
-                      isTxConfirming
+                      isTxConfirming ||
+                      isSoldOut
                     }
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     onClick={handleMint}
                   />
                 )}

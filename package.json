@@ -15,10 +15,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@0xsplits/splits-sdk-react": "^3.1.0",
     "@coinbase/onchainkit": "^0.13.0",
     "@plaiceholder/next": "^3.0.0",
     "@farcaster/frame-sdk": "^0.0.31",
     "@farcaster/frame-wagmi-connector": "^0.0.19",
+    "@plaiceholder/next": "^3.0.0",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@tanstack/react-query": "^5.45.1",

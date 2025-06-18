@@ -35,6 +35,7 @@ const useApprove = (approveParams: any) => {
     write: {
       isApproveWriteError,
       approveWriteError,
+      approveWriteData,
       isApproving,
       approve
     }

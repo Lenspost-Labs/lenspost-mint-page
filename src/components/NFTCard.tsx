@@ -11,18 +11,19 @@ import {
   REGEX
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
+import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
-import { useSwitchChain, useAccount } from 'wagmi';
 import { useEffect, useState, FC } from 'react';
 import { LENSPOST_721 } from '@/contracts';
 import { parseEther, Abi } from 'viem';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
+import { Recipients } from './Recipients';
 import ShareModal from './ShareModal';
 import { ConnectButton } from '.';
 
@@ -50,6 +51,8 @@ const NFTCard: FC<CollectionData> = ({
   const [isApproved, setIsApproved] = useState(false);
   const [quantity, setQuantity] = useState(1n);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isApprovalConfirming, setIsApprovalConfirming] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
       chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
@@ -98,7 +101,6 @@ const NFTCard: FC<CollectionData> = ({
   } = claimConditionData;
 
   const currencyAddress2 = currencyAddress || tokenAddress;
-  console.log(currencyAddress2, 'yooo');
   const maxSupply2 = maxSupply || maxClaimableSupply?.toString();
   const totalMinted2 = totalMinted || supplyClaimed?.toString();
   const price2 = price || pricePerToken;
@@ -108,6 +110,8 @@ const NFTCard: FC<CollectionData> = ({
   const royaltyTokenAddress = readRoyaltyData?.[0];
   const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
   const title2 = title || readContractName;
+
+  const isSoldOut = totalMinted2 === maxSupply2;
 
   const tokenSymbol =
     currencyAddress2 === NULL_ADDRESS
@@ -210,7 +214,7 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const {
-    write: { isApproving, approve },
+    write: { approveWriteData, isApproving, approve },
     tx: { isApproveTxSuccess }
   } = useApprove(approveParams);
 
@@ -219,6 +223,8 @@ const NFTCard: FC<CollectionData> = ({
     write: { isWriteError, writeError, isWriting, mint721 },
     simulation: { refetchSimulation }
   } = useMint721(mintParams());
+
+  const publicClient = usePublicClient();
 
   useEffect(() => {
     if (isSwitchChainSuccess) {
@@ -229,16 +235,21 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (
       isReadClaimConditionError ||
-      isReadRoyaltyError ||
-      isReadContractNameError
+      isReadContractNameError ||
+      isReadRoyaltyError
     ) {
-      toast.error('Failed to load contract data. Please try again later.');
+      console.error('Contract data loading errors:', {
+        isReadClaimConditionError,
+        isReadContractNameError,
+        isReadRoyaltyError
+      });
+      toast.error('Unable to load collection details. Please try again later.');
     }
-  }, [isReadClaimConditionError, isReadRoyaltyError, isReadContractNameError]);
+  }, [isReadClaimConditionError, isReadContractNameError, isReadRoyaltyError]);
 
   useEffect(() => {
     if (isTxSuccess) {
-      toast.success('NFT minted successfully!');
+      toast.success('Successfully collected your NFT! 🎉');
       setShowSuccessModal(true);
     }
   }, [isTxSuccess]);
@@ -252,7 +263,20 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (isWriteError || isTxError) {
       const error: any = writeError || txError;
-      toast.error(error?.message?.split('\n')[0] || 'An error occurred');
+      console.error('Mint/transaction error:', error?.message);
+
+      let userMessage = 'Unable to complete the mint. Please try again.';
+
+      if (error?.message?.includes('insufficient funds')) {
+        userMessage =
+          "You don't have enough funds to complete this transaction.";
+      } else if (error?.message?.includes('user rejected')) {
+        userMessage = 'Transaction was cancelled.';
+      } else if (error?.message?.includes('gas')) {
+        userMessage = 'Network is busy. Please try again with higher gas fees.';
+      }
+
+      toast.error(userMessage);
     }
   }, [isWriteError, writeError, isTxError, txError]);
 
@@ -282,14 +306,60 @@ const NFTCard: FC<CollectionData> = ({
     }
   }, [currentAllowance, currencyAddress2, price2, quantity]);
 
+  const handleMint = async () => {
+    try {
+      if (isContractApprove && !isApproved) {
+        // approve
+        setIsProcessing(true);
+        setIsApprovalConfirming(true);
+        approve();
+      } else {
+        // If non native token or already approved
+        mint721();
+      }
+    } catch (error: any) {
+      console.error('Mint handler error:', error);
+      toast.error('Unable to process your mint request. Please try again.');
+      setIsProcessing(false);
+      setIsApprovalConfirming(false);
+    }
+  };
+
+  // watching approve txs
+  useEffect(() => {
+    const handleApproveConfirmation = async () => {
+      try {
+        if (approveWriteData && publicClient && isProcessing) {
+          setIsApprovalConfirming(true);
+          setIsProcessing(false);
+          const receipt = await publicClient.waitForTransactionReceipt({
+            hash: approveWriteData,
+            confirmations: 2
+          });
+
+          if (receipt.status === 'success') {
+            setIsApproved(true);
+            setIsApprovalConfirming(false);
+            mint721();
+          }
+        }
+      } catch (error: any) {
+        console.error('Approval confirmation error:', error);
+        toast.error('Unable to confirm approval. Please try again.');
+        setIsProcessing(false);
+      }
+    };
+
+    handleApproveConfirmation();
+  }, [approveWriteData, publicClient, mint721]);
+
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
       <div className="flex items-center justify-between bg-gray-800 px-6 py-4">
         <div className="flex items-center gap-2">
-          {/* <div className="h-2 w-2 rounded-full bg-purple-500" /> */}
           <Image
-            src="/apple-touch-icon.png"
-            className="h-auto w-auto"
+            src="/poster-logo-8.svg"
+            className="h-7 w-7"
             alt="Poster Logo"
             height={28}
             width={28}
@@ -326,9 +396,13 @@ const NFTCard: FC<CollectionData> = ({
 
             <div className="mt-2 flex items-center gap-2">
               <span
-                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${isMinting2 ? 'bg-green-900/60 text-green-400' : 'bg-red-900/60 text-red-400'}`}
+                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${isMinting2 && !isSoldOut ? 'bg-green-900/60 text-green-400' : 'bg-red-900/60 text-red-400'}`}
               >
-                {isMinting2 ? 'Live Mint' : 'Not Minting'}
+                {isMinting2 && !isSoldOut
+                  ? 'Live Mint'
+                  : isSoldOut
+                    ? 'Minting Ended'
+                    : 'Not Minting'}
               </span>
               <span className="inline-flex rounded-full bg-blue-900/60 px-2 py-1 text-xs font-medium text-blue-400">
                 {contractTypeFiltered}
@@ -386,6 +460,13 @@ const NFTCard: FC<CollectionData> = ({
                   />
                 </div>
               </div>
+
+              {royaltyTokenAddress && (
+                <Recipients
+                  splitAddress={royaltyTokenAddress}
+                  chainId={chainId || 1}
+                />
+              )}
             </div>
 
             <div className="mt-6 space-y-4">
@@ -425,35 +506,42 @@ const NFTCard: FC<CollectionData> = ({
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Switch Network"
                   />
-                ) : isContractApprove && !isApproved ? (
-                  <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-2 text-white"
-                    onClick={() => {
-                      approve?.();
-                    }}
-                    title="Approve token allowance"
-                    disabled={isApproving}
-                  />
-                ) : isApproved ? (
-                  <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    onClick={mint721}
-                    title="Mint NFT"
-                  />
                 ) : (
                   <Button
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    disabled={!isConnected || isTxSuccess}
-                    onClick={mint721}
-                    title="Mint NFT"
+                    className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white ${
+                      !isConnected ||
+                      isApproving ||
+                      isWriting ||
+                      isTxConfirming ||
+                      isSoldOut ||
+                      isApprovalConfirming
+                        ? 'cursor-not-allowed opacity-50'
+                        : ''
+                    }`}
+                    title={
+                      isApproving
+                        ? 'Approving...'
+                        : isWriting || isTxConfirming || isApprovalConfirming
+                          ? 'Minting...'
+                          : 'Collect'
+                    }
+                    disabled={
+                      !isConnected ||
+                      isApproving ||
+                      isWriting ||
+                      isTxConfirming ||
+                      isSoldOut
+                    }
+                    onClick={handleMint}
                   />
                 )}
               </div>
 
-              {(isWriting || isTxConfirming) && (
+              {(isApproving || isWriting || isTxConfirming) && (
                 <div className="mt-2 text-center text-sm font-semibold text-purple-400">
+                  {isApproving && 'Approving token access...'}
+                  {isWriting && 'Preparing transaction...'}
                   {isTxConfirming && 'Confirming transaction...'}
-                  {isWriting && 'Processing...'}
                 </div>
               )}
 

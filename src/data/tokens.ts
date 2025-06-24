@@ -1,4 +1,5 @@
 import {
+  BIZARRE_BEASTS,
   MFERCOIN,
   WDEGEN,
   TN100x,
@@ -17,6 +18,7 @@ const USDT_ABI = USDT?.abi;
 const USDC_ABI = USDC?.abi;
 const DOG_ABI = DOG?.abi;
 const OG_ABI = OG?.abi;
+const BIZARRE_BEASTS_ABI = BIZARRE_BEASTS?.abi;
 
 export const TOKENS: any = {
   '0x5B5dee44552546ECEA05EDeA01DCD7Be7aa6144A': {
@@ -31,6 +33,13 @@ export const TOKENS: any = {
     chainId: 666666666,
     symbol: 'WDEGEN',
     abi: WDEGEN_ABI,
+    decimals: 18
+  },
+  '0x0520bf1d3cEE163407aDA79109333aB1599b4004': {
+    abi: BIZARRE_BEASTS_ABI,
+    name: 'BizarreBeasts',
+    chainId: 8453,
+    symbol: 'BB',
     decimals: 18
   },
   '0xE3086852A4B125803C815a158249ae468A3254Ca': {

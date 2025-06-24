@@ -1,6 +1,6 @@
 'use client';
 
-import { FarcasterIcon, XIcon } from '@/components/icons';
+import { FarcasterIcon, FlashIcon, XIcon } from '@/components/icons';
 import { CHAIN_HELPER } from '@/data';
 import { FC } from 'react';
 
@@ -80,6 +80,16 @@ const ShareModal: FC<SuccessModalProps> = ({
             >
               <XIcon className="h-5 w-5 text-white" />
               Share on X (Twitter)
+            </a>
+
+            <a
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 px-4 py-3 font-medium text-white hover:from-red-600 hover:to-pink-600  "
+              href="https://ai.poster.fun"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <FlashIcon />
+              Labubu-fy me!
             </a>
 
             {blockExplorerUrl && (

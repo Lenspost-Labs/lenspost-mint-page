@@ -75,6 +75,13 @@ export const TOKENS: any = {
     name: 'Degen',
     decimals: 18
   },
+  '0x0520bf1d3cEE163407aDA79109333aB1599b4004': {
+    name: 'BizarreBeasts',
+    chainId: 8453,
+    symbol: 'BB',
+    decimals: 18,
+    abi: {}
+  },
   '0xeE597D163C3Fef7B594cC11746BC4099F4323Fd3': {
     symbol: 'AOGI',
     chainId: 16600,

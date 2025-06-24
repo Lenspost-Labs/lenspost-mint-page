@@ -7,3 +7,4 @@ export * from './degen';
 export * from './usdc';
 export * from './usdt';
 export * from './og';
+export * from './bizarre-beasts';

@@ -13,6 +13,9 @@
     "buttonTitle": "Mint-page",
     "splashImageUrl": "https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png",
     "splashBackgroundColor": "#eeccff",
-    "webhookUrl": "https://dev-poster.vercel.app/api/webhook"
+    "webhookUrl": "https://dev-poster.vercel.app/api/webhook",
+    "subtitle": "Poster.fun NFT Mint",
+    "primaryCategory": "art-creativity",
+    "description": "Mint your unique NFT in seconds! Connect your wallet, choose your artwork, and hit \"Mint\" to create a one-of-a-kind digital collectible on the blockchain. Own it, trade it, or showcase it — it's yours forever."
   }
 }

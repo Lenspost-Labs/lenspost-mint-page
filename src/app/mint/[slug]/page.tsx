@@ -29,13 +29,13 @@ export const generateMetadata = async ({
               splashImageUrl:
                 'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
               splashBackgroundColor: '#ffffff',
-              url: `https://mint.poster.fun`,
               type: 'launch_frame',
+              url: `${APP_URL}`,
               name: 'Mint'
             },
             title: 'Collect'
           },
-          imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
+          imageUrl: `${APP_URL}/OG_logo_1200x630.png`,
           version: 'next'
         })
       },
@@ -56,57 +56,6 @@ export const generateMetadata = async ({
   }
 
   try {
-    // Handle case where getCollectionData returns no image
-    // if (!imageUrl) {
-    //   return {
-    //     other: {
-    //       'fc:frame': JSON.stringify({
-    //         button: {
-    //           action: {
-    //             splashImageUrl:
-    //               'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
-    //             splashBackgroundColor: '#ffffff',
-    //             url: `https://mint.poster.fun`,
-    //             type: 'launch_frame',
-    //             name: 'Mint'
-    //           },
-    //           title: 'Collect',
-    //           name: 'Collect'
-    //         },
-    //         imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
-    //         version: 'next'
-    //       })
-    //     },
-    //     twitter: {
-    //       images: ['/OG_logo_1200x630.png'],
-    //       description: APP_DESCRIPTION,
-    //       card: 'summary_large_image',
-    //       title: APP_NAME
-    //     },
-    //     openGraph: {
-    //       images: ['/OG_logo_1200x630.png'],
-    //       description: APP_DESCRIPTION,
-    //       title: APP_NAME
-    //     },
-    //     description: APP_DESCRIPTION,
-    //     title: APP_NAME
-    //   };
-    // }
-
-    // const frameMetadata = getFrameMetadata({
-    //   buttons: [
-    //     {
-    //       target: `${APP_URL}/mint/${slug}`,
-    //       label: 'Mint on Poster',
-    //       action: 'link'
-    //     }
-    //   ],
-    //   image: {
-    //     aspectRatio: '1:1',
-    //     src: imageCdnUrl
-    //   }
-    // });
-
     return {
       other: {
         'fc:frame': JSON.stringify({
@@ -114,22 +63,22 @@ export const generateMetadata = async ({
             action: {
               splashImageUrl:
                 'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
-              url: `https://mint.poster.fun/mint/${slug}`,
               splashBackgroundColor: '#ffffff',
+              url: `${APP_URL}/mint/${slug}`,
               type: 'launch_frame',
               name: 'Mint'
             },
             title: 'Collect',
             name: 'Collect'
           },
-          imageUrl: `https://mint.poster.fun/api/images?slug=${slug}`,
+          imageUrl: `${APP_URL}/api/images?slug=${slug}`,
           version: 'next'
         })
       },
       twitter: {
         images: [
           {
-            url: `https://mint.poster.fun/api/images?slug=${slug}`,
+            url: `${APP_URL}/api/images?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630
@@ -144,7 +93,7 @@ export const generateMetadata = async ({
       openGraph: {
         images: [
           {
-            url: `https://mint.poster.fun/api/images?slug=${slug}`,
+            url: `${APP_URL}/api/images?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630

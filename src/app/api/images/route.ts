@@ -1,4 +1,4 @@
-import { CDN_IMAGE_URL, R2_IMAGE_URL } from '@/data/constants';
+import { CDN_IMAGE_URL, R2_IMAGE_URL, APP_URL } from '@/data/constants';
 import { getCollectionData } from '@/services';
 import { NextResponse } from 'next/server';
 
@@ -7,9 +7,7 @@ export async function GET(request: Request) {
   const slug = searchParams.get('slug');
 
   if (!slug) {
-    return NextResponse.redirect(
-      'https://mint.poster.fun/OG_logo_1200x630.png'
-    );
+    return NextResponse.redirect(`${APP_URL}/OG_logo_1200x630.png`);
   }
 
   try {

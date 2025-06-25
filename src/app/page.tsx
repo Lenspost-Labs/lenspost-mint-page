@@ -14,7 +14,8 @@ export const metadata: Metadata = {
           type: 'launch_frame',
           name: 'Mint'
         },
-        title: 'Collect'
+        title: 'Collect',
+        name: 'Collect'
       },
       imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
       version: 'next'

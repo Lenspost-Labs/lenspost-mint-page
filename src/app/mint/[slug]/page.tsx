@@ -20,86 +20,196 @@ type Props = {
 export const generateMetadata = async ({
   params
 }: Props): Promise<Metadata> => {
-  const slug = params.slug;
+  const slug = params?.slug;
 
-  const { imageUrl } = await getCollectionData(slug);
-  const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL);
-  const frameMetadata = getFrameMetadata({
-    buttons: [
-      {
-        target: `${APP_URL}/mint/${slug}`,
-        label: 'Mint on Poster',
-        action: 'link'
-      }
-    ],
-    image: {
-      aspectRatio: '1:1',
-      src: imageCdnUrl
-    }
-  });
-
-  return {
-    other: {
-      ...frameMetadata,
-      'fc:frame': JSON.stringify({
-        button: {
-          action: {
-            splashImageUrl:
-              'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
-            url: `https://mint.poster.fun/mint/${slug}`,
-            splashBackgroundColor: '#ffffff',
-            type: 'launch_frame',
-            name: 'Mint'
+  // Handle case where slug is missing
+  if (!slug) {
+    return {
+      other: {
+        'fc:frame': JSON.stringify({
+          button: {
+            action: {
+              splashImageUrl:
+                'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+              splashBackgroundColor: '#ffffff',
+              url: `https://mint.poster.fun`,
+              type: 'launch_frame',
+              name: 'Mint'
+            },
+            title: 'Collect'
           },
-          title: 'Collect'
+          imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
+          version: 'next'
+        })
+      },
+      twitter: {
+        description: 'The requested NFT collection could not be found.',
+        images: ['/OG_logo_1200x630.png'],
+        title: 'Collection Not Found',
+        card: 'summary_large_image'
+      },
+      openGraph: {
+        description: 'The requested NFT collection could not be found.',
+        images: ['/OG_logo_1200x630.png'],
+        title: 'Collection Not Found'
+      },
+      description: 'The requested NFT collection could not be found.',
+      title: 'Collection Not Found'
+    };
+  }
+
+  try {
+    const { imageUrl } = await getCollectionData(slug);
+
+    // Handle case where getCollectionData returns no image
+    if (!imageUrl) {
+      return {
+        other: {
+          'fc:frame': JSON.stringify({
+            button: {
+              action: {
+                splashImageUrl:
+                  'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+                splashBackgroundColor: '#ffffff',
+                url: `https://mint.poster.fun`,
+                type: 'launch_frame',
+                name: 'Mint'
+              },
+              title: 'Collect'
+            },
+            imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
+            version: 'next'
+          })
         },
-        imageUrl: imageCdnUrl,
-        version: 'next'
-      })
-    },
-    twitter: {
-      images: [
+        twitter: {
+          images: ['/OG_logo_1200x630.png'],
+          description: APP_DESCRIPTION,
+          card: 'summary_large_image',
+          title: APP_NAME
+        },
+        openGraph: {
+          images: ['/OG_logo_1200x630.png'],
+          description: APP_DESCRIPTION,
+          title: APP_NAME
+        },
+        description: APP_DESCRIPTION,
+        title: APP_NAME
+      };
+    }
+
+    const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL);
+    const frameMetadata = getFrameMetadata({
+      buttons: [
         {
-          url: imageCdnUrl,
-          alt: 'og image',
-          height: 1200,
-          width: 630
+          target: `${APP_URL}/mint/${slug}`,
+          label: 'Mint on Poster',
+          action: 'link'
         }
       ],
-      creator: LENSPOST_TWITTER_USERNAME,
-      site: LENSPOST_TWITTER_USERNAME,
+      image: {
+        aspectRatio: '1:1',
+        src: imageCdnUrl
+      }
+    });
+
+    return {
+      other: {
+        ...frameMetadata,
+        'fc:frame': JSON.stringify({
+          button: {
+            action: {
+              splashImageUrl:
+                'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+              url: `https://mint.poster.fun/mint/${slug}`,
+              splashBackgroundColor: '#ffffff',
+              type: 'launch_frame',
+              name: 'Mint'
+            },
+            title: 'Collect'
+          },
+          imageUrl: imageCdnUrl,
+          version: 'next'
+        })
+      },
+      twitter: {
+        images: [
+          {
+            url: imageCdnUrl,
+            alt: 'og image',
+            height: 1200,
+            width: 630
+          }
+        ],
+        creator: LENSPOST_TWITTER_USERNAME,
+        site: LENSPOST_TWITTER_USERNAME,
+        description: APP_DESCRIPTION,
+        card: 'summary_large_image',
+        title: APP_NAME
+      },
+      openGraph: {
+        images: [
+          {
+            url: imageCdnUrl,
+            alt: 'og image',
+            height: 1200,
+            width: 630
+          }
+        ],
+        description: APP_DESCRIPTION,
+        title: APP_NAME,
+        url: APP_URL
+      },
+      keywords: [
+        'Lenspost Mint',
+        'Lenspost NFT',
+        'Lenspost',
+        'Poster',
+        'Mint',
+        'NFT'
+      ],
+      authors: [{ url: LENSPOST_APP_URL, name: AUTHOR }],
+      metadataBase: new URL(APP_URL),
       description: APP_DESCRIPTION,
-      card: 'summary_large_image',
+      icons: ['/favicon.ico'],
+      creator: AUTHOR,
       title: APP_NAME
-    },
-    openGraph: {
-      images: [
-        {
-          url: imageCdnUrl,
-          alt: 'og image',
-          height: 1200,
-          width: 630
-        }
-      ],
-      description: APP_DESCRIPTION,
-      title: APP_NAME,
-      url: APP_URL
-    },
-    keywords: [
-      'Lenspost Mint',
-      'Lenspost NFT',
-      'Lenspost',
-      'Poster',
-      'Mint',
-      'NFT'
-    ],
-    authors: [{ url: LENSPOST_APP_URL, name: AUTHOR }],
-    metadataBase: new URL(APP_URL),
-    description: APP_DESCRIPTION,
-    icons: ['/favicon.ico'],
-    creator: AUTHOR,
-    title: APP_NAME
-  };
+    };
+  } catch (error) {
+    // Handle any errors from getCollectionData
+    console.error('Error generating metadata:', error);
+    return {
+      other: {
+        'fc:frame': JSON.stringify({
+          button: {
+            action: {
+              splashImageUrl:
+                'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+              splashBackgroundColor: '#ffffff',
+              url: `https://mint.poster.fun`,
+              type: 'launch_frame',
+              name: 'Mint'
+            },
+            title: 'Collect'
+          },
+          imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
+          version: 'next'
+        })
+      },
+      twitter: {
+        description: 'The requested NFT collection could not be found.',
+        images: ['/OG_logo_1200x630.png'],
+        title: 'Collection Not Found',
+        card: 'summary_large_image'
+      },
+      openGraph: {
+        description: 'The requested NFT collection could not be found.',
+        images: ['/OG_logo_1200x630.png'],
+        title: 'Collection Not Found'
+      },
+      description: 'The requested NFT collection could not be found.',
+      title: 'Collection Not Found'
+    };
+  }
 };
 
 const Home = async ({ params }: Props) => {

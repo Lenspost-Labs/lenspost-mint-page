@@ -2,8 +2,6 @@ import {
   LENSPOST_TWITTER_USERNAME,
   LENSPOST_APP_URL,
   APP_DESCRIPTION,
-  CDN_IMAGE_URL,
-  R2_IMAGE_URL,
   APP_NAME,
   APP_URL,
   AUTHOR
@@ -58,45 +56,43 @@ export const generateMetadata = async ({
   }
 
   try {
-    const { imageUrl } = await getCollectionData(slug);
-
     // Handle case where getCollectionData returns no image
-    if (!imageUrl) {
-      return {
-        other: {
-          'fc:frame': JSON.stringify({
-            button: {
-              action: {
-                splashImageUrl:
-                  'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
-                splashBackgroundColor: '#ffffff',
-                url: `https://mint.poster.fun`,
-                type: 'launch_frame',
-                name: 'Mint'
-              },
-              title: 'Collect'
-            },
-            imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
-            version: 'next'
-          })
-        },
-        twitter: {
-          images: ['/OG_logo_1200x630.png'],
-          description: APP_DESCRIPTION,
-          card: 'summary_large_image',
-          title: APP_NAME
-        },
-        openGraph: {
-          images: ['/OG_logo_1200x630.png'],
-          description: APP_DESCRIPTION,
-          title: APP_NAME
-        },
-        description: APP_DESCRIPTION,
-        title: APP_NAME
-      };
-    }
+    // if (!imageUrl) {
+    //   return {
+    //     other: {
+    //       'fc:frame': JSON.stringify({
+    //         button: {
+    //           action: {
+    //             splashImageUrl:
+    //               'https://lenspost-r2.b-cdn.net/web-assets/poster_logo_trans_greenBG.png',
+    //             splashBackgroundColor: '#ffffff',
+    //             url: `https://mint.poster.fun`,
+    //             type: 'launch_frame',
+    //             name: 'Mint'
+    //           },
+    //           title: 'Collect',
+    //           name: 'Collect'
+    //         },
+    //         imageUrl: 'https://mint.poster.fun/OG_logo_1200x630.png',
+    //         version: 'next'
+    //       })
+    //     },
+    //     twitter: {
+    //       images: ['/OG_logo_1200x630.png'],
+    //       description: APP_DESCRIPTION,
+    //       card: 'summary_large_image',
+    //       title: APP_NAME
+    //     },
+    //     openGraph: {
+    //       images: ['/OG_logo_1200x630.png'],
+    //       description: APP_DESCRIPTION,
+    //       title: APP_NAME
+    //     },
+    //     description: APP_DESCRIPTION,
+    //     title: APP_NAME
+    //   };
+    // }
 
-    const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL);
     // const frameMetadata = getFrameMetadata({
     //   buttons: [
     //     {
@@ -123,16 +119,17 @@ export const generateMetadata = async ({
               type: 'launch_frame',
               name: 'Mint'
             },
-            title: 'Collect'
+            title: 'Collect',
+            name: 'Collect'
           },
-          imageUrl: imageCdnUrl,
+          imageUrl: `https://mint.poster.fun/api/image?slug=${slug}`,
           version: 'next'
         })
       },
       twitter: {
         images: [
           {
-            url: imageCdnUrl,
+            url: `https://mint.poster.fun/api/image?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630
@@ -147,7 +144,7 @@ export const generateMetadata = async ({
       openGraph: {
         images: [
           {
-            url: imageCdnUrl,
+            url: `https://mint.poster.fun/api/image?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630

@@ -8,7 +8,6 @@ import {
   APP_URL,
   AUTHOR
 } from '@/data';
-import { getFrameMetadata } from '@coinbase/onchainkit/frame';
 import { Default, NFTCard } from '@/components';
 import { getCollectionData } from '@/services';
 import { Metadata } from 'next';
@@ -98,23 +97,22 @@ export const generateMetadata = async ({
     }
 
     const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL);
-    const frameMetadata = getFrameMetadata({
-      buttons: [
-        {
-          target: `${APP_URL}/mint/${slug}`,
-          label: 'Mint on Poster',
-          action: 'link'
-        }
-      ],
-      image: {
-        aspectRatio: '1:1',
-        src: imageCdnUrl
-      }
-    });
+    // const frameMetadata = getFrameMetadata({
+    //   buttons: [
+    //     {
+    //       target: `${APP_URL}/mint/${slug}`,
+    //       label: 'Mint on Poster',
+    //       action: 'link'
+    //     }
+    //   ],
+    //   image: {
+    //     aspectRatio: '1:1',
+    //     src: imageCdnUrl
+    //   }
+    // });
 
     return {
       other: {
-        ...frameMetadata,
         'fc:frame': JSON.stringify({
           button: {
             action: {

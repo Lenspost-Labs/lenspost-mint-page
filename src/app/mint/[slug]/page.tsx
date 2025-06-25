@@ -122,14 +122,14 @@ export const generateMetadata = async ({
             title: 'Collect',
             name: 'Collect'
           },
-          imageUrl: `https://mint.poster.fun/api/image?slug=${slug}`,
+          imageUrl: `https://mint.poster.fun/api/images?slug=${slug}`,
           version: 'next'
         })
       },
       twitter: {
         images: [
           {
-            url: `https://mint.poster.fun/api/image?slug=${slug}`,
+            url: `https://mint.poster.fun/api/images?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630
@@ -144,7 +144,7 @@ export const generateMetadata = async ({
       openGraph: {
         images: [
           {
-            url: `https://mint.poster.fun/api/image?slug=${slug}`,
+            url: `https://mint.poster.fun/api/images?slug=${slug}`,
             alt: 'og image',
             height: 1200,
             width: 630

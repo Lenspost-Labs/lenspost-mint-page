@@ -12,12 +12,14 @@ import {
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
+import { useConnectWallet, usePrivy } from '@privy-io/react-auth';
+import { useLoginToFrame } from '@privy-io/react-auth/farcaster';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
-import { useConnectWallet } from '@privy-io/react-auth';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
 import { useEffect, useState, FC } from 'react';
+import { sdk } from '@farcaster/frame-sdk';
 import { LENSPOST_721 } from '@/contracts';
 import { parseEther, Abi } from 'viem';
 import { toast } from 'sonner';
@@ -225,6 +227,39 @@ const NFTCard: FC<CollectionData> = ({
   } = useMint721(mintParams());
 
   const publicClient = usePublicClient();
+
+  // FC
+
+  const { authenticated, ready } = usePrivy();
+  const { initLoginToFrame, loginToFrame } = useLoginToFrame();
+
+  useEffect(() => {
+    const initializeAndAuthenticate = async () => {
+      try {
+        // Initialize SDK
+        if (sdk) {
+          sdk.actions.ready();
+        }
+
+        // Handle authentication when ready and not authenticated
+        if (ready && !authenticated) {
+          // Initialize a new login attempt to get a nonce for the Farcaster wallet to sign
+          const { nonce } = await initLoginToFrame();
+          // Request a signature from Warpcast
+          const result = await sdk.actions.signIn({ nonce: nonce });
+          // Send the received signature from Warpcast to Privy for authentication
+          await loginToFrame({
+            signature: result.signature,
+            message: result.message
+          });
+        }
+      } catch (error) {
+        console.log(error, 'farcaster sdk error');
+      }
+    };
+
+    initializeAndAuthenticate();
+  }, [ready, authenticated, initLoginToFrame, loginToFrame]);
 
   useEffect(() => {
     if (isSwitchChainSuccess) {

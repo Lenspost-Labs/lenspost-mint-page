@@ -37,3 +37,5 @@ export const CDN_IMAGE_URL = 'https://lenspost-r2.b-cdn.net';
 
 // Zora
 export const CREATORS_REWARD_FEE = '0.000777';
+
+export const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID;

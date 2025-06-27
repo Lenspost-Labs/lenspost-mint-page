@@ -5,7 +5,6 @@ import {
   storyMainnet
 } from '@/chains';
 import { arbitrum, optimism, polygon, morph, zora, base } from 'wagmi/chains';
-import { frameConnector } from '@/lib/connector';
 import { polygonMumbai } from 'wagmi/chains';
 import { baseSepolia } from 'wagmi/chains';
 import { mainnet } from 'wagmi/chains';
@@ -39,8 +38,7 @@ export const config = createConfig({
     basecampTestnet,
     morph,
     monadTestnet
-  ],
+  ]
   // projectId: '7a34546f8123a1b402f47936af9d736c',
-  connectors: [frameConnector()]
   // appName: 'Poster.fun'
 });

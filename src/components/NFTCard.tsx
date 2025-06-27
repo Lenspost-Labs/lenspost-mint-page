@@ -14,7 +14,7 @@ import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useConnectWallet } from '@privy-io/react-auth';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
 import { useEffect, useState, FC } from 'react';
@@ -45,7 +45,7 @@ const NFTCard: FC<CollectionData> = ({
     address: EVMAddress,
     isConnected
   } = useAccount();
-  const { openConnectModal } = useConnectModal();
+  const { connectWallet } = useConnectWallet();
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -491,7 +491,7 @@ const NFTCard: FC<CollectionData> = ({
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Connect Wallet to Mint"
-                    onClick={openConnectModal}
+                    onClick={connectWallet}
                   />
                 ) : !isSupportedChain ? (
                   <Button

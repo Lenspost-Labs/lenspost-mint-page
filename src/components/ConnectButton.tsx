@@ -1,23 +1,28 @@
 'use client';
 
-import { useConnectModal, useAccountModal } from '@rainbow-me/rainbowkit';
+import { useWallets, usePrivy } from '@privy-io/react-auth';
 import { formatAddress } from '@/utils';
-import { useAccount } from 'wagmi';
 import { Button } from '@/ui';
 import { FC } from 'react';
 
 const ConnectButton: FC = () => {
-  const { address: EVMAddress, isConnected } = useAccount();
-  const { openConnectModal } = useConnectModal();
-  const { openAccountModal } = useAccountModal();
+  const { authenticated, logout, ready, login } = usePrivy();
+  const { wallets } = useWallets();
 
-  return isConnected ? (
-    <Button
-      title={formatAddress(EVMAddress as `0x${string}`)}
-      onClick={openAccountModal}
-    />
+  // Get the first wallet address if available
+  const address = wallets[0]?.address;
+
+  if (!ready) {
+    return <Button title="Loading..." disabled />;
+  }
+
+  return authenticated && address ? (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <Button title={formatAddress(address as `0x${string}`)} disabled />
+      <Button variant="outline" onClick={logout} title="Logout" />
+    </div>
   ) : (
-    <Button onClick={openConnectModal} title="Connect wallet" />
+    <Button title="Connect wallet" onClick={login} />
   );
 };
 

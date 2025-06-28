@@ -16,10 +16,11 @@ import {
   storyAeneidTestnet,
   storyMainnet
 } from '@/chains';
+import { farcasterFrame as miniAppConnector } from '@farcaster/frame-wagmi-connector';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { PrivyClientConfig, PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider, createConfig } from '@privy-io/wagmi';
-import { frameConnector } from '@/lib/farcasterConnector';
+// import { frameConnector } from '@/lib/farcasterConnector';
 import { PRIVY_APP_ID, ENV } from '@/data';
 import { http } from 'wagmi';
 
@@ -104,7 +105,7 @@ export const config = createConfig({
     [base.id]: http(),
     [zora.id]: http()
   },
-  connectors: [frameConnector()]
+  connectors: [miniAppConnector()]
 });
 
 export const wagmiAdapter = createConfig({
@@ -122,7 +123,7 @@ export const wagmiAdapter = createConfig({
     [base.id]: http(),
     [zora.id]: http()
   },
-  connectors: [frameConnector()],
+  connectors: [miniAppConnector()],
   chains: config?.chains
 });
 

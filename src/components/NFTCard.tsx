@@ -237,21 +237,28 @@ const NFTCard: FC<CollectionData> = ({
     const initializeAndAuthenticate = async () => {
       try {
         // Initialize SDK
-        if (sdk) {
+        const isMiniApp = await sdk?.isInMiniApp();
+        if (isMiniApp) {
+          // ready the mini app
           sdk.actions.ready();
-        }
 
-        // Handle authentication when ready and not authenticated
-        if (ready && !authenticated) {
-          // Initialize a new login attempt to get a nonce for the Farcaster wallet to sign
-          const { nonce } = await initLoginToFrame();
-          // Request a signature from Warpcast
-          const result = await sdk.actions.signIn({ nonce: nonce });
-          // Send the received signature from Warpcast to Privy for authentication
-          await loginToFrame({
-            signature: result.signature,
-            message: result.message
-          });
+          // Handle authentication when ready and not authenticated
+          if (ready && !authenticated) {
+            // Initialize a new login attempt to get a nonce for the Farcaster wallet to sign
+            const { nonce } = await initLoginToFrame();
+            console.log(nonce, 'nonce');
+
+            // Request a signature from Warpcast
+            const result = await sdk.actions.signIn({ nonce: nonce });
+            console.log(result, 'result');
+
+            // Send the received signature from Warpcast to Privy for authentication
+            const login = await loginToFrame({
+              signature: result.signature,
+              message: result.message
+            });
+            console.log(login, 'login');
+          }
         }
       } catch (error) {
         console.log(error, 'farcaster sdk error');
@@ -259,7 +266,7 @@ const NFTCard: FC<CollectionData> = ({
     };
 
     initializeAndAuthenticate();
-  }, [ready, authenticated, initLoginToFrame, loginToFrame]);
+  }, []);
 
   useEffect(() => {
     if (isSwitchChainSuccess) {
@@ -344,6 +351,7 @@ const NFTCard: FC<CollectionData> = ({
   const handleMint = async () => {
     try {
       if (isContractApprove && !isApproved) {
+        console.log('approving');
         // approve
         setIsProcessing(true);
         setIsApprovalConfirming(true);

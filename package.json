@@ -17,8 +17,8 @@
   "dependencies": {
     "@0xsplits/splits-sdk-react": "^3.1.0",
     "@coinbase/onchainkit": "^0.13.0",
-    "@farcaster/frame-sdk": "^0.0.31",
-    "@farcaster/frame-wagmi-connector": "^0.0.19",
+    "@farcaster/frame-sdk": "^0.0.64",
+    "@farcaster/frame-wagmi-connector": "^0.0.53",
     "@plaiceholder/next": "^3.0.0",
     "@privy-io/react-auth": "^2.17.1",
     "@privy-io/wagmi": "^1.0.5",

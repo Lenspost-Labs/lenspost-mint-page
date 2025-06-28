@@ -14,11 +14,11 @@ importers:
         specifier: ^0.13.0
         version: 0.13.4(@tanstack/react-query@5.45.1(react@18.3.1))(@xmtp/frames-validator@0.6.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(graphql-request@6.1.0(encoding@0.1.13)(graphql@16.8.2))(graphql@16.8.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))
       '@farcaster/frame-sdk':
-        specifier: ^0.0.31
-        version: 0.0.31(typescript@5.4.5)(zod@3.25.48)
+        specifier: ^0.0.64
+        version: 0.0.64(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48)
       '@farcaster/frame-wagmi-connector':
-        specifier: ^0.0.19
-        version: 0.0.19(@farcaster/frame-sdk@0.0.31(typescript@5.4.5)(zod@3.25.48))(@wagmi/core@2.11.2(@tanstack/query-core@5.45.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(zod@3.25.48))(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))
+        specifier: ^0.0.53
+        version: 0.0.53(@farcaster/frame-sdk@0.0.64(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(@wagmi/core@2.11.2(@tanstack/query-core@5.45.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(zod@3.25.48))(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))
       '@plaiceholder/next':
         specifier: ^3.0.0
         version: 3.0.0(next@14.2.30(@babel/core@7.24.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(plaiceholder@3.0.0(sharp@0.33.4))(sharp@0.33.4)
@@ -1591,27 +1591,35 @@ packages:
         integrity: sha512-j7+Ksi/9KfGviws6Qtf9Q7KCqRhpwrYKQPs+JBA/rKVFF/yaWLHJEH3zfVP2plVu+eys0d2DlFmhoQJayFewcw==
       }
 
-  '@farcaster/frame-core@0.0.29':
+  '@farcaster/frame-core@0.2.0':
     resolution:
       {
-        integrity: sha512-+iQjOS4OE0YCeW7hhBOg0QK8Pch7/C3mlkfD0OLey0Thnj4Uab4tWmvmfKxnsJNSYnESx9BT+Sw/pn9cueCl1Q==
+        integrity: sha512-HNxg7A4p5W/HqMMs6CKKJXbhHFpLYrlcOGlvc9k9tRiGBSo8JjAZhyjVUfaXqSIvN0ItCGBVmtB0ULzpktMpTA==
       }
 
-  '@farcaster/frame-sdk@0.0.31':
+  '@farcaster/frame-sdk@0.0.64':
     resolution:
       {
-        integrity: sha512-ZRFA4HyfE1PIcEi++27ulSqrArv2qdVeYww7juM90DYgvqyGLtX6cTZS0UEoRL7iog2U8Rv2aq1ORLbePCBZuA==
+        integrity: sha512-mrFXmkRc5RR6/PDaN3Rho4YFEh2oI2s9eg5NA9pHUEN9oPt4Sd5ShdeX/0/uVxOk3/EbVL69lGIGce5hYbUyhw==
       }
 
-  '@farcaster/frame-wagmi-connector@0.0.19':
+  '@farcaster/frame-wagmi-connector@0.0.53':
     resolution:
       {
-        integrity: sha512-Ey9lEEk4SudkOiTtqY2eMGVTFZwW1lLMEtnAYqb7dCc/mDQowj3GfxNW9a2bdPoq5UEwAwJxxLiVvdERI+Hy3A==
+        integrity: sha512-+fonXzzj3KxTeUHbtt7lZUC4v/MhC2Y2KpQw7WcVamiDwedm+jTMqBIdrMrWRej/HSWrBQ1rDIOlsWxnv9CDng==
       }
     peerDependencies:
-      '@farcaster/frame-sdk': ^0.0.31
+      '@farcaster/frame-sdk': ^0.0.64
       '@wagmi/core': ^2.14.1
       viem: ^2.21.55
+
+  '@farcaster/quick-auth@0.0.6':
+    resolution:
+      {
+        integrity: sha512-tiZndhpfDtEhaKlkmS5cVDuS+A/tafqZT3y9I44rC69m3beJok6e8dIH2JhxVy3EvOWTyTBnrmNn6GOOh+qK6A==
+      }
+    peerDependencies:
+      typescript: 5.8.3
 
   '@fastify/busboy@2.1.1':
     resolution:
@@ -4504,7 +4512,6 @@ packages:
         integrity: sha512-26g/igWUNfzY01tWbCRAM1Ax72rqSZtUf1iJJWJdmcerYuXWyH54tE6jsUzfMijP4CbZF/dzgVFMZKFl6PEdAg==
       }
     engines: { node: '>=18' }
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@xmtp/proto@3.56.0':
     resolution:
@@ -7660,6 +7667,12 @@ packages:
     resolution:
       {
         integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==
+      }
+
+  jose@5.10.0:
+    resolution:
+      {
+        integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==
       }
 
   joycon@3.1.1:
@@ -12829,28 +12842,42 @@ snapshots:
       '@ethersproject/properties': 5.8.0
       '@ethersproject/strings': 5.8.0
 
-  '@farcaster/frame-core@0.0.29(typescript@5.4.5)':
+  '@farcaster/frame-core@0.2.0(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)':
     dependencies:
+      '@solana/web3.js': 1.98.2(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)
       ox: 0.4.4(typescript@5.4.5)(zod@3.25.48)
       zod: 3.25.48
     transitivePeerDependencies:
+      - bufferutil
+      - encoding
       - typescript
+      - utf-8-validate
 
-  '@farcaster/frame-sdk@0.0.31(typescript@5.4.5)(zod@3.25.48)':
+  '@farcaster/frame-sdk@0.0.64(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48)':
     dependencies:
-      '@farcaster/frame-core': 0.0.29(typescript@5.4.5)
+      '@farcaster/frame-core': 0.2.0(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)
+      '@farcaster/quick-auth': 0.0.6(typescript@5.4.5)
       comlink: 4.4.2
       eventemitter3: 5.0.1
       ox: 0.4.4(typescript@5.4.5)(zod@3.25.48)
     transitivePeerDependencies:
+      - bufferutil
+      - encoding
       - typescript
+      - utf-8-validate
       - zod
 
-  '@farcaster/frame-wagmi-connector@0.0.19(@farcaster/frame-sdk@0.0.31(typescript@5.4.5)(zod@3.25.48))(@wagmi/core@2.11.2(@tanstack/query-core@5.45.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(zod@3.25.48))(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))':
+  '@farcaster/frame-wagmi-connector@0.0.53(@farcaster/frame-sdk@0.0.64(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(@wagmi/core@2.11.2(@tanstack/query-core@5.45.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(zod@3.25.48))(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))':
     dependencies:
-      '@farcaster/frame-sdk': 0.0.31(typescript@5.4.5)(zod@3.25.48)
+      '@farcaster/frame-sdk': 0.0.64(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48)
       '@wagmi/core': 2.11.2(@tanstack/query-core@5.45.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48))(zod@3.25.48)
       viem: 2.22.14(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.25.48)
+
+  '@farcaster/quick-auth@0.0.6(typescript@5.4.5)':
+    dependencies:
+      jose: 5.10.0
+      typescript: 5.4.5
+      zod: 3.25.48
 
   '@fastify/busboy@2.1.1': {}
 
@@ -17885,6 +17912,8 @@ snapshots:
 
   jose@4.15.9: {}
 
+  jose@5.10.0: {}
+
   joycon@3.1.1: {}
 
   js-cookie@3.0.5: {}
@@ -18640,10 +18669,10 @@ snapshots:
   ox@0.4.4(typescript@5.4.5)(zod@3.25.48):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
       abitype: 1.0.8(typescript@5.4.5)(zod@3.25.48)
       eventemitter3: 5.0.1
     optionalDependencies:

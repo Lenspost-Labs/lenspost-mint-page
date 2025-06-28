@@ -237,7 +237,9 @@ const NFTCard: FC<CollectionData> = ({
     const initializeAndAuthenticate = async () => {
       try {
         // Initialize SDK
-        if (sdk) {
+        const isMiniApp = await sdk.isInMiniApp();
+        console.log(isMiniApp, 'isMiniApp');
+        if (isMiniApp) {
           sdk.actions.ready();
         }
 
@@ -245,13 +247,18 @@ const NFTCard: FC<CollectionData> = ({
         if (ready && !authenticated) {
           // Initialize a new login attempt to get a nonce for the Farcaster wallet to sign
           const { nonce } = await initLoginToFrame();
+          console.log(nonce, 'nonce');
+
           // Request a signature from Warpcast
           const result = await sdk.actions.signIn({ nonce: nonce });
+          console.log(result, 'result');
+
           // Send the received signature from Warpcast to Privy for authentication
-          await loginToFrame({
+          const login = await loginToFrame({
             signature: result.signature,
             message: result.message
           });
+          console.log(login, 'login');
         }
       } catch (error) {
         console.log(error, 'farcaster sdk error');

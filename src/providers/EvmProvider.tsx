@@ -19,12 +19,18 @@ import {
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { PrivyClientConfig, PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider, createConfig } from '@privy-io/wagmi';
+import { frameConnector } from '@/lib/farcasterConnector';
 import { PRIVY_APP_ID, ENV } from '@/data';
 import { http } from 'wagmi';
 
 export const privyConfig = {
   appearance: {
-    walletList: ['coinbase_wallet', 'detected_wallets', 'wallet_connect'],
+    walletList: [
+      'coinbase_wallet',
+      'detected_wallets',
+      'wallet_connect',
+      'farcaster'
+    ],
     logo: 'https://lenspost-r2.b-cdn.net/web-assets/Poster_logo.png',
     walletChainType: 'ethereum-only',
     showWalletLoginFirst: false,
@@ -97,7 +103,8 @@ export const config = createConfig({
     [morph.id]: http(),
     [base.id]: http(),
     [zora.id]: http()
-  }
+  },
+  connectors: [frameConnector()]
 });
 
 export const wagmiAdapter = createConfig({
@@ -115,6 +122,7 @@ export const wagmiAdapter = createConfig({
     [base.id]: http(),
     [zora.id]: http()
   },
+  connectors: [frameConnector()],
   chains: config?.chains
 });
 

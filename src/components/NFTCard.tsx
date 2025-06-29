@@ -606,6 +606,9 @@ const NFTCard: FC<CollectionData> = ({
                   </a>
                 </div>
               )}
+              <div className="flex items-center justify-center gap-2 text-sm text-white">
+                <span className="text-purple-400">Address:</span> {EVMAddress}
+              </div>
             </div>
           </div>
         </div>

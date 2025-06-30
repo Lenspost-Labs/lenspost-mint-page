@@ -12,13 +12,13 @@ import {
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
-import { useConnectWallet, usePrivy } from '@privy-io/react-auth';
 import { useLoginToFrame } from '@privy-io/react-auth/farcaster';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
 import { useEffect, useState, FC } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
 import { sdk } from '@farcaster/frame-sdk';
 import { LENSPOST_721 } from '@/contracts';
 import { parseEther, Abi } from 'viem';
@@ -47,7 +47,6 @@ const NFTCard: FC<CollectionData> = ({
     address: EVMAddress,
     isConnected
   } = useAccount();
-  const { connectWallet } = useConnectWallet();
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
   const [isInputError, setIsInputError] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -230,7 +229,7 @@ const NFTCard: FC<CollectionData> = ({
 
   // FC
 
-  const { authenticated, ready } = usePrivy();
+  const { authenticated, ready, login } = usePrivy();
   const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
   useEffect(() => {
@@ -530,11 +529,11 @@ const NFTCard: FC<CollectionData> = ({
               </div>
 
               <div className="mt-4 w-full">
-                {!isConnected ? (
+                {!authenticated ? (
                   <Button
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                     title="Connect Wallet to Mint"
-                    onClick={connectWallet}
+                    onClick={() => login()}
                   />
                 ) : !isSupportedChain ? (
                   <Button

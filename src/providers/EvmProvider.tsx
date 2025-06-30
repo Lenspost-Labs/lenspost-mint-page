@@ -16,15 +16,20 @@ import {
   storyAeneidTestnet,
   storyMainnet
 } from '@/chains';
+import { farcasterFrame as miniAppConnector } from '@farcaster/frame-wagmi-connector';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { PrivyClientConfig, PrivyProvider } from '@privy-io/react-auth';
-import { WagmiProvider, createConfig } from '@privy-io/wagmi';
+import { WagmiProvider, createConfig, http } from 'wagmi';
 import { PRIVY_APP_ID, ENV } from '@/data';
-import { http } from 'wagmi';
 
 export const privyConfig = {
   appearance: {
-    walletList: ['coinbase_wallet', 'detected_wallets', 'wallet_connect'],
+    walletList: [
+      'coinbase_wallet',
+      'detected_wallets',
+      'wallet_connect',
+      'farcaster'
+    ],
     logo: 'https://lenspost-r2.b-cdn.net/web-assets/Poster_logo.png',
     walletChainType: 'ethereum-only',
     showWalletLoginFirst: false,
@@ -56,9 +61,7 @@ export const privyConfig = {
   }
 } as unknown as PrivyClientConfig;
 
-export const config = createConfig({
-  // appName: "Poster.fun",
-  // projectId: WALLETCONNECT_PROJECT_ID,
+export const wagmiAdapter = createConfig({
   chains:
     ENV === 'production'
       ? [
@@ -97,36 +100,21 @@ export const config = createConfig({
     [morph.id]: http(),
     [base.id]: http(),
     [zora.id]: http()
-  }
-});
-
-export const wagmiAdapter = createConfig({
-  transports: {
-    [campNetworkTestnetV2.id]: http(),
-    [storyAeneidTestnet.id]: http(),
-    [polygonMumbai.id]: http(),
-    [storyMainnet.id]: http(),
-    [baseSepolia.id]: http(),
-    [arbitrum.id]: http(),
-    [optimism.id]: http(),
-    [mainnet.id]: http(),
-    [polygon.id]: http(),
-    [morph.id]: http(),
-    [base.id]: http(),
-    [zora.id]: http()
   },
-  chains: config?.chains
+  connectors: [miniAppConnector()]
 });
 
 const queryClient = new QueryClient();
 
 const EvmProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <PrivyProvider appId={PRIVY_APP_ID as string} config={privyConfig}>
+    <WagmiProvider config={wagmiAdapter}>
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>{children}</WagmiProvider>
+        <PrivyProvider appId={PRIVY_APP_ID as string} config={privyConfig}>
+          {children}
+        </PrivyProvider>
       </QueryClientProvider>
-    </PrivyProvider>
+    </WagmiProvider>
   );
 };
 

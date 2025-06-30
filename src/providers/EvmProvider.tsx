@@ -109,31 +109,17 @@ export const config = createConfig({
 });
 
 export const wagmiAdapter = createConfig({
-  transports: {
-    [campNetworkTestnetV2.id]: http(),
-    [storyAeneidTestnet.id]: http(),
-    [polygonMumbai.id]: http(),
-    [storyMainnet.id]: http(),
-    [baseSepolia.id]: http(),
-    [arbitrum.id]: http(),
-    [optimism.id]: http(),
-    [mainnet.id]: http(),
-    [polygon.id]: http(),
-    [morph.id]: http(),
-    [base.id]: http(),
-    [zora.id]: http()
-  },
   connectors: [miniAppConnector()],
+  transports: config?.transports,
   chains: config?.chains
 });
-
 const queryClient = new QueryClient();
 
 const EvmProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <PrivyProvider appId={PRIVY_APP_ID as string} config={privyConfig}>
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={config}>{children}</WagmiProvider>
+        <WagmiProvider config={wagmiAdapter}>{children}</WagmiProvider>
       </QueryClientProvider>
     </PrivyProvider>
   );

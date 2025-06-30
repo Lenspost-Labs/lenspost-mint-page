@@ -2,6 +2,7 @@
 
 import { usePrivy } from '@privy-io/react-auth';
 import { formatAddress } from '@/utils';
+import { useDisconnect } from 'wagmi';
 import { useState, FC } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/ui';
@@ -23,14 +24,16 @@ const ConnectButton: FC = () => {
   const { authenticated, logout, ready, login, user } = usePrivy();
   const [isLoading, setIsLoading] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
+  const { disconnect } = useDisconnect();
 
   const handleAuth = async () => {
     if (authenticated) {
+      disconnect();
       logout();
     } else {
       setIsLoading(true);
       try {
-        await login();
+        login();
       } catch (error) {
         toast.error(error as string);
       } finally {

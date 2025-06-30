@@ -12,14 +12,12 @@ import {
 } from '@/data';
 import { useReadContractData, useApprove, useMint721 } from '@/hooks';
 import { usePublicClient, useSwitchChain, useAccount } from 'wagmi';
-import { useLoginToFrame } from '@privy-io/react-auth/farcaster';
 import { erc721DropABI } from '@zoralabs/zora-721-contracts';
 import { formatStableTokens, formatAddress } from '@/utils';
 import { ShareButton, CopyButton, Button } from '@/ui';
 import { CollectionData, ParamsType } from '@/types';
 import { useEffect, useState, FC } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
-import { sdk } from '@farcaster/frame-sdk';
 import { LENSPOST_721 } from '@/contracts';
 import { parseEther, Abi } from 'viem';
 import { toast } from 'sonner';
@@ -42,6 +40,7 @@ const NFTCard: FC<CollectionData> = ({
   price,
   title
 }) => {
+  const { authenticated, login } = usePrivy();
   const {
     chainId: currentChainId,
     address: EVMAddress,
@@ -54,6 +53,8 @@ const NFTCard: FC<CollectionData> = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isApprovalConfirming, setIsApprovalConfirming] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [customApprovalConfirming, setCustomApprovalConfirming] =
+    useState(false);
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
       chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
@@ -120,7 +121,7 @@ const NFTCard: FC<CollectionData> = ({
           ?.nativeCurrency?.symbol
       : TOKENS?.[currencyAddress2]?.symbol;
 
-  const isSupportedChain: Boolean = isConnected && chainId == currentChainId;
+  const isSupportedChain: Boolean = authenticated && chainId == currentChainId;
 
   const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) as string;
   const isContractApprove =
@@ -215,8 +216,14 @@ const NFTCard: FC<CollectionData> = ({
   };
 
   const {
-    write: { approveWriteData, isApproving, approve },
-    tx: { isApproveTxSuccess }
+    write: {
+      isApproveWriteError,
+      approveWriteError,
+      approveWriteData,
+      isApproving,
+      approve
+    },
+    tx: { isApproveTxSuccess, isApproveTxError, approveTxError }
   } = useApprove(approveParams);
 
   const {
@@ -226,46 +233,6 @@ const NFTCard: FC<CollectionData> = ({
   } = useMint721(mintParams());
 
   const publicClient = usePublicClient();
-
-  // FC
-
-  const { authenticated, ready, login } = usePrivy();
-  const { initLoginToFrame, loginToFrame } = useLoginToFrame();
-
-  useEffect(() => {
-    const initializeAndAuthenticate = async () => {
-      try {
-        // Initialize SDK
-        const isMiniApp = await sdk?.isInMiniApp();
-        if (isMiniApp) {
-          // ready the mini app
-          sdk.actions.ready();
-
-          // Handle authentication when ready and not authenticated
-          if (ready && !authenticated) {
-            // Initialize a new login attempt to get a nonce for the Farcaster wallet to sign
-            const { nonce } = await initLoginToFrame();
-            console.log(nonce, 'nonce');
-
-            // Request a signature from Warpcast
-            const result = await sdk.actions.signIn({ nonce: nonce });
-            console.log(result, 'result');
-
-            // Send the received signature from Warpcast to Privy for authentication
-            const login = await loginToFrame({
-              signature: result.signature,
-              message: result.message
-            });
-            console.log(login, 'login');
-          }
-        }
-      } catch (error) {
-        console.log(error, 'farcaster sdk error');
-      }
-    };
-
-    initializeAndAuthenticate();
-  }, []);
 
   useEffect(() => {
     if (isSwitchChainSuccess) {
@@ -320,6 +287,14 @@ const NFTCard: FC<CollectionData> = ({
       toast.error(userMessage);
     }
   }, [isWriteError, writeError, isTxError, txError]);
+
+  // custom approval handling
+  useEffect(() => {
+    if (isApproveTxError) {
+      console.error('Error:', approveTxError);
+      setCustomApprovalConfirming(!customApprovalConfirming);
+    }
+  }, [isApproveTxError, approveTxError]);
 
   // Add allowance check for ERC20 tokens
   const { isError: isReadAllowanceError, data: currentAllowance } =
@@ -394,6 +369,34 @@ const NFTCard: FC<CollectionData> = ({
 
     handleApproveConfirmation();
   }, [approveWriteData, publicClient, mint721]);
+
+  // error handling
+  useEffect(() => {
+    if (isApproveWriteError || isApproveTxError) {
+      console.error('Error:', approveWriteError || approveTxError);
+      toast.error(
+        approveWriteError?.message ||
+          approveTxError?.message ||
+          'Unable to process your mint request. Please try again.'
+      );
+    }
+  }, [
+    isApproveWriteError,
+    isApproveTxError,
+    approveWriteError,
+    approveTxError
+  ]);
+
+  useEffect(() => {
+    if (isApproveTxError) {
+      console.error('Error:', approveTxError);
+      toast.error(
+        approveTxError?.message?.includes('user rejected')
+          ? 'Transaction was cancelled.'
+          : 'Unable to process your mint request. Please try again.'
+      );
+    }
+  }, [isApproveTxError, approveTxError]);
 
   return (
     <div className="h-full w-full max-w-6xl  overflow-auto rounded-3xl bg-gray-900 text-white shadow-[0_0_40px_rgba(120,120,255,0.15)]">
@@ -556,14 +559,16 @@ const NFTCard: FC<CollectionData> = ({
                       isWriting ||
                       isTxConfirming ||
                       isSoldOut ||
-                      isApprovalConfirming
+                      customApprovalConfirming
                         ? 'cursor-not-allowed opacity-50'
                         : ''
                     }`}
                     title={
                       isApproving
                         ? 'Approving...'
-                        : isWriting || isTxConfirming || isApprovalConfirming
+                        : isWriting ||
+                            isTxConfirming ||
+                            customApprovalConfirming
                           ? 'Minting...'
                           : 'Collect'
                     }
@@ -605,9 +610,6 @@ const NFTCard: FC<CollectionData> = ({
                   </a>
                 </div>
               )}
-              <div className="flex items-center justify-center gap-2 text-sm text-white">
-                <span className="text-purple-400">Address:</span> {EVMAddress}
-              </div>
             </div>
           </div>
         </div>

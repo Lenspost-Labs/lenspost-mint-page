@@ -19,10 +19,8 @@ import {
 import { farcasterFrame as miniAppConnector } from '@farcaster/frame-wagmi-connector';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { PrivyClientConfig, PrivyProvider } from '@privy-io/react-auth';
-import { WagmiProvider, createConfig } from '@privy-io/wagmi';
-// import { frameConnector } from '@/lib/farcasterConnector';
+import { WagmiProvider, createConfig, http } from 'wagmi';
 import { PRIVY_APP_ID, ENV } from '@/data';
-import { http } from 'wagmi';
 
 export const privyConfig = {
   appearance: {
@@ -63,9 +61,7 @@ export const privyConfig = {
   }
 } as unknown as PrivyClientConfig;
 
-export const config = createConfig({
-  // appName: "Poster.fun",
-  // projectId: WALLETCONNECT_PROJECT_ID,
+export const wagmiAdapter = createConfig({
   chains:
     ENV === 'production'
       ? [
@@ -108,20 +104,17 @@ export const config = createConfig({
   connectors: [miniAppConnector()]
 });
 
-export const wagmiAdapter = createConfig({
-  connectors: [miniAppConnector()],
-  transports: config?.transports,
-  chains: config?.chains
-});
 const queryClient = new QueryClient();
 
 const EvmProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <PrivyProvider appId={PRIVY_APP_ID as string} config={privyConfig}>
+    <WagmiProvider config={wagmiAdapter}>
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiAdapter}>{children}</WagmiProvider>
+        <PrivyProvider appId={PRIVY_APP_ID as string} config={privyConfig}>
+          {children}
+        </PrivyProvider>
       </QueryClientProvider>
-    </PrivyProvider>
+    </WagmiProvider>
   );
 };
 

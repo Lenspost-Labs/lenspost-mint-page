@@ -9,7 +9,7 @@ import {
   AUTHOR
 } from '@/data';
 import { SplitsProviderWrapper } from '@/providers/SplitsProvider';
-import { EvmProvider } from '@/providers';
+import { MiniAppProvider, EvmProvider } from '@/providers';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 
@@ -57,17 +57,19 @@ const RootLayout = ({
     <html lang="en">
       <body className={inter.className}>
         <EvmProvider>
-          <SplitsProviderWrapper>
-            <Toaster
-              position="bottom-center"
-              duration={8000}
-              closeButton
-              richColors
-            />
-            <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
-              {children}
-            </div>
-          </SplitsProviderWrapper>
+          <MiniAppProvider>
+            <SplitsProviderWrapper>
+              <Toaster
+                position="bottom-center"
+                duration={8000}
+                closeButton
+                richColors
+              />
+              <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
+                {children}
+              </div>
+            </SplitsProviderWrapper>
+          </MiniAppProvider>
         </EvmProvider>
       </body>
     </html>

@@ -40,6 +40,9 @@ const ConnectButton: FC = () => {
     wallets = []
   } = useAptosWallet();
 
+  const { aptosConnectWallets, installableWallets, availableWallets } =
+    groupAndSortWallets([...wallets, ...notDetectedWallets]);
+
   const handlePrivyAuth = async () => {
     if (authenticated) {
       disconnectEvm();
@@ -58,6 +61,70 @@ const ConnectButton: FC = () => {
 
   if (!ready) {
     return <Button title="Loading..." disabled />;
+  }
+
+  // Show connect options when user needs to connect to mint
+  if (!authenticated && !aptosConnected) {
+    return (
+      <div className="relative">
+        <Button
+          className="rounded-full border-0 bg-gradient-to-r from-pink-500 to-purple-600 px-6 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:from-pink-600 hover:to-purple-700"
+          title={isLoading ? 'Connecting...' : 'Connect wallet to mint'}
+          onClick={() => setShowMenu((v) => !v)}
+          disabled={isLoading}
+        />
+        <div
+          className={`absolute right-0 z-50 mt-2 w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg transition-all duration-200 ${showMenu ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+        >
+          <div className="px-2 pb-1 text-xs font-semibold text-gray-500">
+            Choose network
+          </div>
+          <button
+            className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100"
+            onClick={() => {
+              setShowMenu(false);
+              handlePrivyAuth();
+            }}
+          >
+            EVM (Privy)
+          </button>
+          <div className="my-2 h-px bg-gray-200" />
+          <div className="px-2 pb-1 text-xs font-semibold text-gray-500">
+            Aptos wallets
+          </div>
+          {[
+            ...aptosConnectWallets,
+            ...availableWallets,
+            ...installableWallets
+          ].map((wallet) => (
+            <button
+              onClick={async () => {
+                setIsLoading(true);
+                try {
+                  await connectAptos(wallet.name);
+                  setShowMenu(false);
+                } catch (error) {
+                  toast.error(String(error));
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-800 hover:bg-gray-100"
+              key={wallet.name}
+            >
+              {wallet.icon && (
+                <img
+                  alt={wallet.name}
+                  src={wallet.icon}
+                  className="h-5 w-5 rounded"
+                />
+              )}
+              <span>{wallet.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (authenticated && user) {
@@ -139,9 +206,6 @@ const ConnectButton: FC = () => {
       </div>
     );
   }
-
-  const { aptosConnectWallets, installableWallets, availableWallets } =
-    groupAndSortWallets([...wallets, ...notDetectedWallets]);
 
   return (
     <div className="relative">

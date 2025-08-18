@@ -5,7 +5,12 @@ import { AptosWalletAdapterProvider } from '@aptos-labs/wallet-adapter-react';
 
 const AptosProvider = ({ children }: { children: ReactNode }) => {
   return (
-    <AptosWalletAdapterProvider autoConnect>
+    <AptosWalletAdapterProvider
+      autoConnect
+      onError={(error) => {
+        console.error('Aptos wallet error:', error);
+      }}
+    >
       {children}
     </AptosWalletAdapterProvider>
   );

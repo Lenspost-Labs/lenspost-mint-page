@@ -44,7 +44,7 @@ const useReadAptosData = ({
 
       try {
         const aptosConfig = new AptosConfig({
-          network: getAptosNetwork(chainId)
+          network: Network.TESTNET
         });
         const aptos = new Aptos(aptosConfig);
 

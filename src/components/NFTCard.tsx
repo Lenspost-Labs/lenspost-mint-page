@@ -66,13 +66,21 @@ const NFTCard: FC<CollectionData> = ({
   const {
     account: aptosAccount,
     connected: aptosConnected,
-    signAndSubmitTransaction
+    signAndSubmitTransaction,
+    wallet: aptosWallet
   } = useAptosWallet();
   const {
     chainId: currentChainId,
     address: EVMAddress,
     isConnected
   } = useAccount();
+
+  console.log('Aptos wallet state:', {
+    aptosConnected,
+    aptosAccount: aptosAccount?.address,
+    aptosWallet: aptosWallet?.name,
+    isReady: aptosWallet?.readyState
+  });
 
   const [aptosTxHash, setAptosTxHash] = useState('');
   const { isSuccess: isSwitchChainSuccess, switchChain } = useSwitchChain();
@@ -118,15 +126,18 @@ const NFTCard: FC<CollectionData> = ({
     });
 
   // APTOS INTEGRATION: Fetch Aptos data when the chain is Aptos
+  const aptosCollectionId =
+    '0x360a56dd6befb1903f1957d17ce598f925430666f11829c6b32726182275880';
+  const aptosModuleAddress =
+    '0x9bdd2119745ecc8ff07ddf7d1e6621ad288c6a83106c5610372ffa347054caec';
+
   const {
     data: aptosCollectionData,
     isError: isAptosReadError,
     isLoading: isAptosLoading
   } = useReadAptosData({
-    collectionId:
-      '0x360a56dd6befb1903f1957d17ce598f925430666f11829c6b32726182275880',
-    moduleAddress:
-      '0x9bdd2119745ecc8ff07ddf7d1e6621ad288c6a83106c5610372ffa347054caec',
+    collectionId: aptosCollectionId,
+    moduleAddress: aptosModuleAddress,
     chainId: chainId?.toString()
   });
 
@@ -196,9 +207,39 @@ const NFTCard: FC<CollectionData> = ({
     return TOKENS?.[currencyAddress2]?.symbol || 'TOKEN';
   })();
 
-  const isSupportedChain: boolean = isAptos
-    ? aptosConnected
-    : authenticated && chainId == currentChainId;
+  const isSupportedChain: boolean = (() => {
+    if (isAptos) {
+      // For Aptos, check if wallet is connected and has an account
+      const hasAptosWallet =
+        aptosConnected && aptosAccount?.address !== undefined;
+      console.log('Aptos chain check:', {
+        aptosConnected,
+        hasAccount: aptosAccount?.address !== undefined,
+        result: hasAptosWallet
+      });
+      return hasAptosWallet;
+    } else {
+      // For EVM chains
+      const hasEvmWallet = authenticated && chainId == currentChainId;
+      console.log('EVM chain check:', {
+        authenticated,
+        chainId,
+        currentChainId,
+        result: hasEvmWallet
+      });
+      return hasEvmWallet;
+    }
+  })();
+
+  console.log('Wallet connection debug:', {
+    isAptos,
+    aptosConnected,
+    aptosAccount: aptosAccount?.address,
+    authenticated,
+    chainId,
+    currentChainId,
+    isSupportedChain
+  });
 
   const imageCdnUrl = imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) as string;
   const isContractApprove =
@@ -422,8 +463,34 @@ const NFTCard: FC<CollectionData> = ({
   }, [currentAllowance, currencyAddress2, price2, quantity]);
 
   const handleAptosMint = async () => {
+    console.log('handleAptosMint called with:', {
+      aptosConnected,
+      aptosAccount: aptosAccount?.address,
+      aptosWallet: aptosWallet?.name,
+      isAptos,
+      chainId
+    });
+
     if (!aptosConnected) {
+      console.error('Aptos wallet not connected. Status:', {
+        aptosConnected,
+        aptosAccount
+      });
       toast.error('Please connect your Aptos wallet.');
+      return;
+    }
+
+    if (!aptosAccount?.address) {
+      console.error('No Aptos account address found');
+      toast.error('No Aptos account found. Please reconnect your wallet.');
+      return;
+    }
+
+    if (!aptosWallet?.readyState || aptosWallet.readyState !== 'Installed') {
+      console.error('Aptos wallet not ready:', aptosWallet?.readyState);
+      toast.error(
+        'Aptos wallet not ready. Please check your wallet connection.'
+      );
       return;
     }
 
@@ -435,11 +502,21 @@ const NFTCard: FC<CollectionData> = ({
 
     setIsProcessing(true);
     try {
+      console.log('Attempting Aptos mint with:', {
+        function: `${aptosModuleAddress}::poster_test_two::mint_nft`,
+        signer: aptosAccount?.address,
+        collectionId: aptosCollectionId,
+        quantity: quantity.toString()
+      });
+
       const response = await signAndSubmitTransaction({
         data: {
-          function: `0x9bdd2119745ecc8ff07ddf7d1e6621ad288c6a83106c5610372ffa347054caec::poster_test_two::mint_token`,
+          function: `${aptosModuleAddress}::poster_test_two::mint_nft`,
           typeArguments: [],
-          functionArguments: [contractAddress, quantity.toString()]
+          functionArguments: [
+            aptosCollectionId,
+            quantity.toString()
+          ]
         }
       });
 
@@ -447,7 +524,7 @@ const NFTCard: FC<CollectionData> = ({
       setAptosTxHash(response.hash);
 
       const aptosConfig = new AptosConfig({
-        network: getAptosNetwork(chainId?.toString())
+        network: Network.TESTNET
       });
       const aptos = new Aptos(aptosConfig);
       await aptos.waitForTransaction({ transactionHash: response.hash });
@@ -456,11 +533,23 @@ const NFTCard: FC<CollectionData> = ({
       setShowSuccessModal(true);
     } catch (error: any) {
       console.error('Aptos mint error:', error);
-      toast.error(
-        error?.message?.includes('User Rejected')
-          ? 'Transaction was cancelled.'
-          : 'Aptos mint failed. Please try again.'
-      );
+      console.error('Error details:', {
+        message: error?.message,
+        code: error?.code,
+        name: error?.name,
+        stack: error?.stack
+      });
+
+      let errorMessage = 'Aptos mint failed. Please try again.';
+      if (error?.message?.includes('User Rejected')) {
+        errorMessage = 'Transaction was cancelled.';
+      } else if (error?.message?.includes('insufficient funds')) {
+        errorMessage = 'Insufficient funds for transaction.';
+      } else if (error?.message?.includes('invalid argument')) {
+        errorMessage = 'Invalid function arguments. Check console for details.';
+      }
+
+      toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }
@@ -472,7 +561,6 @@ const NFTCard: FC<CollectionData> = ({
       await handleAptosMint();
       return;
     }
-    // Fallback to existing EVM logic
     try {
       if (isContractApprove && !isApproved) {
         setIsProcessing(true);

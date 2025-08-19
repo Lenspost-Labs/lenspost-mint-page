@@ -19,7 +19,8 @@ module.exports = {
     'perfectionist/sort-exports': 'off',
     'perfectionist/sort-named-imports': 'off',
     'perfectionist/sort-union-types': 'off',
-    'perfectionist/sort-object-types': 'off'
+    'perfectionist/sort-object-types': 'off',
+    'perfectionist/sort-interfaces': 'off'
   },
   extends: [
     'plugin:perfectionist/recommended-line-length',

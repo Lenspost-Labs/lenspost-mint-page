@@ -5,9 +5,10 @@ import { useReadContract } from 'wagmi';
 
 const useReadConractData = (params: UseReadContractParameters) => {
   const isAptos = params.chainId?.toString().startsWith('Aptos:');
+  const isAptosAddress = params.address && params.address.length > 42;
 
-  // Check if the address is an Aptos address (32 bytes instead of 20 bytes for EVM)
-  const isAptosAddress = params.address && params.address.length > 42; // 0x + 40 chars = 42, Aptos addresses are longer
+  // Always call the hook at the top level
+  const { isError, error, data } = useReadContract(params) as any;
 
   if (isAptos || isAptosAddress) {
     return {
@@ -17,8 +18,6 @@ const useReadConractData = (params: UseReadContractParameters) => {
         'Aptos network or address detected - using Aptos-specific data fetching'
     };
   }
-
-  const { isError, error, data } = useReadContract(params) as any;
 
   if (isError) {
     console.error('Error fetching contract data', error);

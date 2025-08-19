@@ -178,8 +178,9 @@ const NFTCard: FC<CollectionData> = ({
   });
 
   // Validate collectionId format for Aptos
+  // 0x + 64 hex chars
   const isValidAptosCollectionId =
-    collectionId?.startsWith('0x') && collectionId.length === 66; // 0x + 64 hex chars
+    collectionId?.startsWith('0x') && collectionId.length === 66;
   console.log('NFTCard: CollectionId validation:', {
     isValidAptosCollectionId,
     collectionIdLength: collectionId?.length,
@@ -477,7 +478,7 @@ const NFTCard: FC<CollectionData> = ({
   useEffect(() => {
     if (isApproveTxError) {
       console.error('Error:', approveTxError);
-      setCustomApprovalConfirming(!customApprovalConfirming);
+      setCustomApprovalConfirming((prev) => !prev);
     }
   }, [isApproveTxError, approveTxError]);
 
@@ -659,7 +660,7 @@ const NFTCard: FC<CollectionData> = ({
     };
 
     handleApproveConfirmation();
-  }, [approveWriteData, publicClient, mint721]);
+  }, [approveWriteData, publicClient, mint721, isProcessing]);
 
   // error handling
   useEffect(() => {

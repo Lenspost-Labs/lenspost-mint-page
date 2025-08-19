@@ -56,7 +56,8 @@ const NFTCard: FC<CollectionData> = ({
   imageUrl,
   chainId,
   price,
-  title
+  title,
+  collectionId
 }) => {
   const { authenticated, login } = usePrivy();
   const isAptos = chainId?.toString().startsWith('Aptos:');
@@ -126,19 +127,63 @@ const NFTCard: FC<CollectionData> = ({
     });
 
   // APTOS INTEGRATION: Fetch Aptos data when the chain is Aptos
-  const aptosCollectionId =
-    '0x360a56dd6befb1903f1957d17ce598f925430666f11829c6b32726182275880';
+
   const aptosModuleAddress =
     '0x9bdd2119745ecc8ff07ddf7d1e6621ad288c6a83106c5610372ffa347054caec';
+
+  console.log('NFTCard: Aptos data parameters:', {
+    collectionId,
+    moduleAddress: aptosModuleAddress,
+    chainId: chainId?.toString(),
+    isAptos
+  });
+
+  // Validate module address format
+  const isValidModuleAddress =
+    aptosModuleAddress?.startsWith('0x') && aptosModuleAddress.length === 66;
+  console.log('NFTCard: Module address validation:', {
+    isValidModuleAddress,
+    moduleAddressLength: aptosModuleAddress?.length,
+    moduleAddressStartsWith0x: aptosModuleAddress?.startsWith('0x')
+  });
+
+  console.log('NFTCard: Debug values:', {
+    collectionIdType: typeof collectionId,
+    collectionIdValue: collectionId,
+    chainIdType: typeof chainId,
+    chainIdValue: chainId,
+    isAptosCheck: chainId?.toString().startsWith('Aptos:'),
+    hasCollectionId: !!collectionId,
+    hasModuleAddress: !!aptosModuleAddress
+  });
+
+  // Transform chainId for Aptos SDK if needed
+  const aptosChainId = isAptos
+    ? chainId?.toString().replace('Aptos:', '')
+    : chainId?.toString();
+  console.log('NFTCard: Transformed chainId for Aptos:', aptosChainId);
 
   const {
     data: aptosCollectionData,
     isError: isAptosReadError,
     isLoading: isAptosLoading
   } = useReadAptosData({
-    collectionId: aptosCollectionId,
-    moduleAddress: aptosModuleAddress,
-    chainId: chainId?.toString()
+    collectionId: collectionId?.startsWith('0x')
+      ? (collectionId as `0x${string}`)
+      : undefined,
+    moduleAddress: isValidModuleAddress
+      ? (aptosModuleAddress as `0x${string}`)
+      : undefined,
+    chainId: aptosChainId
+  });
+
+  // Validate collectionId format for Aptos
+  const isValidAptosCollectionId =
+    collectionId?.startsWith('0x') && collectionId.length === 66; // 0x + 64 hex chars
+  console.log('NFTCard: CollectionId validation:', {
+    isValidAptosCollectionId,
+    collectionIdLength: collectionId?.length,
+    collectionIdStartsWith0x: collectionId?.startsWith('0x')
   });
 
   console.log('Aptos Collection Data:', aptosCollectionData);
@@ -495,6 +540,20 @@ const NFTCard: FC<CollectionData> = ({
     }
 
     // Check if we have the required data
+    if (!isValidModuleAddress) {
+      toast.error(
+        'Invalid module address format. Please check the collection configuration.'
+      );
+      return;
+    }
+
+    if (!isValidAptosCollectionId) {
+      toast.error(
+        'Invalid collection ID format. Please check the collection configuration.'
+      );
+      return;
+    }
+
     if (!aptosCollectionData || isAptosReadError) {
       toast.error('Unable to load collection data. Please try again later.');
       return;
@@ -505,7 +564,7 @@ const NFTCard: FC<CollectionData> = ({
       console.log('Attempting Aptos mint with:', {
         function: `${aptosModuleAddress}::poster_test_two::mint_nft`,
         signer: aptosAccount?.address,
-        collectionId: aptosCollectionId,
+        collectionId: collectionId,
         quantity: quantity.toString()
       });
 
@@ -513,7 +572,7 @@ const NFTCard: FC<CollectionData> = ({
         data: {
           function: `${aptosModuleAddress}::poster_test_two::mint_nft`,
           typeArguments: [],
-          functionArguments: [aptosCollectionId, quantity.toString()]
+          functionArguments: [collectionId, quantity.toString()]
         }
       });
 
@@ -526,7 +585,7 @@ const NFTCard: FC<CollectionData> = ({
       const aptos = new Aptos(aptosConfig);
       await aptos.waitForTransaction({ transactionHash: response.hash });
 
-      toast.success('Successfully collected your Aptos NFT! 🎉');
+      toast.success('Successfully collected your Aptos NFT!');
       setShowSuccessModal(true);
     } catch (error: any) {
       console.error('Aptos mint error:', error);
@@ -841,7 +900,9 @@ const NFTCard: FC<CollectionData> = ({
                       isTxConfirming ||
                       (isAptos && isAptosLoading) ||
                       (isAptos && isAptosReadError) ||
-                      (isAptos && !aptosCollectionData)
+                      (isAptos && !aptosCollectionData) ||
+                      (isAptos && !isValidAptosCollectionId) ||
+                      (isAptos && !isValidModuleAddress)
                     }
                     title={
                       isProcessing || isWriting || isTxConfirming
@@ -852,11 +913,15 @@ const NFTCard: FC<CollectionData> = ({
                             ? 'Loading...'
                             : isAptos && isAptosReadError
                               ? 'Data Error'
-                              : isAptos && !aptosCollectionData
-                                ? 'No Data'
-                                : isSoldOut
-                                  ? 'Sold Out'
-                                  : 'Collect'
+                              : isAptos && !isValidModuleAddress
+                                ? 'Invalid Module Address'
+                                : isAptos && !isValidAptosCollectionId
+                                  ? 'Invalid Collection ID'
+                                  : isAptos && !aptosCollectionData
+                                    ? 'No Data'
+                                    : isSoldOut
+                                      ? 'Sold Out'
+                                      : 'Collect'
                     }
                     onClick={handleMint}
                   />

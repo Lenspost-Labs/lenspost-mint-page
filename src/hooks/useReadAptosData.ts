@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { AptosConfig, Aptos, Network } from '@aptos-labs/ts-sdk';
 
 const getAptosNetwork = (chainId: undefined | string) => {
-  if (chainId?.endsWith('1')) return Network.MAINNET;
-  if (chainId?.endsWith('2')) return Network.TESTNET;
+  if (!chainId) return Network.DEVNET;
+  if (chainId.endsWith('1')) return Network.MAINNET;
+  if (chainId.endsWith('2')) return Network.TESTNET;
   return Network.DEVNET;
 };
 
@@ -35,6 +36,11 @@ const useReadAptosData = ({
   useEffect(() => {
     const fetchData = async () => {
       if (!moduleAddress || !collectionId || !chainId) {
+        console.log('useReadAptosData: Missing required parameters:', {
+          moduleAddress,
+          collectionId,
+          chainId
+        });
         setIsLoading(false);
         return;
       }

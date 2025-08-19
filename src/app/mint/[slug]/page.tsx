@@ -170,26 +170,14 @@ const Home = async ({ params }: Props) => {
     message,
     isError,
     price,
-    title
+    title,
+    collectionId
   } = await getCollectionData(params?.slug);
 
   if (isError) {
     return <Default text={message} />;
   }
 
-  console.log('contractAddress', contractAddress);
-  console.log('currencyAddress', currencyAddress);
-  console.log('contractType', contractType);
-  console.log('totalMinted', totalMinted);
-  console.log('royaltyBPS', royaltyBPS);
-  console.log('isMinting', isMinting);
-  console.log('maxSupply', maxSupply);
-  console.log('imageUrl', imageUrl);
-  console.log('chainId', chainId);
-  console.log('message', message);
-  console.log('isError', isError);
-  console.log('price', price);
-  console.log('title', title);
   return (
     <NFTCard
       contractAddress={contractAddress}
@@ -203,6 +191,7 @@ const Home = async ({ params }: Props) => {
       chainId={chainId}
       title={title}
       price={price}
+      collectionId={collectionId}
     />
   );
 };

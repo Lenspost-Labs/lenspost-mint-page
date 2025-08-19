@@ -513,10 +513,7 @@ const NFTCard: FC<CollectionData> = ({
         data: {
           function: `${aptosModuleAddress}::poster_test_two::mint_nft`,
           typeArguments: [],
-          functionArguments: [
-            aptosCollectionId,
-            quantity.toString()
-          ]
+          functionArguments: [aptosCollectionId, quantity.toString()]
         }
       });
 

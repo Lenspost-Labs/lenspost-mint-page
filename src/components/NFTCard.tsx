@@ -188,6 +188,14 @@ const NFTCard: FC<CollectionData> = ({
   });
 
   console.log('Aptos Collection Data:', aptosCollectionData);
+  console.log('Aptos Collection Data Details:', {
+    name: aptosCollectionData?.name,
+    description: aptosCollectionData?.description,
+    imageUri: aptosCollectionData?.imageUri,
+    royaltyPercentage: aptosCollectionData?.royaltyPercentage,
+    royaltyAddress: aptosCollectionData?.royaltyAddress,
+    royaltyRecipients: aptosCollectionData?.royaltyRecipients
+  });
   console.log('Aptos Read Error:', isAptosReadError);
   console.log('Aptos Loading:', isAptosLoading);
   console.log('Is Aptos Chain:', isAptos);
@@ -233,7 +241,10 @@ const NFTCard: FC<CollectionData> = ({
 
   const royaltyTokenAddress = readRoyaltyData?.[0];
   const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
-  const title2 = title || readContractName;
+  const title2 =
+    isAptos && aptosCollectionData?.name
+      ? aptosCollectionData.name
+      : title || readContractName;
   const isSoldOut = (() => {
     if (isAptos && isAptosLoading) return false;
     if (!maxSupply2 || !totalMinted2) return false;
@@ -302,7 +313,10 @@ const NFTCard: FC<CollectionData> = ({
       : '0';
   })();
 
-  const royalty = Number(royaltyBps) / 100;
+  const royalty =
+    isAptos && aptosCollectionData?.royaltyPercentage
+      ? Number(aptosCollectionData.royaltyPercentage)
+      : Number(royaltyBps) / 100;
   const mintReferral = LENSPOST_ETH_ADDRESS;
   const mintTotalFee = mintFee * quantity;
   const comment = '';
@@ -577,6 +591,11 @@ const NFTCard: FC<CollectionData> = ({
         }
       });
 
+      console.log('Aptos mint response:', response);
+      console.log('Response hash:', response.hash);
+      console.log('Response type:', typeof response.hash);
+      console.log('Full response object:', JSON.stringify(response, null, 2));
+
       // Set the transaction hash immediately
       setAptosTxHash(response.hash);
 
@@ -718,6 +737,14 @@ const NFTCard: FC<CollectionData> = ({
               priority={true}
               height={1080}
               width={1920}
+              onError={(e) => {
+                console.error('Image failed to load:', imageCdnUrl);
+                // Fallback to default image if Aptos image fails
+                const fallbackImage =
+                  imageUrl?.replace(R2_IMAGE_URL, CDN_IMAGE_URL) || '/next.svg';
+                console.log('Falling back to image:', fallbackImage);
+                e.currentTarget.src = fallbackImage;
+              }}
             />
           </div>
         </div>
@@ -752,6 +779,15 @@ const NFTCard: FC<CollectionData> = ({
                 {contractTypeFiltered}
               </span>
             </div>
+
+            {/* Description section for Aptos collections */}
+            {isAptos && aptosCollectionData?.description && (
+              <div className="mt-3">
+                <p className="text-sm leading-relaxed text-gray-300">
+                  {aptosCollectionData.description}
+                </p>
+              </div>
+            )}
           </div>
           <div className="space-y-4 rounded-xl bg-gray-800/50 p-4">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -843,6 +879,33 @@ const NFTCard: FC<CollectionData> = ({
                   chainId={chainId || 1}
                 />
               )}
+
+              {/* Aptos royalty recipients */}
+              {isAptos &&
+                aptosCollectionData?.royaltyRecipients &&
+                aptosCollectionData.royaltyRecipients.length > 0 && (
+                  <div className="rounded-lg bg-gray-800 p-3">
+                    <p className="text-xs font-medium text-gray-400">
+                      Royalty Recipients
+                    </p>
+                    <div className="mt-2 space-y-1">
+                      {aptosCollectionData.royaltyRecipients.map(
+                        (recipient, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-1 text-sm font-bold text-white"
+                          >
+                            {formatAddress(recipient as `0x${string}`)}
+                            <CopyButton
+                              successMessage="Address copied!"
+                              text={recipient}
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
             </div>
             <div className="mt-6 space-y-4">
               <div className="flex items-center gap-4">

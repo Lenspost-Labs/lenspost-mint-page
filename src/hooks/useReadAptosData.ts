@@ -22,6 +22,12 @@ type AptosCollectionData = {
   maxSupply: string;
   totalMinted: string;
   price: bigint;
+  royaltyAddress: string;
+  name: string;
+  description: string;
+  imageUri: string;
+  royaltyPercentage: string;
+  royaltyRecipients: string[];
 };
 
 const useReadAptosData = ({
@@ -64,8 +70,45 @@ const useReadAptosData = ({
         });
 
         // Map the array-based result to a clear object
-        const [maxSupply, totalMinted, price, maxPerWallet, isMintEnabled] =
-          result;
+        const [
+          maxSupply,
+          totalMinted,
+          price,
+          maxPerWallet,
+          isMintEnabled,
+          royaltyAddress,
+          name,
+          description,
+          imageUri,
+          royaltyPercentageVec,
+          royaltyRecipientsVec
+        ] = result;
+
+        // Extract royalty percentage from the vector format
+        const royaltyPercentage = Array.isArray(royaltyPercentageVec)
+          ? royaltyPercentageVec[0]?.toString() || '0'
+          : typeof royaltyPercentageVec === 'object' &&
+              royaltyPercentageVec &&
+              'vec' in royaltyPercentageVec
+            ? (royaltyPercentageVec as { vec: any[] }).vec[0]?.toString() || '0'
+            : '0';
+
+        // Validate royalty percentage is a valid number
+        const validatedRoyaltyPercentage = (() => {
+          const num = Number(royaltyPercentage);
+          return isNaN(num) || num < 0 ? '0' : royaltyPercentage;
+        })();
+
+        // Extract royalty recipients from the vector format
+        const royaltyRecipients = Array.isArray(royaltyRecipientsVec)
+          ? royaltyRecipientsVec.map((r: any) => r?.toString() || '')
+          : typeof royaltyRecipientsVec === 'object' &&
+              royaltyRecipientsVec &&
+              'vec' in royaltyRecipientsVec
+            ? (royaltyRecipientsVec as { vec: any[] }).vec.map(
+                (r: any) => r?.toString() || ''
+              )
+            : [];
 
         const formattedData: AptosCollectionData = {
           maxSupply: maxSupply?.toString() || '0',
@@ -75,10 +118,30 @@ const useReadAptosData = ({
               ? price
               : BigInt(price?.toString() || '0'),
           maxPerWallet: maxPerWallet?.toString() || '0',
-          isMinting: Boolean(isMintEnabled)
+          isMinting: Boolean(isMintEnabled),
+          royaltyAddress: royaltyAddress?.toString() || '',
+          name: name?.toString() || '',
+          description: description?.toString() || '',
+          imageUri: imageUri?.toString() || '',
+          royaltyPercentage: validatedRoyaltyPercentage,
+          royaltyRecipients
         };
 
         console.log('Aptos collection data fetched:', formattedData);
+        console.log('Raw Move function result:', result);
+        console.log('Parsed values:', {
+          maxSupply,
+          totalMinted,
+          price,
+          maxPerWallet,
+          isMintEnabled,
+          royaltyAddress,
+          name,
+          description,
+          imageUri,
+          royaltyPercentageVec,
+          royaltyRecipientsVec
+        });
         setData(formattedData);
       } catch (error) {
         console.error('Aptos data read error:', error);
@@ -89,7 +152,13 @@ const useReadAptosData = ({
           totalMinted: '0',
           price: 0n,
           maxPerWallet: '0',
-          isMinting: false
+          isMinting: false,
+          royaltyAddress: '',
+          name: '',
+          description: '',
+          imageUri: '',
+          royaltyPercentage: '0',
+          royaltyRecipients: []
         });
       } finally {
         setIsLoading(false);

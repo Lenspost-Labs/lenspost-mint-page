@@ -179,10 +179,9 @@ const NFTCard: FC<CollectionData> = ({
 
   // Validate collectionId format for Aptos
   // 0x + 64 hex chars
-  const isValidAptosCollectionId =
-    collectionId?.startsWith('0x') && collectionId.length === 66;
+  //const isValidAptosCollectionId =
+  //collectionId?.startsWith('0x') && collectionId.length === 66;
   console.log('NFTCard: CollectionId validation:', {
-    isValidAptosCollectionId,
     collectionIdLength: collectionId?.length,
     collectionIdStartsWith0x: collectionId?.startsWith('0x')
   });
@@ -562,12 +561,12 @@ const NFTCard: FC<CollectionData> = ({
       return;
     }
 
-    if (!isValidAptosCollectionId) {
-      toast.error(
-        'Invalid collection ID format. Please check the collection configuration.'
-      );
-      return;
-    }
+    // if (!isValidAptosCollectionId) {
+    //   toast.error(
+    //     'Invalid collection ID format. Please check the collection configuration.'
+    //   );
+    //   return;
+    // }
 
     if (!aptosCollectionData || isAptosReadError) {
       toast.error('Unable to load collection data. Please try again later.');
@@ -965,7 +964,7 @@ const NFTCard: FC<CollectionData> = ({
                       (isAptos && isAptosLoading) ||
                       (isAptos && isAptosReadError) ||
                       (isAptos && !aptosCollectionData) ||
-                      (isAptos && !isValidAptosCollectionId) ||
+                      // (isAptos && !isValidAptosCollectionId) ||
                       (isAptos && !isValidModuleAddress)
                     }
                     title={
@@ -979,13 +978,11 @@ const NFTCard: FC<CollectionData> = ({
                               ? 'Data Error'
                               : isAptos && !isValidModuleAddress
                                 ? 'Invalid Module Address'
-                                : isAptos && !isValidAptosCollectionId
-                                  ? 'Invalid Collection ID'
-                                  : isAptos && !aptosCollectionData
-                                    ? 'No Data'
-                                    : isSoldOut
-                                      ? 'Sold Out'
-                                      : 'Collect'
+                                : isAptos && !aptosCollectionData
+                                  ? 'No Data'
+                                  : isSoldOut
+                                    ? 'Sold Out'
+                                    : 'Collect'
                     }
                     onClick={handleMint}
                   />

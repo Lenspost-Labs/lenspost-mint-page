@@ -143,6 +143,7 @@ const useReadAptosData = ({
           royaltyRecipientsVec
         });
         setData(formattedData);
+        console.log('Aptos collection data fetched:', formattedData);
       } catch (error) {
         console.error('Aptos data read error:', error);
         setIsError(true);

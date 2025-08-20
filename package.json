@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@0xsplits/splits-sdk-react": "^3.1.0",
+    "@aptos-labs/ts-sdk": "^4.0.0",
+    "@aptos-labs/wallet-adapter-react": "^7.0.4",
     "@coinbase/onchainkit": "^0.13.0",
     "@farcaster/frame-sdk": "^0.0.64",
     "@farcaster/frame-wagmi-connector": "^0.0.53",

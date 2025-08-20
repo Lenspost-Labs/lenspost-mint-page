@@ -10,6 +10,12 @@ importers:
       '@0xsplits/splits-sdk-react':
         specifier: ^3.1.0
         version: 3.1.0(react@18.3.1)(viem@2.31.6(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.67))
+      '@aptos-labs/ts-sdk':
+        specifier: ^4.0.0
+        version: 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-adapter-react':
+        specifier: ^7.0.4
+        version: 7.0.4(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@types/react@18.3.23)(@wallet-standard/core@1.1.1)(aptos@1.21.0)(react@18.3.1)
       '@coinbase/onchainkit':
         specifier: ^0.13.0
         version: 0.13.4(@tanstack/react-query@5.81.5(react@18.3.1))(@xmtp/frames-validator@0.6.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.67))(graphql-request@6.1.0(encoding@0.1.13)(graphql@16.11.0))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.31.6(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.67))
@@ -188,6 +194,90 @@ packages:
         integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
       }
     engines: { node: '>=10' }
+
+  '@aptos-connect/wallet-adapter-plugin@2.5.1':
+    resolution:
+      {
+        integrity: sha512-yihmS3oC5G9qUD56+FHvwAxpy6lv/6IxxJiuOlmm7tkkjsclpOqGUJx11G1UhQT3KgwSsMstzTL8FLw1QkHrIQ==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+
+  '@aptos-connect/wallet-api@0.3.1':
+    resolution:
+      {
+        integrity: sha512-04zXCzK/wCv9rSt71nAkuSHbgV8WJ4xy104QGfdJiEOyDGkocVoZGyc4vbG9olivqSrG/jlrnO8N1eRQ9NL6AA==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      aptos: ^1.20.0
+
+  '@aptos-connect/web-transport@0.3.1':
+    resolution:
+      {
+        integrity: sha512-ZTgtr/BjGnE2Z1u0p84lLKxG5ScFEid5X+5nte54lbvAIcTroRp3FAG2HZ4Jf2KxtYaArry77BJ2ocKTL7XpLw==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/wallet-standard': ^0.5.0
+      '@telegram-apps/bridge': ^1.0.0
+      aptos: ^1.20.0
+
+  '@aptos-labs/aptos-cli@1.0.2':
+    resolution:
+      {
+        integrity: sha512-PYPsd0Kk3ynkxNfe3S4fanI3DiUICCoh4ibQderbvjPFL5A0oK6F4lPEO2t0MDsQySTk2t4vh99Xjy6Bd9y+aQ==
+      }
+    hasBin: true
+
+  '@aptos-labs/aptos-client@0.1.1':
+    resolution:
+      {
+        integrity: sha512-kJsoy4fAPTOhzVr7Vwq8s/AUg6BQiJDa7WOqRzev4zsuIS3+JCuIZ6vUd7UBsjnxtmguJJulMRs9qWCzVBt2XA==
+      }
+    engines: { node: '>=15.10.0' }
+    deprecated: <1.0.0 is no longer supported please upgrade to the latest version
+
+  '@aptos-labs/aptos-client@2.0.0':
+    resolution:
+      {
+        integrity: sha512-A23T3zTCRXEKURodp00dkadVtIrhWjC9uo08dRDBkh69OhCnBAxkENmUy/rcBarfLoFr60nRWt7cBkc8wxr1mg==
+      }
+    engines: { node: '>=20.0.0' }
+    peerDependencies:
+      got: ^11.8.6
+
+  '@aptos-labs/ts-sdk@4.0.0':
+    resolution:
+      {
+        integrity: sha512-bRB9fT0t86btGyL/b5I4c3K1gZvldSvFv2KkV+1kEHt+yDbDrWI43wsfHLv0fFAVatCrH610NpLONMCnQSqQhA==
+      }
+    engines: { node: '>=20.0.0' }
+
+  '@aptos-labs/wallet-adapter-core@7.1.1':
+    resolution:
+      {
+        integrity: sha512-87CM2hyUiBKv7bNPrYfUoPzwK0faSTlgRWIxMXzg/JgC1WdcmEU70wyE20BpHGY6LTC8eET1+sHTyoqZb0/9vA==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^3.1.3
+
+  '@aptos-labs/wallet-adapter-react@7.0.4':
+    resolution:
+      {
+        integrity: sha512-jFo2dS/97C3w/CQY17GoeJrQdaBI1qKk3ff4y5u4i97lDkDlTdgsAo9r3NdMVCL5FN7S4ImUEeDkRdpfIL7BhQ==
+      }
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+
+  '@aptos-labs/wallet-standard@0.5.1':
+    resolution:
+      {
+        integrity: sha512-jrdWH4qibIZRVn3h7eJhTpkvlLhwJgViC0XLoEz/+deMGZUUbga47LDX3SyZi/Sms7MvlN8oDI40pbCZX6PhaA==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^3.1.3
+      '@wallet-standard/core': ^1.0.3
 
   '@babel/code-frame@7.27.1':
     resolution:
@@ -618,6 +708,38 @@ packages:
         integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
       }
     deprecated: Use @eslint/object-schema instead
+
+  '@identity-connect/api@0.7.0':
+    resolution:
+      {
+        integrity: sha512-mn/LZGeb3xgBD644p67tYOjvYSSdZpwxiO4/ZjwjsJZ8eYvGha5FiZg+pqVH73lg1S36qikwbkA3HUQOAE5GKA==
+      }
+
+  '@identity-connect/crypto@0.2.8':
+    resolution:
+      {
+        integrity: sha512-Yzhc+cjaUQdZ7hdK2ck/PWSHAAhsMKxKbVtQ4ySfKhBouV8Aysc1XzPhlHtCi0SlfzMW2KEhhT2yKFGgHoeYZA==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+
+  '@identity-connect/dapp-sdk@0.11.1':
+    resolution:
+      {
+        integrity: sha512-fll2b15nz/ZtjM/xLRjnJcNwpramYNEW8oARBPHWXtmEUOtD/z9gepmCbUssgobCjSJs8OMUjHfNKvIDXFpxlg==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      '@aptos-labs/wallet-standard': ^0.5.0
+
+  '@identity-connect/wallet-api@0.1.3':
+    resolution:
+      {
+        integrity: sha512-sIXauLKpywxfR1VBsC9mbAMebMRC1kXkW1DIOMdcXF7csjhOraC8qJE7M84GM4ZLVgRZHWSHS9PjQNcKU6QW5w==
+      }
+    peerDependencies:
+      '@aptos-labs/ts-sdk': ^1.33.1 || ^2.0.0 || ^3.0.0
+      aptos: ^1.20.0
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution:
@@ -1183,6 +1305,13 @@ packages:
         integrity: sha512-HxngEd2XUcg9xi20JkwlLCtYwfoFw4JGkuZpT+WlsPD4gB/cxkvTD8fSsoAnphGZhFdZYKeQIPCuFlWPm1uE0g==
       }
     engines: { node: ^14.21.3 || >=16 }
+
+  '@noble/hashes@1.3.3':
+    resolution:
+      {
+        integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==
+      }
+    engines: { node: '>= 16' }
 
   '@noble/hashes@1.4.0':
     resolution:
@@ -2074,6 +2203,12 @@ packages:
         integrity: sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==
       }
 
+  '@scure/bip39@1.2.1':
+    resolution:
+      {
+        integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==
+      }
+
   '@scure/bip39@1.3.0':
     resolution:
       {
@@ -2103,6 +2238,13 @@ packages:
       {
         integrity: sha512-tGSRP1QvsAvsJmnOlRQyw/mvK9gnPtjEc5fg2+m8n+QUa+D7rvrKkOYyfpy42GTs90X3RDOnqJgfHt+qO67/+w==
       }
+
+  '@sindresorhus/is@4.6.0':
+    resolution:
+      {
+        integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==
+      }
+    engines: { node: '>=10' }
 
   '@socket.io/component-emitter@3.1.2':
     resolution:
@@ -2219,6 +2361,13 @@ packages:
         integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==
       }
 
+  '@szmarczak/http-timer@4.0.6':
+    resolution:
+      {
+        integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==
+      }
+    engines: { node: '>=10' }
+
   '@tanstack/query-core@5.81.5':
     resolution:
       {
@@ -2248,10 +2397,46 @@ packages:
         integrity: sha512-1YBOJfRHV4sXUmWsFSf5rQor4Ss82G8dQWLRbnk3GA4jeP8hQt1hxXh0tmflpC0dz3VgEv/1+qwPyLeWkQuPFA==
       }
 
+  '@telegram-apps/bridge@1.9.2':
+    resolution:
+      {
+        integrity: sha512-SJLcNWLXhbbZr9MiqFH/g2ceuitSJKMxUIZysK4zUNyTUNuonrQG80Q/yrO+XiNbKUj8WdDNM86NBARhuyyinQ==
+      }
+
+  '@telegram-apps/signals@1.1.2':
+    resolution:
+      {
+        integrity: sha512-1P1kdCLX7MfETGPxH7f3UZKIsdE7Tz5S7QmN4Km1sbYQMakD5Bi1NecSMR7/wnHp50gWMI1JzENcMtCEmouhSg==
+      }
+
+  '@telegram-apps/toolkit@1.1.1':
+    resolution:
+      {
+        integrity: sha512-+vhKx6ngfvjyTE6Xagl3z1TPVbfx5s7xAkcYzCdHYUo6T60jLIqLgyZMcI1UPoIAMuMu1pHoO+p8QNCj/+tFmw==
+      }
+
+  '@telegram-apps/transformers@1.2.2':
+    resolution:
+      {
+        integrity: sha512-vvMwXckd1D7Ozc0h66PSUwF5QLrRV9HlGJFFeBuUex8QEk5mSPtsJkLiqB8aBbwuFDa91+TUSM/CxqPZO/e9YQ==
+      }
+
+  '@telegram-apps/types@1.2.1':
+    resolution:
+      {
+        integrity: sha512-so4HLh7clur0YyMthi9KVIgWoGpZdXlFOuQjk3+Q5NAvJZ11nAheBSwPlGw/Ko92+zwvrSBE/lQyN2+p17RP+w==
+      }
+
   '@tybys/wasm-util@0.9.0':
     resolution:
       {
         integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==
+      }
+
+  '@types/cacheable-request@6.0.3':
+    resolution:
+      {
+        integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==
       }
 
   '@types/connect@3.4.38':
@@ -2266,10 +2451,22 @@ packages:
         integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==
       }
 
+  '@types/http-cache-semantics@4.0.4':
+    resolution:
+      {
+        integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==
+      }
+
   '@types/json5@0.0.29':
     resolution:
       {
         integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+      }
+
+  '@types/keyv@3.1.4':
+    resolution:
+      {
+        integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
       }
 
   '@types/ms@2.1.0':
@@ -2314,6 +2511,12 @@ packages:
     resolution:
       {
         integrity: sha512-/LDXMQh55EzZQ0uVAZmKKhfENivEvWz6E+EYzh+/MCjMhNsotd+ZHhBGIjFDTi6+fz0OhQQQLbTgdQIxxCsC0w==
+      }
+
+  '@types/responselike@1.0.3':
+    resolution:
+      {
+        integrity: sha512-H/+L+UkTV33uf49PH5pCAUBVPNj2nDBXTN+qS1dOwyyg24l3CcicicCA7ca+HMvJBZcFgl5r8e+RR6elsb4Lyw==
       }
 
   '@types/stylis@4.2.5':
@@ -2679,6 +2882,21 @@ packages:
         integrity: sha512-DJDQhjKmSNVLKWItoKThJS+CsJQjR9AOBOirBVT1F9YpRyC9oYHE+ZnSf8y8bxUphtKqdQMPVQ2mHohYdRvDVQ==
       }
     engines: { node: '>=16' }
+
+  '@wallet-standard/core@1.1.1':
+    resolution:
+      {
+        integrity: sha512-5Xmjc6+Oe0hcPfVc5n8F77NVLwx1JVAoCVgQpLyv/43/bhtIif+Gx3WUrDlaSDoM8i2kA2xd6YoFbHCxs+e0zA==
+      }
+    engines: { node: '>=16' }
+
+  '@wallet-standard/errors@0.1.1':
+    resolution:
+      {
+        integrity: sha512-V8Ju1Wvol8i/VDyQOHhjhxmMVwmKiwyxUZBnHhtiPZJTWY0U/Shb2iEWyGngYEbAkp2sGTmEeNX1tVyGR7PqNw==
+      }
+    engines: { node: '>=16' }
+    hasBin: true
 
   '@wallet-standard/features@1.1.0':
     resolution:
@@ -3093,6 +3311,14 @@ packages:
       }
     engines: { node: '>= 8' }
 
+  aptos@1.21.0:
+    resolution:
+      {
+        integrity: sha512-PRKjoFgL8tVEc9+oS7eJUv8GNxx8n3+0byH2+m7CP3raYOD6yFKOecuwjVMIJmgfpjp6xH0P0HDMGZAXmSyU0Q==
+      }
+    engines: { node: '>=11.0.0' }
+    deprecated: Package aptos is no longer supported, please migrate to https://www.npmjs.com/package/@aptos-labs/ts-sdk
+
   arg@5.0.2:
     resolution:
       {
@@ -3201,6 +3427,12 @@ packages:
         integrity: sha512-Hs4R+4SPgamu6rSGW8C7cV9gaWUKEHykfzCCvIRuaVv636Ju10ZdeUbvb4TBEW0INuq2DHZqXbK4Nd3yG4RaRw==
       }
 
+  asynckit@0.4.0:
+    resolution:
+      {
+        integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
+      }
+
   atomic-sleep@1.0.0:
     resolution:
       {
@@ -3236,6 +3468,18 @@ packages:
     resolution:
       {
         integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
+      }
+
+  axios@1.11.0:
+    resolution:
+      {
+        integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==
+      }
+
+  axios@1.7.4:
+    resolution:
+      {
+        integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==
       }
 
   axobject-query@4.1.0:
@@ -3408,6 +3652,20 @@ packages:
       }
     engines: { node: '>=10.16.0' }
 
+  cacheable-lookup@5.0.4:
+    resolution:
+      {
+        integrity: sha512-2/kNscPhpcxrOigMZzbiWF7dz8ilhb/nIHU3EyZiXWXpeq/au8qJ8VhdftMkty3n7Gj6HIGalQG8oiBNB3AJgA==
+      }
+    engines: { node: '>=10.6.0' }
+
+  cacheable-request@7.0.4:
+    resolution:
+      {
+        integrity: sha512-v+p6ongsrp0yTGbJXjgxPow2+DL93DASP4kXCDKb8/bwRtt9OEF3whggkkDkGNzgcWy2XaF4a8nZglC7uElscg==
+      }
+    engines: { node: '>=8' }
+
   call-bind-apply-helpers@1.0.2:
     resolution:
       {
@@ -3549,6 +3807,12 @@ packages:
         integrity: sha512-t6wbgtoCXvAzst7QgXxJYqPt0usEfbgQdftEPbLL/cvv6HPE5VgvqCuAIDR0NgU52ds6rFwqrgakNLrHEjCbrQ==
       }
 
+  clone-response@1.0.3:
+    resolution:
+      {
+        integrity: sha512-ROoL94jJH2dUVML2Y/5PEDNaSHgeOdSDicUyS7izcF63G6sTc/FTjLub4b8Il9S8S0beOfYt0TaA5qvFK+w0wA==
+      }
+
   clsx@1.2.1:
     resolution:
       {
@@ -3607,11 +3871,25 @@ packages:
         integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==
       }
 
+  combined-stream@1.0.8:
+    resolution:
+      {
+        integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
+      }
+    engines: { node: '>= 0.8' }
+
   comlink@4.4.2:
     resolution:
       {
         integrity: sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==
       }
+
+  commander@12.1.0:
+    resolution:
+      {
+        integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==
+      }
+    engines: { node: '>=18' }
 
   commander@13.1.0:
     resolution:
@@ -3824,11 +4102,25 @@ packages:
       }
     engines: { node: '>=0.10' }
 
+  decompress-response@6.0.0:
+    resolution:
+      {
+        integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==
+      }
+    engines: { node: '>=10' }
+
   deep-is@0.1.4:
     resolution:
       {
         integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
       }
+
+  defer-to-connect@2.0.1:
+    resolution:
+      {
+        integrity: sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==
+      }
+    engines: { node: '>=10' }
 
   define-data-property@1.1.4:
     resolution:
@@ -3856,6 +4148,13 @@ packages:
         integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==
       }
     engines: { node: '>=10' }
+
+  delayed-stream@1.0.0:
+    resolution:
+      {
+        integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
+      }
+    engines: { node: '>=0.4.0' }
 
   derive-valtio@0.1.0:
     resolution:
@@ -3982,6 +4281,12 @@ packages:
         integrity: sha512-r6kEJXDKecVOCj2nLMuXK/FCPeurW33+3JRpfXVbjLja3XUYFfD9I/JBreH6sUyzcm3G/YQboBjMla6poKeSdA==
       }
     engines: { bun: '>=1', deno: '>=2', node: '>=16' }
+
+  ed2curve@0.3.0:
+    resolution:
+      {
+        integrity: sha512-8w2fmmq3hv9rCrcI7g9hms2pMunQr1JINfcjwR9tAyZqhtyaMN991lF/ZfHfr5tzZQ8c7y7aBgZbjfbd0fjFwQ==
+      }
 
   electron-to-chromium@1.5.177:
     resolution:
@@ -4640,6 +4945,20 @@ packages:
       }
     version: 1.1.1
 
+  form-data@4.0.0:
+    resolution:
+      {
+        integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
+      }
+    engines: { node: '>= 6' }
+
+  form-data@4.0.4:
+    resolution:
+      {
+        integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==
+      }
+    engines: { node: '>= 6' }
+
   fraction.js@4.3.7:
     resolution:
       {
@@ -4713,6 +5032,13 @@ packages:
         integrity: sha512-sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g==
       }
     engines: { node: '>= 0.4' }
+
+  get-stream@5.2.0:
+    resolution:
+      {
+        integrity: sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==
+      }
+    engines: { node: '>=8' }
 
   get-symbol-description@1.1.0:
     resolution:
@@ -4797,6 +5123,13 @@ packages:
         integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
       }
     engines: { node: '>= 0.4' }
+
+  got@11.8.6:
+    resolution:
+      {
+        integrity: sha512-6tfZ91bOr7bOXnK7PRDCGBLa1H4U080YHNaAQ2KsMGlLEzRbk44nsZF2E1IeRc3vtJHPVbKCYgdFbaGO2ljd8g==
+      }
+    engines: { node: '>=10.19.0' }
 
   graceful-fs@4.2.11:
     resolution:
@@ -4915,6 +5248,19 @@ packages:
       {
         integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
       }
+
+  http-cache-semantics@4.2.0:
+    resolution:
+      {
+        integrity: sha512-dTxcvPXqPvXBQpq5dUr6mEMJX4oIEFv6bwom3FDwKRDsuIjjJGANqhBuoAn9c1RQJIdAKav33ED65E2ys+87QQ==
+      }
+
+  http2-wrapper@1.0.3:
+    resolution:
+      {
+        integrity: sha512-V+23sDMr12Wnz7iTcDeJr3O6AIxlnvT/bmaAAAP/Xda35C90p9599p0F1eHR/N1KILWSoWVAiOMFjBBXaXSMxg==
+      }
+    engines: { node: '>=10.19.0' }
 
   humanize-ms@1.2.1:
     resolution:
@@ -5369,6 +5715,12 @@ packages:
       }
     engines: { node: '>=10' }
 
+  js-base64@3.7.8:
+    resolution:
+      {
+        integrity: sha512-hNngCeKxIUQiEUN3GPJOkz4wF/YvdUdbNL9hsBcMQTkKzboD7T/q3OYOuuPZLUE6dBxSGpwhk5mwuDud7JVAow==
+      }
+
   js-cookie@3.0.5:
     resolution:
       {
@@ -5478,6 +5830,13 @@ packages:
         integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==
       }
     engines: { node: '>=4.0' }
+
+  jwt-decode@4.0.0:
+    resolution:
+      {
+        integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
+      }
+    engines: { node: '>=18' }
 
   keccak@3.0.4:
     resolution:
@@ -5646,6 +6005,13 @@ packages:
       }
     hasBin: true
 
+  lowercase-keys@2.0.0:
+    resolution:
+      {
+        integrity: sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
+      }
+    engines: { node: '>=8' }
+
   lru-cache@10.4.3:
     resolution:
       {
@@ -5692,6 +6058,34 @@ packages:
         integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==
       }
     engines: { node: '>=8.6' }
+
+  mime-db@1.52.0:
+    resolution:
+      {
+        integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
+      }
+    engines: { node: '>= 0.6' }
+
+  mime-types@2.1.35:
+    resolution:
+      {
+        integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
+      }
+    engines: { node: '>= 0.6' }
+
+  mimic-response@1.0.1:
+    resolution:
+      {
+        integrity: sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
+      }
+    engines: { node: '>=4' }
+
+  mimic-response@3.1.0:
+    resolution:
+      {
+        integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==
+      }
+    engines: { node: '>=10' }
 
   min-indent@1.0.1:
     resolution:
@@ -5892,6 +6286,13 @@ packages:
       }
     engines: { node: '>=0.10.0' }
 
+  normalize-url@6.1.0:
+    resolution:
+      {
+        integrity: sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
+      }
+    engines: { node: '>=10' }
+
   obj-multiplex@1.0.0:
     resolution:
       {
@@ -6043,6 +6444,13 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  p-cancelable@2.1.1:
+    resolution:
+      {
+        integrity: sha512-BZOr3nRQHOntUjTrH8+Lh54smKHoHyur8We1V8DSMVrl5A2malOOwuJRnKRDjSnkoeBh4at6BwEnb5I7Jl31wg==
+      }
+    engines: { node: '>=8' }
 
   p-limit@1.3.0:
     resolution:
@@ -6291,6 +6699,12 @@ packages:
       }
     engines: { node: '>=12.0.0' }
 
+  poseidon-lite@0.2.1:
+    resolution:
+      {
+        integrity: sha512-xIr+G6HeYfOhCuswdqcFpSX47SPhm0EpisWJ6h7fHlWwaVIvH3dLnejpatrtw6Xc6HaLrpq05y7VRfvDmDGIog==
+      }
+
   possible-typed-array-names@1.1.0:
     resolution:
       {
@@ -6508,6 +6922,12 @@ packages:
         integrity: sha512-8xuCeM3l8yqdmbPoYeLbrAXCBWu19XEYc5/F28f5qOaoAIMyfmBUkl5axiK+x9olUvRlcekvnm98AP9RDngOIw==
       }
 
+  proxy-from-env@1.1.0:
+    resolution:
+      {
+        integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
+      }
+
   pump@3.0.3:
     resolution:
       {
@@ -6555,6 +6975,13 @@ packages:
       {
         integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==
       }
+
+  quick-lru@5.1.1:
+    resolution:
+      {
+        integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
+      }
+    engines: { node: '>=10' }
 
   radix3@1.1.2:
     resolution:
@@ -6740,6 +7167,12 @@ packages:
         integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
       }
 
+  resolve-alpn@1.2.1:
+    resolution:
+      {
+        integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==
+      }
+
   resolve-from@4.0.0:
     resolution:
       {
@@ -6767,6 +7200,12 @@ packages:
         integrity: sha512-U7WjGVG9sH8tvjW5SmGbQuui75FiyjAX72HX15DwBBwF9dNiQZRQAg9nnPhYy+TUnE0+VcrttuvNI8oSxZcocA==
       }
     hasBin: true
+
+  responselike@2.0.1:
+    resolution:
+      {
+        integrity: sha512-4gl03wn3hj1HP3yzgdI7d3lCkF95F21Pz4BPGvKHinyQzALR5CapwC8yIi0Rh58DEMQ/SguC03wFj2k0M/mHhw==
+      }
 
   reusify@1.1.0:
     resolution:
@@ -8169,6 +8608,102 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
+  '@aptos-connect/wallet-adapter-plugin@2.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      '@identity-connect/crypto': 0.2.8(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@identity-connect/dapp-sdk': 0.11.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+    transitivePeerDependencies:
+      - '@telegram-apps/bridge'
+      - '@wallet-standard/core'
+      - aptos
+      - debug
+
+  '@aptos-connect/wallet-api@0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      '@identity-connect/api': 0.7.0
+      aptos: 1.21.0
+    transitivePeerDependencies:
+      - '@wallet-standard/core'
+
+  '@aptos-connect/web-transport@0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      '@telegram-apps/bridge': 1.9.2
+      aptos: 1.21.0
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - '@wallet-standard/core'
+
+  '@aptos-labs/aptos-cli@1.0.2':
+    dependencies:
+      commander: 12.1.0
+
+  '@aptos-labs/aptos-client@0.1.1':
+    dependencies:
+      axios: 1.7.4
+      got: 11.8.6
+    transitivePeerDependencies:
+      - debug
+
+  '@aptos-labs/aptos-client@2.0.0(got@11.8.6)':
+    dependencies:
+      got: 11.8.6
+
+  '@aptos-labs/ts-sdk@4.0.0(got@11.8.6)':
+    dependencies:
+      '@aptos-labs/aptos-cli': 1.0.2
+      '@aptos-labs/aptos-client': 2.0.0(got@11.8.6)
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      eventemitter3: 5.0.1
+      form-data: 4.0.4
+      js-base64: 3.7.8
+      jwt-decode: 4.0.0
+      poseidon-lite: 0.2.1
+    transitivePeerDependencies:
+      - got
+
+  '@aptos-labs/wallet-adapter-core@7.1.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-connect/wallet-adapter-plugin': 2.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      buffer: 6.0.3
+      eventemitter3: 4.0.7
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - '@telegram-apps/bridge'
+      - '@wallet-standard/core'
+      - aptos
+      - debug
+
+  '@aptos-labs/wallet-adapter-react@7.0.4(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@types/react@18.3.23)(@wallet-standard/core@1.1.1)(aptos@1.21.0)(react@18.3.1)':
+    dependencies:
+      '@aptos-labs/wallet-adapter-core': 7.1.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@radix-ui/react-slot': 1.2.3(@types/react@18.3.23)(react@18.3.1)
+      react: 18.3.1
+    transitivePeerDependencies:
+      - '@aptos-labs/ts-sdk'
+      - '@telegram-apps/bridge'
+      - '@types/react'
+      - '@wallet-standard/core'
+      - aptos
+      - debug
+
+  '@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)':
+    dependencies:
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@wallet-standard/core': 1.1.1
+
   '@babel/code-frame@7.27.1':
     dependencies:
       '@babel/helper-validator-identifier': 7.27.1
@@ -8582,6 +9117,41 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
+  '@identity-connect/api@0.7.0': {}
+
+  '@identity-connect/crypto@0.2.8(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@noble/hashes': 1.8.0
+      ed2curve: 0.3.0
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - '@wallet-standard/core'
+      - aptos
+
+  '@identity-connect/dapp-sdk@0.11.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)':
+    dependencies:
+      '@aptos-connect/wallet-api': 0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-connect/web-transport': 0.3.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@aptos-labs/wallet-standard@0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1))(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      '@aptos-labs/wallet-standard': 0.5.1(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      '@identity-connect/api': 0.7.0
+      '@identity-connect/crypto': 0.2.8(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(@wallet-standard/core@1.1.1)(aptos@1.21.0)
+      '@identity-connect/wallet-api': 0.1.3(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(aptos@1.21.0)
+      axios: 1.11.0
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - '@telegram-apps/bridge'
+      - '@wallet-standard/core'
+      - aptos
+      - debug
+
+  '@identity-connect/wallet-api@0.1.3(@aptos-labs/ts-sdk@4.0.0(got@11.8.6))(aptos@1.21.0)':
+    dependencies:
+      '@aptos-labs/ts-sdk': 4.0.0(got@11.8.6)
+      aptos: 1.21.0
+
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
       '@img/sharp-libvips-darwin-arm64': 1.0.4
@@ -8989,6 +9559,8 @@ snapshots:
   '@noble/curves@1.9.2':
     dependencies:
       '@noble/hashes': 1.8.0
+
+  '@noble/hashes@1.3.3': {}
 
   '@noble/hashes@1.4.0': {}
 
@@ -10143,6 +10715,11 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
+  '@scure/bip39@1.2.1':
+    dependencies:
+      '@noble/hashes': 1.3.3
+      '@scure/base': 1.1.9
+
   '@scure/bip39@1.3.0':
     dependencies:
       '@noble/hashes': 1.4.0
@@ -10163,6 +10740,8 @@ snapshots:
       '@simplewebauthn/types': 9.0.1
 
   '@simplewebauthn/types@9.0.1': {}
+
+  '@sindresorhus/is@4.6.0': {}
 
   '@socket.io/component-emitter@3.1.2': {}
 
@@ -10268,6 +10847,10 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.8.1
 
+  '@szmarczak/http-timer@4.0.6':
+    dependencies:
+      defer-to-connect: 2.0.1
+
   '@tanstack/query-core@5.81.5': {}
 
   '@tanstack/react-query@5.81.5(react@18.3.1)':
@@ -10283,10 +10866,35 @@ snapshots:
 
   '@tanstack/virtual-core@3.13.12': {}
 
+  '@telegram-apps/bridge@1.9.2':
+    dependencies:
+      '@telegram-apps/signals': 1.1.2
+      '@telegram-apps/toolkit': 1.1.1
+      '@telegram-apps/transformers': 1.2.2
+      '@telegram-apps/types': 1.2.1
+
+  '@telegram-apps/signals@1.1.2': {}
+
+  '@telegram-apps/toolkit@1.1.1': {}
+
+  '@telegram-apps/transformers@1.2.2':
+    dependencies:
+      '@telegram-apps/toolkit': 1.1.1
+      '@telegram-apps/types': 1.2.1
+
+  '@telegram-apps/types@1.2.1': {}
+
   '@tybys/wasm-util@0.9.0':
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@types/cacheable-request@6.0.3':
+    dependencies:
+      '@types/http-cache-semantics': 4.0.4
+      '@types/keyv': 3.1.4
+      '@types/node': 20.19.2
+      '@types/responselike': 1.0.3
 
   '@types/connect@3.4.38':
     dependencies:
@@ -10296,7 +10904,13 @@ snapshots:
     dependencies:
       '@types/ms': 2.1.0
 
+  '@types/http-cache-semantics@4.0.4': {}
+
   '@types/json5@0.0.29': {}
+
+  '@types/keyv@3.1.4':
+    dependencies:
+      '@types/node': 20.19.2
 
   '@types/ms@2.1.0': {}
 
@@ -10318,6 +10932,10 @@ snapshots:
     dependencies:
       '@types/prop-types': 15.7.15
       csstype: 3.1.3
+
+  '@types/responselike@1.0.3':
+    dependencies:
+      '@types/node': 20.19.2
 
   '@types/stylis@4.2.5': {}
 
@@ -10581,6 +11199,19 @@ snapshots:
       '@wallet-standard/base': 1.1.0
 
   '@wallet-standard/base@1.1.0': {}
+
+  '@wallet-standard/core@1.1.1':
+    dependencies:
+      '@wallet-standard/app': 1.1.0
+      '@wallet-standard/base': 1.1.0
+      '@wallet-standard/errors': 0.1.1
+      '@wallet-standard/features': 1.1.0
+      '@wallet-standard/wallet': 1.1.0
+
+  '@wallet-standard/errors@0.1.1':
+    dependencies:
+      chalk: 5.4.1
+      commander: 13.1.0
 
   '@wallet-standard/features@1.1.0':
     dependencies:
@@ -11666,6 +12297,17 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
+  aptos@1.21.0:
+    dependencies:
+      '@aptos-labs/aptos-client': 0.1.1
+      '@noble/hashes': 1.3.3
+      '@scure/bip39': 1.2.1
+      eventemitter3: 5.0.1
+      form-data: 4.0.0
+      tweetnacl: 1.0.3
+    transitivePeerDependencies:
+      - debug
+
   arg@5.0.2: {}
 
   argparse@2.0.1: {}
@@ -11753,6 +12395,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  asynckit@0.4.0: {}
+
   atomic-sleep@1.0.0: {}
 
   autoprefixer@10.4.21(postcss@8.5.6):
@@ -11774,6 +12418,22 @@ snapshots:
   axios@0.21.4:
     dependencies:
       follow-redirects: 1.15.9
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.11.0:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.4:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
 
@@ -11862,6 +12522,18 @@ snapshots:
     dependencies:
       streamsearch: 1.1.0
 
+  cacheable-lookup@5.0.4: {}
+
+  cacheable-request@7.0.4:
+    dependencies:
+      clone-response: 1.0.3
+      get-stream: 5.2.0
+      http-cache-semantics: 4.2.0
+      keyv: 4.5.4
+      lowercase-keys: 2.0.0
+      normalize-url: 6.1.0
+      responselike: 2.0.1
+
   call-bind-apply-helpers@1.0.2:
     dependencies:
       es-errors: 1.3.0
@@ -11944,6 +12616,10 @@ snapshots:
       strip-ansi: 6.0.1
       wrap-ansi: 6.2.0
 
+  clone-response@1.0.3:
+    dependencies:
+      mimic-response: 1.0.1
+
   clsx@1.2.1: {}
 
   clsx@2.1.1: {}
@@ -11972,7 +12648,13 @@ snapshots:
 
   colorette@2.0.20: {}
 
+  combined-stream@1.0.8:
+    dependencies:
+      delayed-stream: 1.0.0
+
   comlink@4.4.2: {}
+
+  commander@12.1.0: {}
 
   commander@13.1.0: {}
 
@@ -12074,7 +12756,13 @@ snapshots:
 
   decode-uri-component@0.2.2: {}
 
+  decompress-response@6.0.0:
+    dependencies:
+      mimic-response: 3.1.0
+
   deep-is@0.1.4: {}
+
+  defer-to-connect@2.0.1: {}
 
   define-data-property@1.1.4:
     dependencies:
@@ -12091,6 +12779,8 @@ snapshots:
   defu@6.1.4: {}
 
   delay@5.0.0: {}
+
+  delayed-stream@1.0.0: {}
 
   derive-valtio@0.1.0(valtio@1.13.2(@types/react@18.3.23)(react@18.3.1)):
     dependencies:
@@ -12152,6 +12842,10 @@ snapshots:
       '@noble/ciphers': 1.3.0
       '@noble/curves': 1.9.2
       '@noble/hashes': 1.8.0
+
+  ed2curve@0.3.0:
+    dependencies:
+      tweetnacl: 1.0.3
 
   electron-to-chromium@1.5.177: {}
 
@@ -12701,6 +13395,20 @@ snapshots:
   forge-std@https://codeload.github.com/foundry-rs/forge-std/tar.gz/cd7d533f9a0ee0ec02ad81e0a8f262bc4203c653:
     {}
 
+  form-data@4.0.0:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
+      mime-types: 2.1.35
+
   fraction.js@4.3.7: {}
 
   fs-extra@8.1.0:
@@ -12748,6 +13456,10 @@ snapshots:
     dependencies:
       dunder-proto: 1.0.1
       es-object-atoms: 1.1.1
+
+  get-stream@5.2.0:
+    dependencies:
+      pump: 3.0.3
 
   get-symbol-description@1.1.0:
     dependencies:
@@ -12821,6 +13533,20 @@ snapshots:
 
   gopd@1.2.0: {}
 
+  got@11.8.6:
+    dependencies:
+      '@sindresorhus/is': 4.6.0
+      '@szmarczak/http-timer': 4.0.6
+      '@types/cacheable-request': 6.0.3
+      '@types/responselike': 1.0.3
+      cacheable-lookup: 5.0.4
+      cacheable-request: 7.0.4
+      decompress-response: 6.0.0
+      http2-wrapper: 1.0.3
+      lowercase-keys: 2.0.0
+      p-cancelable: 2.1.1
+      responselike: 2.0.1
+
   graceful-fs@4.2.11: {}
 
   graphemer@1.4.0: {}
@@ -12887,6 +13613,13 @@ snapshots:
       minimalistic-crypto-utils: 1.0.1
 
   hosted-git-info@2.8.9: {}
+
+  http-cache-semantics@4.2.0: {}
+
+  http2-wrapper@1.0.3:
+    dependencies:
+      quick-lru: 5.1.1
+      resolve-alpn: 1.2.1
 
   humanize-ms@1.2.1:
     dependencies:
@@ -13139,6 +13872,8 @@ snapshots:
 
   joycon@3.1.1: {}
 
+  js-base64@3.7.8: {}
+
   js-cookie@3.0.5: {}
 
   js-sha3@0.8.0: {}
@@ -13186,6 +13921,8 @@ snapshots:
       array.prototype.flat: 1.3.3
       object.assign: 4.1.7
       object.values: 1.2.1
+
+  jwt-decode@4.0.0: {}
 
   keccak@3.0.4:
     dependencies:
@@ -13284,6 +14021,8 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
+  lowercase-keys@2.0.0: {}
+
   lru-cache@10.4.3: {}
 
   lucide-react@0.513.0(react@18.3.1):
@@ -13306,6 +14045,16 @@ snapshots:
     dependencies:
       braces: 3.0.3
       picomatch: 2.3.1
+
+  mime-db@1.52.0: {}
+
+  mime-types@2.1.35:
+    dependencies:
+      mime-db: 1.52.0
+
+  mimic-response@1.0.1: {}
+
+  mimic-response@3.1.0: {}
 
   min-indent@1.0.1: {}
 
@@ -13411,6 +14160,8 @@ snapshots:
   normalize-path@3.0.0: {}
 
   normalize-range@0.1.2: {}
+
+  normalize-url@6.1.0: {}
 
   obj-multiplex@1.0.0:
     dependencies:
@@ -13564,6 +14315,8 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
+  p-cancelable@2.1.1: {}
+
   p-limit@1.3.0:
     dependencies:
       p-try: 1.0.0
@@ -13699,6 +14452,8 @@ snapshots:
 
   pony-cause@2.1.11: {}
 
+  poseidon-lite@0.2.1: {}
+
   possible-typed-array-names@1.1.0: {}
 
   postcss-import@15.1.0(postcss@8.5.6):
@@ -13800,6 +14555,8 @@ snapshots:
 
   proxy-compare@2.6.0: {}
 
+  proxy-from-env@1.1.0: {}
+
   pump@3.0.3:
     dependencies:
       end-of-stream: 1.4.5
@@ -13830,6 +14587,8 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
+
+  quick-lru@5.1.1: {}
 
   radix3@1.1.2: {}
 
@@ -13961,6 +14720,8 @@ snapshots:
 
   require-main-filename@2.0.0: {}
 
+  resolve-alpn@1.2.1: {}
+
   resolve-from@4.0.0: {}
 
   resolve-pkg-maps@1.0.0: {}
@@ -13976,6 +14737,10 @@ snapshots:
       is-core-module: 2.16.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+
+  responselike@2.0.1:
+    dependencies:
+      lowercase-keys: 2.0.0
 
   reusify@1.1.0: {}
 

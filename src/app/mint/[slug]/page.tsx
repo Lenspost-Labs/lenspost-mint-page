@@ -170,7 +170,8 @@ const Home = async ({ params }: Props) => {
     message,
     isError,
     price,
-    title
+    title,
+    collectionId
   } = await getCollectionData(params?.slug);
 
   if (isError) {
@@ -190,6 +191,7 @@ const Home = async ({ params }: Props) => {
       chainId={chainId}
       title={title}
       price={price}
+      collectionId={collectionId}
     />
   );
 };

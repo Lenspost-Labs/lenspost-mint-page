@@ -14,6 +14,7 @@ export interface CollectionData {
   isError?: boolean;
   price?: string;
   title?: string;
+  collectionId?: string;
 }
 
 export interface ParamsType {

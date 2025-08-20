@@ -8,8 +8,9 @@ import {
   APP_URL,
   AUTHOR
 } from '@/data';
+import { MiniAppProvider, AptosProvider, EvmProvider } from '@/providers';
 import { SplitsProviderWrapper } from '@/providers/SplitsProvider';
-import { MiniAppProvider, EvmProvider } from '@/providers';
+
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 
@@ -56,21 +57,23 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <EvmProvider>
-          <MiniAppProvider>
-            <SplitsProviderWrapper>
-              <Toaster
-                position="bottom-center"
-                duration={8000}
-                closeButton
-                richColors
-              />
-              <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
-                {children}
-              </div>
-            </SplitsProviderWrapper>
-          </MiniAppProvider>
-        </EvmProvider>
+        <AptosProvider>
+          <EvmProvider>
+            <MiniAppProvider>
+              <SplitsProviderWrapper>
+                <Toaster
+                  position="bottom-center"
+                  duration={8000}
+                  closeButton
+                  richColors
+                />
+                <div className="flex h-screen items-center justify-center bg-gradient-to-b from-gray-950 to-gray-900 p-4 sm:p-10">
+                  {children}
+                </div>
+              </SplitsProviderWrapper>
+            </MiniAppProvider>
+          </EvmProvider>
+        </AptosProvider>
       </body>
     </html>
   );

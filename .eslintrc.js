@@ -12,7 +12,15 @@ module.exports = {
     'unicorn/no-lonely-if': 'error',
     'react/jsx-fragments': 'error',
     'no-inline-comments': 'error',
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
+    'perfectionist/sort-imports': 'off',
+    'perfectionist/sort-objects': 'off',
+    'perfectionist/sort-jsx-props': 'off',
+    'perfectionist/sort-exports': 'off',
+    'perfectionist/sort-named-imports': 'off',
+    'perfectionist/sort-union-types': 'off',
+    'perfectionist/sort-object-types': 'off',
+    'perfectionist/sort-interfaces': 'off'
   },
   extends: [
     'plugin:perfectionist/recommended-line-length',

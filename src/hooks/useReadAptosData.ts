@@ -42,11 +42,6 @@ const useReadAptosData = ({
   useEffect(() => {
     const fetchData = async () => {
       if (!moduleAddress || !collectionId || !chainId) {
-        console.log('useReadAptosData: Missing required parameters:', {
-          moduleAddress,
-          collectionId,
-          chainId
-        });
         setIsLoading(false);
         return;
       }
@@ -126,24 +121,7 @@ const useReadAptosData = ({
           royaltyPercentage: validatedRoyaltyPercentage,
           royaltyRecipients
         };
-
-        console.log('Aptos collection data fetched:', formattedData);
-        console.log('Raw Move function result:', result);
-        console.log('Parsed values:', {
-          maxSupply,
-          totalMinted,
-          price,
-          maxPerWallet,
-          isMintEnabled,
-          royaltyAddress,
-          name,
-          description,
-          imageUri,
-          royaltyPercentageVec,
-          royaltyRecipientsVec
-        });
         setData(formattedData);
-        console.log('Aptos collection data fetched:', formattedData);
       } catch (error) {
         console.error('Aptos data read error:', error);
         setIsError(true);

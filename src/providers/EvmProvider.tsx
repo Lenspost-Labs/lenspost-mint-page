@@ -14,7 +14,8 @@ import {
 import {
   campNetworkTestnetV2,
   storyAeneidTestnet,
-  storyMainnet
+  storyMainnet,
+  monadTestnet
 } from '@/chains';
 import { farcasterFrame as miniAppConnector } from '@farcaster/frame-wagmi-connector';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -73,7 +74,8 @@ export const wagmiAdapter = createConfig({
           polygon,
           storyMainnet,
           campNetworkTestnetV2,
-          morph
+          morph,
+          monadTestnet
         ]
       : [
           base,
@@ -85,7 +87,8 @@ export const wagmiAdapter = createConfig({
           polygon,
           storyAeneidTestnet,
           campNetworkTestnetV2,
-          morph
+          morph,
+          monadTestnet
         ],
   transports: {
     [campNetworkTestnetV2.id]: http(),
@@ -99,7 +102,8 @@ export const wagmiAdapter = createConfig({
     [polygon.id]: http(),
     [morph.id]: http(),
     [base.id]: http(),
-    [zora.id]: http()
+    [zora.id]: http(),
+    [monadTestnet.id]: http()
   },
   connectors: [miniAppConnector()]
 });

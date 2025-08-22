@@ -3,7 +3,7 @@
 import { type UseReadContractParameters } from 'wagmi';
 import { useReadContract } from 'wagmi';
 
-const useReadConractData = (params: UseReadContractParameters) => {
+const useReadContractData = (params: UseReadContractParameters) => {
   const isAptos = params.chainId?.toString().startsWith('Aptos:');
   const isAptosAddress = params.address && params.address.length > 42;
 
@@ -30,4 +30,4 @@ const useReadConractData = (params: UseReadContractParameters) => {
   return { isError: false, data };
 };
 
-export default useReadConractData;
+export default useReadContractData;

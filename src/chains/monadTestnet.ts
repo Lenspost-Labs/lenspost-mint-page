@@ -1,21 +1,26 @@
 import { defineChain } from 'viem';
 
 export const monadTestnet = defineChain({
+  id: 10143,
+  name: 'Monad Testnet',
+  network: 'monad-testnet',
   nativeCurrency: {
+    name: 'Monad',
     symbol: 'MON',
-    decimals: 18, // Replace this with the number of decimals for your chain's native token
-    name: 'Monad Testnet'
+    decimals: 18
   },
   rpcUrls: {
     default: {
-      webSocket: [],
+      http: ['https://testnet-rpc.monad.xyz']
+    },
+    public: {
       http: ['https://testnet-rpc.monad.xyz']
     }
   },
   blockExplorers: {
-    default: { url: 'https://testnet.monadexplorer.com', name: 'Explorer' }
-  },
-  name: 'Monad Testnet',
-  network: 'monad-testnet',
-  id: 10143 // Replace this with your chain's ID
+    default: {
+      name: 'Monad Explorer',
+      url: 'https://testnet.monadexplorer.com'
+    }
+  }
 });

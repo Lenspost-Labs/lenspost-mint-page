@@ -64,7 +64,7 @@ export const privyConfig = {
 
 export const wagmiAdapter = createConfig({
   chains:
-    ENV === 'production'
+    ENV == 'production'
       ? [
           base,
           mainnet,
@@ -87,6 +87,7 @@ export const wagmiAdapter = createConfig({
           polygon,
           storyAeneidTestnet,
           campNetworkTestnetV2,
+          storyMainnet,
           morph,
           monadTestnet
         ],

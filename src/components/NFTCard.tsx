@@ -129,7 +129,7 @@ const NFTCard: FC<CollectionData> = ({
   // APTOS INTEGRATION: Fetch Aptos data when the chain is Aptos
 
   const aptosModuleAddress =
-    '0x9bdd2119745ecc8ff07ddf7d1e6621ad288c6a83106c5610372ffa347054caec';
+    '0xdc8e63ee1c2bb69efdb1cafe1d958113b0fe2bc8711605a2f16c9214d91e76f7'; // mainnet module address
 
   console.log('NFTCard: Aptos data parameters:', {
     collectionId,
@@ -599,7 +599,7 @@ const NFTCard: FC<CollectionData> = ({
       setAptosTxHash(response.hash);
 
       const aptosConfig = new AptosConfig({
-        network: Network.TESTNET
+        network: Network.MAINNET
       });
       const aptos = new Aptos(aptosConfig);
       await aptos.waitForTransaction({ transactionHash: response.hash });

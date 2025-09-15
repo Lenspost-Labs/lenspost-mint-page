@@ -38,6 +38,7 @@ const useReadAptosData = ({
   const [data, setData] = useState<AptosCollectionData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,14 +52,14 @@ const useReadAptosData = ({
 
       try {
         const aptosConfig = new AptosConfig({
-          network: Network.TESTNET
+          network: Network.MAINNET
         });
         const aptos = new Aptos(aptosConfig);
 
         // Call the specific Move function with the collectionId
         const result = await aptos.view({
           payload: {
-            function: `${moduleAddress}::poster_test_two::get_collection_info_two`,
+            function: `${moduleAddress}::poster_test_two::get_collection_info`,
             typeArguments: [],
             functionArguments: [collectionId]
           }
@@ -125,6 +126,7 @@ const useReadAptosData = ({
       } catch (error) {
         console.error('Aptos data read error:', error);
         setIsError(true);
+        setErrorMessage((error as Error)?.message || 'Aptos data read error');
         // Set default data on error to prevent crashes
         setData({
           maxSupply: '0',
@@ -147,7 +149,7 @@ const useReadAptosData = ({
     fetchData();
   }, [moduleAddress, collectionId, chainId]);
 
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, errorMessage };
 };
 
 export default useReadAptosData;

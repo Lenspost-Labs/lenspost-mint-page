@@ -11,7 +11,6 @@ module.exports = {
     'unicorn/better-regex': 'error',
     'unicorn/no-lonely-if': 'error',
     'react/jsx-fragments': 'error',
-    'no-inline-comments': 'error',
     'prettier/prettier': 'error',
     'perfectionist/sort-imports': 'off',
     'perfectionist/sort-objects': 'off',

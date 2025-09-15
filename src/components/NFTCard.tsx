@@ -166,7 +166,8 @@ const NFTCard: FC<CollectionData> = ({
   const {
     data: aptosCollectionData,
     isError: isAptosReadError,
-    isLoading: isAptosLoading
+    isLoading: isAptosLoading,
+    errorMessage: aptosErrorMessage
   } = useReadAptosData({
     collectionId: collectionId?.startsWith('0x')
       ? (collectionId as `0x${string}`)
@@ -198,7 +199,7 @@ const NFTCard: FC<CollectionData> = ({
   console.log('Aptos Read Error:', isAptosReadError);
   console.log('Aptos Loading:', isAptosLoading);
   console.log('Is Aptos Chain:', isAptos);
-
+  console.log('Aptos Error Message:', aptosErrorMessage);
   // Show error message if Aptos data fails to load
   useEffect(() => {
     if (isAptos && isAptosReadError && !isAptosLoading) {

@@ -93,38 +93,58 @@ const NFTCard: FC<CollectionData> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [customApprovalConfirming, setCustomApprovalConfirming] =
     useState(false);
+
+  const getContractABI = (): Abi | undefined => {
+    if (!contractType) return undefined;
+    if (contractType === 'LP721') {
+      return (LENSPOST_721?.abi as Abi) || undefined;
+    }
+    return erc721DropABI;
+  };
+
+  const contractAbi = getContractABI();
+  const isValidEVMChain = !isAptos && chainId && contractType && contractAbi && Array.isArray(contractAbi);
+  const evmChainId = isValidEVMChain
+    ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id
+    : undefined;
+
+  console.log('Using contract type:', contractType, 'with ABI:', contractAbi ? 'loaded' : 'missing');
+
   const { isError: isReadClaimConditionError, data: readClaimConditionData } =
     useReadContractData({
-      chainId: !isAptos
-        ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id
-        : undefined,
-      functionName: 'claimCondition',
-      abi: LENSPOST_721?.abi as Abi,
+      chainId: evmChainId,
+      functionName: contractType === 'LP721' ? 'claimCondition' : 'saleDetails',
+      abi: contractAbi,
       address: contractAddress,
       args: []
     });
 
   const { isError: isReadRoyaltyError, data: readRoyaltyData } =
     useReadContractData({
-      chainId: !isAptos
-        ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id
-        : undefined,
-      functionName: 'getDefaultRoyaltyInfo',
-      abi: LENSPOST_721?.abi as Abi,
+      chainId: evmChainId,
+      functionName: contractType === 'LP721' ? 'getDefaultRoyaltyInfo' : 'royaltyInfo',
+      abi: contractAbi,
       address: contractAddress,
-      args: []
+      args: contractType === 'LP721' ? [] : [0, 10000]
     });
 
   const { isError: isReadContractNameError, data: readContractName } =
     useReadContractData({
-      chainId: !isAptos
-        ? CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id
-        : undefined,
-      abi: LENSPOST_721?.abi as Abi,
+      chainId: evmChainId,
+      abi: contractAbi,
       address: contractAddress,
       functionName: 'name',
       args: []
     });
+
+  console.log('Contract read results:', {
+    claimConditionError: isReadClaimConditionError,
+    claimConditionData: readClaimConditionData,
+    royaltyError: isReadRoyaltyError,
+    royaltyData: readRoyaltyData,
+    nameError: isReadContractNameError,
+    name: readContractName
+  });
 
   // APTOS INTEGRATION: Fetch Aptos data when the chain is Aptos
 
@@ -209,14 +229,32 @@ const NFTCard: FC<CollectionData> = ({
     }
   }, [isAptos, isAptosReadError, isAptosLoading]);
 
-  const evmClaimData = {
-    quantityLimitPerWallet: readClaimConditionData?.[3],
-    maxClaimableSupply: readClaimConditionData?.[1],
-    startTimestamp: readClaimConditionData?.[0],
-    supplyClaimed: readClaimConditionData?.[2],
-    pricePerToken: readClaimConditionData?.[5],
-    tokenAddress: readClaimConditionData?.[6]
-  };
+  // Parse contract data based on contract type
+  const evmClaimData = (() => {
+    if (contractType === 'LP721') {
+      // LP721 contract structure
+      return {
+        quantityLimitPerWallet: readClaimConditionData?.[3],
+        maxClaimableSupply: readClaimConditionData?.[1],
+        startTimestamp: readClaimConditionData?.[0],
+        supplyClaimed: readClaimConditionData?.[2],
+        pricePerToken: readClaimConditionData?.[5],
+        tokenAddress: readClaimConditionData?.[6]
+      };
+    } else {
+      // Zora/standard ERC721 contract structure (saleDetails)
+      return {
+        quantityLimitPerWallet: readClaimConditionData?.maxSalePurchasePerAddress,
+        maxClaimableSupply: readClaimConditionData?.maxSupply,
+        startTimestamp: readClaimConditionData?.saleStart,
+        supplyClaimed: readClaimConditionData?.totalMinted,
+        pricePerToken: readClaimConditionData?.publicSalePrice,
+        tokenAddress: readClaimConditionData?.erc20zAddress || NULL_ADDRESS
+      };
+    }
+  })();
+
+  console.log('Parsed EVM claim data:', evmClaimData);
 
   // APTOS INTEGRATION: Use a unified variable set, preferring Aptos data when available.
   const currencyAddress2 = currencyAddress || evmClaimData.tokenAddress;
@@ -239,8 +277,20 @@ const NFTCard: FC<CollectionData> = ({
     ? aptosCollectionData?.maxPerWallet || '1'
     : evmClaimData.quantityLimitPerWallet?.toString() || '1';
 
+  // Parse royalty data based on contract type
   const royaltyTokenAddress = readRoyaltyData?.[0];
-  const royaltyBps = royaltyBPS || readRoyaltyData?.[1];
+  const royaltyBps = (() => {
+    if (royaltyBPS) return royaltyBPS;
+    if (contractType === 'LP721') {
+      return readRoyaltyData?.[1]; // LP721 format
+    } else {
+      // Zora format: royaltyInfo returns [receiver, royaltyAmount]
+      // Calculate BPS from royaltyAmount (which is out of 10000)
+      return readRoyaltyData?.[1]; // This is already in BPS format
+    }
+  })();
+  
+  console.log('Parsed royalty data:', { royaltyTokenAddress, royaltyBps, readRoyaltyData });
   const title2 =
     isAptos && aptosCollectionData?.name
       ? aptosCollectionData.name
@@ -499,7 +549,7 @@ const NFTCard: FC<CollectionData> = ({
   // Add allowance check for ERC20 tokens
   const { isError: isReadAllowanceError, data: currentAllowance } =
     useReadContractData({
-      chainId: CHAIN_HELPER[Number(chainId) as keyof typeof CHAIN_HELPER]?.id,
+      chainId: evmChainId,
       abi: TOKENS?.[currencyAddress2]?.abi,
       args: [EVMAddress, contractAddress],
       address: currencyAddress2,
